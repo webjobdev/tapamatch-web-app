@@ -1,0 +1,315 @@
+<div *ngIf="posts" class="card  h-post-card overflow-h-scroll">
+  <div *ngIf="posts.length > 0">
+    <div *ngFor="let post of posts; let i = index;" class="xl:w-12/12 xl:mb-0 p-2">
+      <div *ngIf="post?.attachement != ''">
+        <img class="mb-2 profile-image" *ngIf="post?.user?.profile_image == '' || post?.user?.profile_image == null"
+          src="../../../assets/images/Gender.png">
+        <img class="mb-2 profile-image" *ngIf="post?.user?.profile_image != '' && post?.user?.profile_image != null"
+          src="{{post?.user?.profile_image}}">
+        <p class="post-uname post-uname-margin">{{post?.user?.name}}</p>
+        <p class="post-created post-created-m">{{getDate(post?.created_at)}}</p>
+      </div>
+      <div *ngIf="post?.attachement == ''" style="height: 50px;">
+        <img class="mb-2 profile-image" *ngIf="post?.user?.profile_image == '' || post?.user?.profile_image == null"
+          src="../../../assets/images/Gender.png">
+        <img class="mb-2 profile-image" *ngIf="post?.user?.profile_image != '' && post?.user?.profile_image != null"
+          src="{{post?.user?.profile_image}}">
+        <p class="notAttachname">{{post?.user?.name}}</p>
+        <p class="set-content-margin notAttachcreated">{{getDate(post?.created_at)}}</p>
+      </div>
+
+      <video *ngIf="post?.attachement_type && post?.attachement_type.includes('video')" controls
+        (canplay)="pauseVideo(videoplayer)" #videoPlayer class="post-video">
+        <source src="{{post?.attachement}}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <img *ngIf="post?.attachement_type && !post?.attachement_type.includes('video') && post?.attachement != ''"
+        src="{{post?.attachement}}" class="card-img-top back-black post-image" alt="...">
+
+      <div class="card-body set-body">
+        <p class="card-text">{{post?.content}}</p>
+        <div class="row">
+          <div class="col-6">
+            <mat-icon *ngIf="!post?.is_like || likeStatus == post.id+'unlike'" [hidden]="likeStatus == post.id+'like'"
+              class="float-left c-red" (click)="likeUnlikePost(post.id , 'like')">
+              favorite_border</mat-icon>
+            <mat-icon *ngIf="post?.is_like || likeStatus == post.id+'like'" [hidden]="likeStatus == post.id+'unlike'"
+              class="float-left c-red" (click)="likeUnlikePost(post.id , 'unlike')">
+              favorite</mat-icon>
+            <label class="float-left bg-trans">{{post?.like_count}}</label>
+          </div>
+          <div class="col-6">
+            <label class="float-right bg-trans">{{post?.comment_count}}</label>
+            <mat-icon *ngIf="post?.comment_count > 0" class="float-right" (click)="open(content, post)"> comment
+            </mat-icon>
+            <mat-icon *ngIf="post?.comment_count == 0" class="float-right"> comment</mat-icon>
+          </div>
+        </div>
+
+        <p *ngIf="post?.comment_count > 0" class="card-text" (click)="open(content, post)">View all
+          {{post?.comment_count}} comments.....</p>
+        <div class="row">
+          <div class="col-10 comment-send-div">
+            <input class="form-control form-control-sm comment-input" type="text" id="content" [(ngModel)]="comment"
+              (input)="changeComment($event.target.value)" placeholder="Comment..."
+              aria-label=".form-control-sm example">
+          </div>
+          <div class="col-2 send-btn-div">
+            <mat-icon (click)="sendComment(post.id)">send</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="task block overflow-x-auto set-no-record box-shad margin-10" *ngIf="posts.length < 1">
+    No
+    Post Available!
+  </div>
+</div>
+<div *ngIf="userposts" class="card  h-post-card box-shad overflow-h-scroll userposts-div">
+  <div *ngIf="userposts.length > 0">
+    <div *ngFor="let post of userposts; let i = index;" class="xl:w-12/12 xl:mb-0 p-2">
+      <div *ngIf="post?.attachement != ''">
+        <img class="mb-2 profile-image" *ngIf="post?.user?.profile_image == '' || post?.user?.profile_image == null"
+          src="../../../assets/images/Gender.png">
+        <img class="mb-2 profile-image" *ngIf="post?.user?.profile_image != '' && post?.user?.profile_image != null"
+          src="{{post?.user?.profile_image}}">
+        <p class="post-uname post-uname-margin2">{{post?.user?.name}}</p>
+        <p class="post-created post-created-m2">{{getDate(post?.created_at)}}</p>
+      </div>
+      <div *ngIf="post?.attachement == ''" style="height: 50px">
+        <img class="mb-2 profile-image" *ngIf="post?.user?.profile_image == '' || post?.user?.profile_image == null"
+          src="../../../assets/images/Gender.png">
+        <img class="mb-2 profile-image" *ngIf="post?.user?.profile_image != '' &&  post?.user?.profile_image != null"
+          src="{{post?.user?.profile_image}}">
+        <p class="post-uname post-uname-margin2">{{post?.user?.name}}</p>
+        <p class="post-created post-created-m2">{{getDate(post?.created_at)}}</p>
+      </div>
+      <video *ngIf="post?.attachement_type && post?.attachement_type.includes('video')" controls
+        (canplay)="pauseVideo(videoplayer)" #videoPlayer class="post-video">
+        <source src="{{post?.attachement}}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <img *ngIf="post?.attachement_type && !post?.attachement_type.includes('video') && post?.attachement != ''"
+        src="{{post?.attachement}}" class="card-img-top back-black post-image" alt="...">
+      <div class="card-body set-body post-content">
+        <p class="card-text">{{post?.content}}</p>
+        <div class="row">
+          <div class="col-6">
+            <mat-icon *ngIf="!post?.is_like || likeStatus == post.id+'unlike'" [hidden]="likeStatus == post.id+'like'"
+              class="float-left c-red" (click)="likeUnlikePost(post.id ,'like')">
+              favorite_border</mat-icon>
+            <mat-icon *ngIf="post?.is_like || likeStatus == post.id+'like'" [hidden]="likeStatus == post.id+'unlike'"
+              class="float-left c-red" (click)="likeUnlikePost(post.id, 'unlike')">
+              favorite</mat-icon>
+            <label class="float-left bg-trans">{{post?.like_count}}</label>
+          </div>
+          <div class="col-6">
+            <label class="float-right bg-trans">{{post?.comment_count}}</label>
+            <mat-icon *ngIf="post?.comment_count > 0" class="float-right" (click)="open(content, post)"> comment
+            </mat-icon>
+            <mat-icon *ngIf="post?.comment_count == 0" class="float-right"> comment</mat-icon>
+          </div>
+        </div>
+
+        <p *ngIf="post?.comment_count > 0" class="card-text" (click)="open(content, post)">View all
+          {{post?.comment_count}} comments.....</p>
+        <div class="row row-div">
+          <div class="col-11 p-0">
+            <input class="form-control form-control-sm comment-input" type="text" id="content" [(NgModel)]="comment"
+              (input)="changeComment($event.target.value)" placeholder="Comment..."
+              aria-label=".form-control-sm example">
+          </div>
+          <div class="col-1 send">
+            <mat-icon (click)="sendComment(post.id)">send</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="task block overflow-x-auto set-no-record box-shad margin-10" *ngIf=" userposts.length < 1">
+    No
+    User Posts Available!
+  </div>
+</div>
+<div *ngIf="feedposts" class="card feed-posts-div">
+  <div *ngIf="feedposts.length > 0" id="scrollview">
+    <div *ngFor="let post of feedposts; let i = index;" class="xl:w-12/12 xl:mb-0 p-2">
+      <div *ngIf="post?.attachement != ''">
+        <img class="mb-2 profile-image" *ngIf="post?.user?.profile_image == '' || post?.user?.profile_image == null"
+          src="../../../assets/images/Gender.png">
+        <img class="mb-2 profile-image" *ngIf="post?.user?.profile_image != '' && post?.user?.profile_image ! null"
+          src="{{post?.user?.profile_image}}">
+        <p class="post-uname post-uname-margin2">{{post?.user?.name}}</p>
+        <p class="post-created post-created-m2">{{getDate(post?.created_at)}}</p>
+      </div>
+      <div *ngIf="post?.attachement == ''" style="height: 50px;">
+        <img class="mb-2 profile-image" *ngIf="post?.user?.profile_image == '' || post?.user?.profile_image == null"
+          src="../../../assets/images/Gender.png">
+        <img class="mb-2 profile-image" *ngIf="post?.user?.profile_image != '' && post?.user?.profile_image != null"
+          src="{{post?.user?.profile_image}}">
+        <p class="post-uname post-uname-margin2">{{post?.user?.name}}</p>
+        <p class="post-created post-created-m2">{{getDate(post?.created_at)}}</p>
+      </div>
+      <video *ngIf="post?.attachement_type && post?.attachement_type.includes('video')" controls
+        (canplay)="pauseVideo(videoplayer)" #videoPlayer class="set-feed-heigth post-video">
+        <source src="{{post?.attachement}}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <img *ngIf="post?.attachement_type && !post?.attachement_type.includes('video') && post?.attachement != ''"
+        src="{{post?.attachement}}" class="card-img-top set-feed-heigth back-black post-image" alt="...">
+
+      <div class="card-body set-body">
+        <p class="card-text">{{post?.content}}</p>
+        <div class="row">
+          <div class="col-6">
+            <mat-icon *ngIf="!post?.is_like || likeStatus == post.id+'unlike'" [hidden]="likeStatus == post.id+'like'"
+              class="float-left c-red" (click)="likeUnlikePost(post.id,'like')">
+              favorite_border</mat-icon>
+            <mat-icon *ngIf="post?.is_like || likeStatus == post.id+'like'" [hidden]="likeStatus == post.id+'unlike'"
+              class="float-left c-red" (click)="likeUnlikePost(post.id , 'unlike')">
+              favorite</mat-icon>
+            <label class="float-left bg-trans">{{post?.like_count}}</label>
+          </div>
+          <div class="col-6">
+            <label class="float-right bg-trans">{{post?.comment_count}}</label>
+            <mat-icon *ngIf="post?.comment_count > 0" class="float-right" (click)="open(content, post)"> comment
+            </mat-icon>
+            <mat-icon *ngIf="post?.comment_count == 0" class="float-right"> comment</mat-icon>
+          </div>
+        </div>
+        <p *ngIf="post?.comment_count > 0" class="card-text" (click)="open(content, post)">View all
+          {{post?.comment_count}} comments.....</p>
+        <div class="row row-div">
+          <div class="col-11 p-0">
+            <input class="form-control form-control-sm comment-input" type="text" id="content" [(NgModel)]="comment"
+              (input)="changeComment($event.target.value)" placeholder="Comment..." aria-label=" .form-control-sm
+              example">
+          </div>
+          <div class="col-1 send">
+            <mat-icon (click)="sendComment(post.id)">send</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="load-more" *ngIf="showButton && !showNoItem">
+      <button #yourElement
+        class="add-frnd btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        type="button" (click)="LoadMore()">
+        Load More
+      </button>
+    </div>
+    <div *ngIf="!showButton && !showNoItem" class="task block overflow-x-auto set-no-record box-shad margin-10">
+      Loading More ......
+    </div>
+    <div *ngIf="showNoItem" class="task block overflow-x-auto set-no-record box-shad margin-10">
+      No more Posts to load!
+    </div>
+  </div>
+  <div class="task block overflow-x-auto set-no-record box-shad margin-10" *ngIf="feedposts.length < 1">
+    No
+    Feeds Posts Available!
+  </div>
+</div>
+
+<ng-template #content let-modal data-backdrop="false">
+  <div>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">POST</h4>
+      <button style="position: absolute;
+      top: 10px;
+      right: 0;"
+        class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        type="button" (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div>
+      <div class="card overflow-h-scroll">
+        <div class="xl:w-12/12 xl:mb-0 p-2 overflowauto"
+          [ngStyle]="{'height': singlePost?.attachement != '' ? '500px !important' : '400px !important'}">
+          <div *ngIf="singlePost?.attachement != ''">
+            <img class="mb-2 profile-image"
+              *ngIf="singlePost?.user?.profile_image == '' || singlePost?.user?.profile_image == null"
+              src="../../../assets/images/Gender.png">
+            <img class="mb-2 profile-image"
+              *ngIf="singlePost?.user?.profile_image != '' && singlePost?.user?.profile_image != null"
+              src="{{singlePost?.user?.profile_image}}">
+            <p class="post-uname post-uname-margin">{{singlePost?.user?.name}}</p>
+            <p class="post-created-3">{{getDate(singlePost?.created_at)}}</p>
+          </div>
+          <div *ngIf="singlePost?.attachement == ''">
+            <img class="mb-2 profile-image"
+              *ngIf="singlePost?.user?.profile_image == '' || singlePost?.user?.profile_image == null"
+              src="../../../assets/images/Gender.png">
+            <img class="mb-2 profile-image"
+              *ngIf="singlePost?.user?.profile_image != '' && singlePost?.user?.profile_image != null"
+              src="{{singlePost?.user?.profile_image}}">
+            <p class="post-uname post-uname-marginnew">{{singlePost?.user?.name}}</p>
+            <p class="post-created-4">{{getDate(singlePost?.created_at)}}</p>
+          </div>
+          <video *ngIf="singlePost?.attachement_type && singlePost?.attachement_type.includes('video')" controls
+            (canplay)="pauseVideo(videoplayer)" #videoPlayer class="post-video">
+            <source src="{{singlePost?.attachement}}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <img
+            *ngIf="singlePost?.attachement_type && !singlePost?.attachement_type.includes('video') && singlePost?.attachement != ''"
+            src="{{singlePost?.attachement}}" class="card-img-top set-feed-heigth back-black post-image" alt="...">
+
+          <div class="card-body set-body">
+            <p class="card-text">{{singlePost?.content}}</p>
+            <div class="row">
+
+              <div class="col-6">
+                <mat-icon *ngIf="!singlePost?.is_like || likeStatus == singlePost.id+'unlike'"
+                  [hidden]="likeStatus == singlePost.id+'like'" class="float-left c-red"
+                  (click)="likeUnlikePost(singlePost.id,'like')">
+                  favorite_border</mat-icon>
+                <mat-icon *ngIf="singlePost?.is_like || likeStatus == singlePost.id+'like'"
+                  [hidden]="likeStatus == singlePost.id+'unlike'" class="float-left c-red"
+                  (click)="likeUnlikePost(singlePost.id, 'unlike')">
+                  favorite</mat-icon>
+                <label class="float-left bg-trans">{{singlePost?.like_count}}</label>
+              </div>
+              <div class="col-6">
+                <label class="float-right bg-trans">{{singlePost?.comment_count}}</label>
+                <mat-icon class="float-right"> comment</mat-icon>
+              </div>
+            </div>
+
+            <div>
+              <label class="label-type c-label">Comments</label>
+            </div>
+            <div class="mt-2 mb-2 singlepost-div">
+              <div class="row m-0 singlepost-comment" *ngFor="let com of singlePost?.comment; let i=index;">
+                <div class="col-2">
+                  <img class="mb-2 profile-image-35" *ngIf="com?.user?.profile_image == ''"
+                    src="../../../assets/images/Gender.png">
+                  <img class="mb-2 profile-image-35" *ngIf="com?.user?.profile_image != ''"
+                    src="{{com?.user?.profile_image}}">
+                </div>
+                <div class="col-10 c-div">
+                  <p class="comment-uname">
+                    {{com?.user?.name}}</p>
+                  <p class="comment-content">{{com?.content}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="row row-commet-input-div">
+              <div class="col-11 p-0">
+                <input class="form-control form-control-sm comment-input" type="text" id="content" [(NgModel)]="comment"
+                  (input)="changeComment($event.target.value)" placeholder="Comment..."
+                  aria-label=".form-control-sm example">
+              </div>
+              <div class="col-1 send">
+                <mat-icon (click)="sendComment(singlePost.id)">send</mat-icon>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,604 @@
+<div *ngIf="leaderboard"
+  class="h-300 relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded set-border-table h-250">
+  <div class="rounded-t mb-0 pl-2  border-0 bg-img-table ">
+    <div class="flex flex-wrap items-center">
+      <div class="relative w-full  max-w-full flex-grow flex-1">
+        <h3 class="font-semibold text-base text-blueGray-700 table-head-font">LEADERBOARD</h3>
+      </div>
+      <div class="relative w-full pl-4 max-w-full flex-grow flex-1 text-right">
+        <button (click)="goToListPage()"
+          class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          type="button">
+          <mat-icon>info</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="block w-full overflow-x-auto table-div-norecord" *ngIf="leaderboard.score.groups.length == 0">No
+    LeaderBoard Available!
+  </div>
+  <div *ngIf="leaderboard.score.groups.length > 0" class="block w-full overflow-x-auto">
+    <table class="table-collapse items-center w-full bg-transparent border-collapse">
+      <thead>
+        <tr>
+          <th width="50%"
+            class="b-first background-e9a927 p-2 font-18 color-fff align-center bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100   uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+            Team
+          </th>
+          <th width="10%"
+            class="background-0e3508 p-2 font-18 color-fff align-center bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100  uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+            W
+          </th>
+          <th width="10%"
+            class="background-e9a927 p-2 font-18 color-fff align-center bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+            L
+          </th>
+          <th width="10%"
+            class="background-0e3508 p-2 font-18 color-fff align-center bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+            T
+          </th>
+          <th width="10%"
+            class="b-last background-e9a927 p-2 font-18 color-fff align-center bg-blueGray-50 text-blueGray-500 align-middle border border-solid border-blueGray-100 uppercase border-l-0 border-r-0 whitespace-nowrap font-semibold text-left">
+            P
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-img-table-body b-first">
+        <tr *ngFor="let group of leaderboard.score.groups; let i = index" class="b-first" width="50%">
+          <th
+            class="th-css b-first font-18 color-fff border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap text-left td-size">
+            #{{i + 1}}
+            <img *ngIf="group?.grp_image == null || group?.grp_image == '' || !group?.grp_image.includes('http')"
+              class="img-size img-grp-leaderboard" src="../../assets/images/sports.jpg">
+            <img *ngIf="group?.grp_image != null && group?.grp_image != '' && group?.grp_image.includes('http')"
+              class="img-size img-grp-leaderboard" src="{{group?.grp_image}}">
+            <label class="bg-trans label-margin">{{group?.grp_name}}</label>
+          </th>
+          <td width="10%"
+            class=" p-2 font-18 color-fff align-center  border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap">
+            {{group?.won}}
+          </td>
+          <td width="10%"
+            class="p-2 font-18 color-fff align-center border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-nowrap">
+            {{group?.lose}}
+          </td>
+          <td width="10%"
+            class="p-2 font-18 color-fff align-center border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap">
+            <i class="fas fa-arrow-up text-emerald-500 mr-4"></i>
+            {{group?.tie}}
+          </td>
+          <td width="10%"
+            class="p-2 font-18 color-fff align-center border-t-0 px-6 align-middle border-l-0 border-r-0  whitespace-nowrap">
+            <i class="fas fa-arrow-up text-emerald-500 mr-4"></i>
+            {{group?.point}}
+          </td>
+          <td width="10%"
+            class="color-0e3508-border b-last background-e9a927 font-18 color-fff align-center border-t-0 px-6 align-middle border-l-0 border-r-0 whitespace-nowrap pt-2">
+            <button (click)="createChallenge(group)"
+              class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button">
+              <mat-icon class="color-0e3508">add_box</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div *ngIf="challenges"
+  class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded set-border-table h-250 ">
+  <div class="rounded-t mb-0 pl-2  border-0 bg-img-table">
+    <div class="flex flex-wrap items-center">
+      <div class="relative w-full  max-w-full flex-grow flex-1">
+        <h3 class="font-semibold text-base text-blueGray-700 table-head-font">UPCOMING CHALLENGES</h3>
+      </div>
+      <div class="relative w-full pl-4 max-w-full flex-grow flex-1 text-right">
+        <button (click)="goToListPage()"
+          class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2  rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          type="button">
+          <mat-icon>info</mat-icon>
+        </button>
+        <button (click)="createNewChallenge()"
+          class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          type="button">
+          <mat-icon>add_box</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="block w-full overflow-x-auto  h-100">
+    <div class="tasks-container">
+      <div class="task block box-shad overflow-x-auto set-no-record margin-10" *ngIf="challenges?.length < 1">No
+        upcoming challenge Available!
+      </div>
+      <div class="task box-shad margin-10" *ngFor="let challenge of challenges; let i=index">
+        <div class="task-title">
+          Match
+        </div>
+        <div class="row set-row">
+          <div class="col-4 align-center">
+            <img
+              *ngIf="challenge?.team_a?.c_image == '' || challenge?.team_a?.c_image == null || !challenge?.team_a?.c_image.includes('http')"
+              class="img-size-set" src="../../../assets/images/Gender.png">
+            <img
+              *ngIf="challenge?.team_a?.c_image != '' && challenge?.team_a?.c_image != null && challenge?.team_a?.c_image.includes('http')"
+              class="img-size-set" src="{{challenge?.team_a?.c_image}}">
+            <label class="name">{{challenge?.team_a?.grp_name}}</label>
+          </div>
+          <div class="col-4 align-center">
+            <img class="img-size-set m-0-auto" src="../../../assets/images/versus.png">
+            <label class="date">{{challenge?.c_date}}</label>
+          </div>
+          <div class="col-4 align-center">
+
+            <img
+              *ngIf="challenge?.team_b != null && (challenge?.team_b?.c_image == '' || challenge?.team_b?.c_image == null || !challenge?.team_b?.c_image.includes('http'))"
+              class="img-size-set" src="../../../assets/images/Gender.png">
+            <img
+              *ngIf="challenge?.team_b != null && challenge?.team_b?.c_image != '' && challenge?.team_b?.c_image != null && challenge?.team_b?.c_image.includes('http')"
+              class="img-size-set" src="{{challenge?.team_b?.c_image}}">
+            <img *ngIf="challenge?.team_b == null;" class="img-size-set" src="../../../assets/images/Gender.png">
+            <label *ngIf="challenge?.team_b != null" class="name">{{challenge?.team_a?.grp_name}}</label>
+            <label *ngIf="challenge?.team_b == null" class="name">Pending</label>
+          </div>
+        </div>
+        <div class="align-center title-div">
+          <label class="name title">{{challenge.c_title}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="upcomingEvent"
+  class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded set-border-table h-250 ">
+  <div class="rounded-t mb-0 pl-2 border-0 bg-img-table">
+    <div class="flex flex-wrap items-center">
+      <div class="relative w-full max-w-full flex-grow flex-1 ">
+        <h3 class="font-semibold text-base text-blueGray-700 table-head-font">UPCOMING MATCH</h3>
+      </div>
+      <div class="relative w-full max-w-full flex-grow flex-1 text-right">
+        <button (click)="goToListPage()"
+          class="btn-set bg-indigo-500 text-white active:bg-indigo-600  font-bold uppercase px-2  rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          type="button">
+          <mat-icon>info</mat-icon>
+        </button>
+        <button
+          class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          type="button" (click)="createNewEvent()">
+          <mat-icon>add_box</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="block w-full overflow-x-auto  h-100">
+
+    <div class="tasks-container">
+      <div class="task block box-shad overflow-x-auto set-no-record margin-10" *ngIf="upcomingEvent?.length < 1">No
+        upcoming matches Available!
+      </div>
+      <div class="task box-shad margin-10" *ngFor=" let event of upcomingEvent; let i=index">
+        <div class="task-title">
+          {{event?.event_name}}
+        </div>
+        <div class="row set-row">
+          <div class="col-4 align-center">
+            <img *ngIf="event?.e_image == null || event?.e_image == ''" class="event-image-set e-image"
+              src="../../../assets/images/Gender.png">
+            <img *ngIf="event?.e_image != null && event?.e_image != ''" class="event-image-set e-image"
+              src="{{event?.e_image}}">
+          </div>
+          <div class="col-8 e-col">
+            <label class="name align-left">{{event?.e_date}}</label>
+            <label class="name align-left">{{event?.e_time}}</label>
+            <label class="name align-left">{{event?.e_group}}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="upcomingFriendly"
+  class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded set-border-table h-250 ">
+  <div class="rounded-t mb-0 pl-2 border-0 bg-img-table ">
+    <div class="flex flex-wrap items-center">
+      <div class="relative w-full  max-w-full flex-grow flex-1">
+        <h3 class="font-semibold text-base text-blueGray-700 table-head-font">UPCOMING FRIENDLY</h3>
+      </div>
+      <div class="relative w-full pl-4 max-w-full flex-grow flex-1 text-right">
+        <button (click)="goToListPage()"
+          class="btn-set bg-indigo-500 text-white active:bg-indigo-600  font-bold uppercase px-2  rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          type="button">
+          <mat-icon>info</mat-icon>
+        </button>
+        <button (click)="createNewFriendly()"
+          class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          type="button">
+          <mat-icon>add_box</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="block w-full overflow-x-auto  h-100">
+    <div class="tasks-container">
+      <div class="task block box-shad overflow-x-auto set-no-record margin-10" *ngIf="upcomingFriendly?.length < 1">No
+        upcoming friendly Available!
+      </div>
+      <div class="task box-shad margin-10" *ngFor="let friendly of upcomingFriendly; let i=index">
+        <div class="task-title">
+          Match
+        </div>
+        <div class="row set-row">
+          <div class="col-4 align-center">
+            <img
+              *ngIf="friendly?.team_a?.profile_image == '' || friendly?.team_a?.profile_image == null || !friendly?.team_a?.profile_image.includes('http')"
+              class="img-size-set" src="../../../assets/images/Gender.png">
+            <img
+              *ngIf="friendly?.team_a?.profile_image != '' && friendly?.team_a?.profile_image != null && friendly?.team_a?.profile_image.includes('http')"
+              class="img-size-set" src="{{friendly?.team_a?.profile_image}}">
+            <label class="name">{{friendly?.user_a?.fname}} {{friendly?.user_a?.lname}}</label>
+          </div>
+          <div class="col-4 align-center">
+            <img class="img-size-set m-0-auto" src="../../../assets/images/versus.png">
+            <label class="date">{{friendly?.frd_date}}</label>
+          </div>
+          <div class="col-4 align-center">
+            <img
+              *ngIf="friendly?.user_b != null && (friendly?.user_b?.profile_image == '' || friendly?.user_b?.profile_image == null || !friendly?.user_b?.profile_image.includes('http'))"
+              class="img-size-set" src="../../../assets/images/Gender.png">
+            <img
+              *ngIf="friendly?.user_b != null && friendly?.user_b?.profile_image != '' && friendly?.user_b?.profile_image != null && friendly?.user_b?.profile_image.includes('http')"
+              class="img-size-set" src="{{friendly?.user_b?.profile_image}}">
+            <img *ngIf="friendly?.user_b == null;" class="img-size-set" src="../../../assets/images/Gender.png">
+            <label *ngIf="friendly?.user_b != null" class="name">{{friendly?.user_b?.fname}}
+              {{friendly?.user_b?.lname}}</label>
+            <label *ngIf="friendly?.user_b == null" class="name">Pending</label>
+          </div>
+        </div>
+        <div class="align-center title-div">
+          <label class="name title">{{friendly?.frd_title}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="result"
+  class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded set-border-table h-250 ">
+  <div class="rounded-t mb-0 pl-2  border-0 bg-img-table">
+    <div class="flex flex-wrap items-center">
+      <div class="relative w-full max-w-full flex-grow flex-1">
+        <h3 class="font-semibold text-base text-blueGray-700 table-head-font">RESULT</h3>
+      </div>
+      <div class="relative w-full pl-4 max-w-full flex-grow flex-1 text-right">
+        <button (click)="goToListPage()"
+          class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2  rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          type="button">
+          <mat-icon>info</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="block w-full overflow-x-auto  h-100">
+    <div class="tasks-container">
+      <div class="task box-shad margin-10" *ngFor="let challenge of result?.challenge; let i = index;">
+        <div class="task-title">
+          Match
+        </div>
+        <div class="row set-row">
+          <div class="col-4 align-center">
+            <img
+              *ngIf="challenge?.team_a?.c_image == '' || challenge?.team_a?.c_image == null || !challenge?.team_a?.c_image.includes('http')"
+              class="img-size-set" src="../../../assets/images/Gender.png">
+            <img
+              *ngIf="challenge?.team_a?.c_image != '' && challenge?.team_a?.c_image != null && challenge?.team_a?.c_image.includes('http')"
+              class="img-size-set" src="{{challenge?.team_a?.c_image}}">
+            <label class="name">{{challenge?.team_a?.grp_name}}</label>
+            <label class="score-size">Score: {{challenge?.team_a_score}}</label>
+          </div>
+          <div class="col-4 align-center title-div">
+            <img class="img-size-set m-0-auto" src="../../../assets/images/versus.png">
+            <label class="date">{{challenge?.challenge?.c_date}}</label>
+            <label class="game-type">::Refree::</label>
+            <label class="name">{{challenge?.referee?.fname}} {{challenge?.referee?.lname}}</label>
+          </div>
+          <div class="col-4 align-center">
+            <img
+              *ngIf="challenge?.team_b != null && (challenge?.team_b?.c_image == '' || challenge?.team_b?.c_image == null || !challenge?.team_b?.c_image.includes('http'))"
+              class="img-size-set" src="../../../assets/images/Gender.png">
+            <img
+              *ngIf="challenge?.team_b != null && challenge?.team_b?.c_image != '' && challenge?.team_b?.c_image != null && challenge?.team_b?.c_image.includes('http')"
+              class="img-size-set" src="{{challenge?.team_b?.c_image}}">
+            <img *ngIf="challenge?.team_b == null;" class="img-size-set" src="../../../assets/images/Gender.png">
+            <label *ngIf="challenge?.team_b != null" class="name">{{challenge?.team_b?.grp_name}}</label>
+            <label *ngIf="challenge?.team_b == null" class="name">Pending</label>
+            <label class="score-size">Score: {{challenge?.team_b_score}}</label>
+          </div>
+        </div>
+      </div>
+      <div class="task box-shad margin-10" *ngFor="let friendly of result?.friendly; let i = index;">
+        <div class="task-title">
+          Match
+        </div>
+        <div class="row set-row">
+          <div class="col-4 align-center">
+            <img
+              *ngIf="friendly?.user_a?.profile_image == '' || friendly?.user_a?.profile_image == null || !friendly?.user_a?.profile_image.includes('http')"
+              class="img-size-set" src="../../../assets/images/Gender.png">
+            <img
+              *ngIf="friendly?.user_a?.profile_image != '' && friendly?.user_a?.profile_image != null && friendly?.user_a?.profile_image.includes('http')"
+              class="img-size-set" src="{{friendly?.user_a?.profile_image}}">
+            <label class="name">{{friendly?.user_a?.fname}} {{friendly?.user_a?.lname}}</label>
+            <label class="score-size">Score: {{friendly?.team_a_score}}</label>
+          </div>
+          <div class="col-4 align-center title-div">
+            <img class="img-size-set m-0-auto" src="../../../assets/images/versus.png">
+            <label class="date">{{friendly?.friendly?.frd_date}}</label>
+            <label class="game-type">::Refree::</label>
+            <label class="name">{{friendly?.referee?.fname}} {{friendly?.referee?.lname}}</label>
+          </div>
+          <div class="col-4 align-center">
+            <img
+              *ngIf="friendly?.user_b != null && (friendly?.user_b?.profile_image == '' || friendly?.user_b?.profile_image == null || !friendly?.user_b?.profile_image.includes('http'))"
+              class="img-size-set" src="../../../assets/images/Gender.png">
+            <img
+              *ngIf="friendly?.user_b != null && friendly?.user_b?.profile_image != '' && friendly?.user_b?.profile_image != null && friendly?.user_b?.profile_image.includes('http')"
+              class="img-size-set" src="{{friendly?.user_b?.profile_image}}">
+            <img *ngIf="friendly?.user_b == null;" class="img-size-set" src="../../../assets/images/Gender.png">
+            <label *ngIf="friendly?.user_b != null" class="name">{{friendly?.user_b?.fname}}
+              {{friendly?.user_b?.lname}}</label>
+            <label *ngIf="friendly?.user_b == null" class="name">Pending</label>
+            <label class="score-size">Score: {{friendly?.team_b_score}}</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="tasks-container" *ngIf="venue">
+  <div class="task box-shad margin-10">
+    <div class="task-title" (click)="openVenue(content,venue)">
+      {{venue.name}}
+    </div>
+    <div class="row set-row venue-day bg-lightgrey">
+      <div class="col-8">
+        <label class="bg-trans">Monday</label>
+      </div>
+      <div class="col-2 align-center">
+        <label class="timeopen time" *ngIf="venue.monday_open != null">{{venue.monday_open}}</label>
+        <label class="timeopen time" *ngIf="venue.monday_open == null">00:00</label>
+      </div>
+      <div class="col-2 align-center">
+        <label class="timeclose time" *ngIf="venue.monday_open != null">{{venue.monday_close}}</label>
+        <label class="timeclose time" *ngIf="venue.monday_open == null">00:00</label>
+      </div>
+    </div>
+    <div class="row set-row venue-day">
+      <div class="col-8">
+        <label class="bg-trans">Tuesday</label>
+      </div>
+      <div class="col-2 align-center">
+        <label class="timeopen time" *ngIf="venue.tuesday_close != null">{{venue.tuesday_open}}</label>
+        <label class="timeopen time" *ngIf="venue.tuesday_close == null">00:00</label>
+      </div>
+      <div class="col-2 align-center">
+        <label class="timeclose time" *ngIf="venue.tuesday_close != null">{{venue.tuesday_close}}</label>
+        <label class="timeclose time" *ngIf="venue.tuesday_close == null">00:00</label>
+      </div>
+    </div>
+    <div class="row set-row venue-day bg-lightgrey">
+      <div class="col-8">
+        <label class="bg-trans">Wednesday</label>
+      </div>
+      <div class="col-2 align-center">
+        <label class="timeopen time" *ngIf="venue.wednesday_close != null">{{venue.wednesday_open}}</label>
+        <label class="timeopen time" *ngIf="venue.wednesday_close == null">00:00</label>
+      </div>
+      <div class="col-2 align-center">
+        <label class="timeclose time" *ngIf="venue.wednesday_close != null">{{venue.wednesday_close}}</label>
+        <label class="timeclose time" *ngIf="venue.wednesday_close == null">00:00</label>
+      </div>
+    </div>
+    <div class="row set-row venue-day">
+      <div class="col-8">
+        <label class="bg-trans">Thursday</label>
+      </div>
+      <div class="col-2 align-center">
+        <label class="timeopen time" *ngIf="venue.thursday_close != null">{{venue.thursday_open}}</label>
+        <label class="timeopen time" *ngIf="venue.thursday_close == null">00:00</label>
+      </div>
+      <div class="col-2 align-center">
+        <label class="timeclose time" *ngIf="venue.thursday_close != null">{{venue.thursday_close}}</label>
+        <label class="timeclose time" *ngIf="venue.thursday_close == null">00:00</label>
+      </div>
+    </div>
+    <div class="row set-row venue-day bg-lightgrey">
+      <div class="col-8">
+        <label class="bg-trans">Friday</label>
+      </div>
+      <div class="col-2 align-center">
+        <label class="timeopen time" *ngIf="venue.friday_close != null">{{venue.friday_open}}</label>
+        <label class="timeopen time" *ngIf="venue.friday_close == null">00:00</label>
+      </div>
+      <div class="col-2 align-center">
+        <label class="timeclose time" *ngIf="venue.friday_close != null">{{venue.friday_close}}</label>
+        <label class="timeclose time" *ngIf="venue.friday_close == null">00:00</label>
+      </div>
+    </div>
+    <div class="row set-row venue-day">
+      <div class="col-8">
+        <label class="bg-trans">Saturday</label>
+      </div>
+      <div class="col-2 align-center">
+        <label class="timeopen time" *ngIf="venue.saturday_close != null">{{venue.saturday_open}}</label>
+        <label class="timeopen time" *ngIf="venue.saturday_close == null">00:00</label>
+      </div>
+      <div class="col-2 align-center">
+        <label class="timeclose time" *ngIf="venue.saturday_close != null">{{venue.saturday_close}}</label>
+        <label class="timeclose time" *ngIf="venue.saturday_close == null">00:00</label>
+      </div>
+    </div>
+    <div class="row set-row venue-day bg-lightgrey">
+      <div class="col-8">
+        <label class="bg-trans">Sunday</label>
+      </div>
+      <div class="col-2 align-center">
+        <label class="timeopen time" *ngIf="venue.sunday_close != null">{{venue.sunday_open}}</label>
+        <label class="timeopen time" *ngIf="venue.sunday_close == null">00:00</label>
+      </div>
+      <div class="col-2 align-center">
+        <label class="timeclose time" *ngIf="venue.sunday_close != null">{{venue.sunday_close}}</label>
+        <label class="timeclose time" *ngIf="venue.sunday_close == null">00:00</label>
+      </div>
+    </div>
+
+    <div class="row set-row venue-price-div">
+      <div class="col-8">
+        <label class="venue-price-label">€ {{venue.price}}</label>
+      </div>
+      <div class="col-4 align-right">
+        <label class="switch">
+          <input type="checkbox" class="switch-input" disabled="true" [checked]="venue.status == 1">
+          <span class="switch-label" data-on="On" data-off="Off"></span>
+          <span class="switch-handle"></span>
+        </label>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<ng-template #content let-modal data-backdrop="false">
+  <div class="modal-header">
+
+    <button
+      class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+      type="button" (click)="modal.dismiss('Cross click')">
+      <mat-icon>close</mat-icon>
+    </button>
+    <h4 class="modal-title" id="modal-basic-title">Update Venue</h4>
+
+    <button
+      class="float-right btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none ease-linear transition-all duration-150"
+      type="button" (click)="saveVenue(venue.id)">
+      <mat-icon>send</mat-icon>
+    </button>
+  </div>
+  <div class="block w-full overflow-x-auto  h-100">
+    <div class="task box-shad margin-10">
+      <form [formGroup]="venueFormgroup">
+        <div class="task-title">
+          {{venue.name}}
+        </div>
+        <div class="row set-row venue-day bg-lightgrey">
+          <div class="col-6">
+            <label class="bg-trans">Monday</label>
+          </div>
+          <div class="col-3 align-center">
+            <input type="time" id="monday_open" class="form-control timeCss timeopen" name="monday_open"
+              formControlName="monday_open" required>
+          </div>
+          <div class="col-3 align-center">
+            <input type="time" id="monday_close" class="form-control timeCss timeclose" name="monday_close"
+              formControlName="monday_close" required>
+          </div>
+        </div>
+        <div class="row set-row venue-day">
+          <div class="col-6">
+            <label class="bg-trans">Tuesday</label>
+          </div>
+          <div class="col-3 align-center">
+            <input type="time" id="tuesday_open" class="form-control timeCss timeopen" name="tuesday_open"
+              formControlName="tuesday_open" required>
+          </div>
+          <div class="col-3 align-center">
+            <input type="time" id="tuesday_close" class="form-control timeCss timeclose" name="tuesday_close"
+              formControlName="tuesday_close" required>
+          </div>
+        </div>
+        <div class="row set-row venue-day bg-lightgrey">
+          <div class="col-6">
+            <label class="bg-trans">Wednesday</label>
+          </div>
+          <div class="col-3 align-center">
+            <input type="time" id="wednesday_open" class="form-control timeCss timeopen" name="wednesday_open"
+              formControlName="wednesday_open" required>
+          </div>
+          <div class="col-3 align-center">
+            <input type="time" id="wednesday_close" class="form-control timeCss timeclose" name="wednesday_close"
+              formControlName="wednesday_close" required>
+          </div>
+        </div>
+        <div class="row set-row venue-day">
+          <div class="col-6">
+            <label class="bg-trans">Thursday</label>
+          </div>
+          <div class="col-3 align-center">
+            <input type="time" id="thursday_open" class="form-control timeCss timeopen" name="thursday_open"
+              formControlName="thursday_open" required>
+          </div>
+          <div class="col-3 align-center">
+            <input type="time" id="thursday_close" class="form-control timeCss timeclose" name="thursday_close"
+              formControlName="thursday_close" required>
+          </div>
+        </div>
+        <div class="row set-row venue-day bg-lightgrey">
+          <div class="col-6">
+            <label class="bg-trans">Friday</label>
+          </div>
+          <div class="col-3 align-center">
+            <input type="time" id="friday_open" class="form-control timeCss timeopen" name="friday_open"
+              formControlName="friday_open" required>
+          </div>
+          <div class="col-3 align-center">
+            <input type="time" id="friday_close" class="form-control timeCss timeclose" name="friday_close"
+              formControlName="friday_close" required>
+          </div>
+        </div>
+        <div class="row set-row venue-day">
+          <div class="col-6">
+            <label class="bg-trans">Saturday</label>
+          </div>
+          <div class="col-3 align-center">
+            <input type="time" id="saturday_open" class="form-control timeCss timeopen" name="saturday_open"
+              formControlName="saturday_open" required>
+          </div>
+          <div class="col-3 align-center">
+            <input type="time" id="saturday_close" class="form-control timeCss timeclose" name="saturday_close"
+              formControlName="saturday_close" required>
+          </div>
+        </div>
+        <div class="row set-row venue-day bg-lightgrey">
+          <div class="col-6">
+            <label class="bg-trans">Sunday</label>
+          </div>
+          <div class="col-3 align-center">
+            <input type="time" id="sunday_open" class="form-control timeCss timeopen" name="sunday_open"
+              formControlName="sunday_open" required>
+          </div>
+          <div class="col-3 align-center">
+            <input type="time" id="sunday_close" class="form-control timeCss timeclose" name="sunday_close"
+              formControlName="sunday_close" required>
+          </div>
+        </div>
+
+        <div class="row set-row venue-price-div">
+          <div class="col-8">
+            <input type="number" id="price" class="form-control priceCss" name="price" formControlName="price" required>
+          </div>
+          <div class="col-4 align-right">
+            <label class="switch">
+              <input type="checkbox" class="switch-input" formControlName="onoff" name="onoff" id="onoff"
+                (input)="onOff($event)">
+              <span class="switch-label" data-on="On" data-off="Off"></span>
+              <span class="switch-handle"></span>
+            </label>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <app-modaldialog *ngIf="loaderShow"></app-modaldialog>
+</ng-template>

@@ -1,0 +1,127 @@
+<div class="sidebar_menu" [@onSideNavChange]="sidebarState">
+  <mat-nav-list class="menu-list">
+    <button mat-icon-button (click)="toggleSideNav()" class="toggle">
+      <mat-icon class="menu-mat">menu</mat-icon>
+    </button>
+    <div fxLayout="column">
+      <div fxLayoutAlign="space-around center" class="align-center" [style.margin]="'0 0 20px 0px'">
+        <img width="80%" [style.borderRadius]="'50%'" src="../../../assets/images/Tap.png">
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+    <mat-list-item routerLinkActive="list-item-active" routerLink="/home" routerDirection="home" class="menu-item"
+      (click)="closeSideNav()">
+      <mat-icon [@iconAnimation]="sidebarState">home</mat-icon>
+      <span class="label menu-item-name" [@labelAnimation]="sidebarState">Home</span>
+    </mat-list-item>
+    <mat-list-item routerLinkActive="list-item-active" routerLink="/profile" routerDirection="profile" class="menu-item"
+      (click)="closeSideNav()">
+      <mat-icon [@iconAnimation]="sidebarState">account_circle</mat-icon>
+      <span class="label menu-item-name" [@labelAnimation]="sidebarState">Profile</span>
+    </mat-list-item>
+    <mat-list-item routerLinkActive="list-item-active" routerLink="/feeds" routerDirection="feeds" class="menu-item"
+      (click)="closeSideNav()">
+      <mat-icon [@iconAnimation]="sidebarState">grid_on</mat-icon>
+      <span class="label menu-item-name" [@labelAnimation]="sidebarState">Feeds</span>
+    </mat-list-item>
+    <mat-list-item routerLinkActive="list-item-active" routerLink="/members" routerDirection="members" class="menu-item"
+      (click)="closeSideNav()">
+      <mat-icon [@iconAnimation]="sidebarState">people</mat-icon>
+      <span class="label menu-item-name" [@labelAnimation]="sidebarState">Members</span>
+    </mat-list-item>
+    <mat-list-item routerLinkActive="list-item-active" routerLink="/wallet" routerDirection="wallet" class="menu-item"
+      (click)="closeSideNav()">
+      <mat-icon [@iconAnimation]="sidebarState">account_balance_wallet</mat-icon>
+      <span class="label menu-item-name" [@labelAnimation]="sidebarState">Wallet</span>
+    </mat-list-item>
+    <mat-list-item routerLinkActive="list-item-active" routerLink="/list" routerDirection="list" class="menu-item"
+      (click)="closeSideNav()">
+      <mat-icon [@iconAnimation]="sidebarState">view_list</mat-icon>
+      <span class="label menu-item-name" [@labelAnimation]="sidebarState">Lists</span>
+    </mat-list-item>
+    <mat-list-item *ngIf="userTypeId == '8'" routerLinkActive="list-item-active" routerLink="/venue-list"
+      routerDirection="venue-list" class="menu-item-img" (click)="closeSideNav()">
+      <img src="../../../assets/images/venue.png" class="menu-img-venue">
+      <span class="label menu-item-name" [@labelAnimation]="sidebarState">Venues</span>
+    </mat-list-item>
+    <mat-list-item *ngIf="userTypeId == '18' || userTypeId == '19'" routerLinkActive="list-item-active"
+      routerLink="/update-score" routerDirection="update-score" class="menu-item-img" (click)="closeSideNav()">
+      <img src="../../../assets/images/score-icon-19.png" class="menu-img">
+      <span class="label menu-item-name" [@labelAnimation]="sidebarState">Update Score</span>
+    </mat-list-item>
+    <mat-list-item routerLinkActive="list-item-active" routerLink="/notification" routerDirection="notification"
+      class="menu-item" (click)="closeSideNav()">
+      <mat-icon [@iconAnimation]="sidebarState">notifications</mat-icon>
+      <span class="label menu-item-name" [@labelAnimation]="sidebarState">Notifications</span>
+    </mat-list-item>
+    <mat-list-item routerLinkActive="list-item-active" routerLink="/chat" routerDirection="chat" class="menu-item"
+      (click)="closeSideNav()">
+      <mat-icon [@iconAnimation]="sidebarState">chat</mat-icon>
+      <span class="label menu-item-name" [@labelAnimation]="sidebarState">Chat</span>
+    </mat-list-item>
+    <mat-list-item routerLinkActive="list-item-active" (click)="editPassword(content)" style="height: 40px !important;">
+      <mat-icon [@iconAnimation]="sidebarState">settings</mat-icon>
+      <span class="label menu-item-name" [@labelAnimation]="sidebarState">Change Password</span>
+    </mat-list-item>
+    <mat-list-item routerLinkActive="list-item-active" (click)="terms(content)" class="menu-item-img"
+      (click)="closeSideNav()">
+      <img src="../../../assets/images/terms.png" class="menu-img">
+      <span class="label menu-item-name" [@labelAnimation]="sidebarState">Terms & Conditions</span>
+    </mat-list-item>
+    <mat-list-item routerLinkActive="list-item-active" (click)="privacy(content)" class="menu-item-img">
+      <img src="../../../assets/images/privacy.png" class="menu-img">
+      <span class="label menu-item-name" [@labelAnimation]="sidebarState">Privacy Policy</span>
+    </mat-list-item>
+    <mat-list-item routerLinkActive="list-item-active" routerLink="/login" routerDirection="login" class="menu-item"
+      (click)="openUrl('logout')">
+      <mat-icon [@iconAnimation]="sidebarState">exit_to_app</mat-icon>
+      <span class="label menu-item-name" [@labelAnimation]="sidebarState">Logout</span>
+    </mat-list-item>
+  </mat-nav-list>
+</div>
+
+<ng-template #content let-modal data-backdrop="false">
+  <div *ngIf="updatePass">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Change Password</h4>
+    </div>
+    <div class="modal-body p-1">
+      <form [formGroup]="updatePasswordFormgroup" class="mt-2">
+        <div>
+          <div class="form-group mb4 align-left">
+            <input type="password" id="old" class="form-control" formControlName="old" [(ngModel)]="old" required>
+            <label class="form-control-placeholder" for="name">Old Password</label>
+          </div>
+          <div class="form-group mb4 align-left">
+            <input type="password" id="new" class="form-control" formControlName="new" [(ngModel)]="new" required>
+            <label class="form-control-placeholder" for="location">New Password</label>
+          </div>
+          <div class="form-group mb4 align-left">
+            <input type="password" id="confirm" class="form-control" formControlName="confirm" [(ngModel)]="confirm"
+              required>
+            <label class="form-control-placeholder" for="city">Confirm Password</label>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer p-1">
+      <button
+        class="close-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        type="button" (click)="modal.dismiss('Cross click')">
+        Cancel
+      </button>
+      <button
+        class="filter-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        type="button" (click)="updatePassword()">
+        Change Password
+      </button>
+    </div>
+  </div>
+  <div *ngIf="termshow">
+    <iframe width="100%" frameBorder="0" [src]="termsUrl" style="height: 500px !important;"></iframe>
+  </div>
+  <div *ngIf="privacyshow">
+    <iframe width="100%" frameBorder="0" [src]="privacyUrl" style="height: 500px !important;"></iframe>
+  </div>
+</ng-template>

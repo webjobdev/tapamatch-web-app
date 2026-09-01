@@ -1,0 +1,133 @@
+<div class="container-fluid page">
+  <div class="d-flex page__box p-3 mt-2">
+    <div class="px-4 md:px-10 mx-auto w-full">
+      <div>
+        <div class="flex flex-wrap">
+          <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
+            <app-card-counts [challenges]="mHomeUpcomingChallengeResponse.data"></app-card-counts>
+          </div>
+          <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
+            <app-card-counts [upcomingEvent]="mHomeUpcomingEventResponse.data"></app-card-counts>
+          </div>
+          <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
+            <app-card-counts [upcomingFriendly]="mHomeUpcomingFriendlyResponse.data"></app-card-counts>
+          </div>
+          <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
+            <app-card-counts [teamData]="mHomeUserTeamResponse.data"></app-card-counts>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page__content card-box-shadow p-4 position-relative">
+    <div class="flex flex-wrap">
+      <div class="w-full xl:w-8/12  xl:mb-0 p-4">
+        <div id="carouselExampleControls" class="carousel slide set-border-carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item" *ngFor="let banner of mHomeBannerResponse.data; let i = index"
+              [ngClass]="{'active': selectedIndex === i}">
+              <img class="d-block w-100 h-500" src="{{banner}}" style="border-radius: 8px;">
+            </div>
+          </div>
+          <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+      <div class="w-full xl:w-4/12 xl:mb-0 p-4">
+        <div class="post-card">
+          <p class="latest-post">LATEST POSTS</p>
+          <button data-bs-toggle="modal" data-bs-target="#addPost" (click)="open(content)"
+            class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none ease-linear transition-all duration-150"
+            type="button">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+        <app-card-page-small [posts]="mHomePostResponse.data"></app-card-page-small>
+      </div>
+    </div>
+    <div class="flex flex-wrap mt-4">
+      <div class="w-full xl:w-12/12 mb-12 xl:mb-0 px-4">
+        <app-card-page [leaderboard]="mHomeLeaderBoardResponse.data"></app-card-page>
+      </div>
+      <div class="w-full xl:w-6/12 mb-12 xl:mb-0 px-4">
+        <app-card-page [challenges]="mHomeUpcomingChallengeResponse.data"></app-card-page>
+      </div>
+      <div class="w-full xl:w-6/12 mb-12 xl:mb-0 px-4">
+        <app-card-page [upcomingFriendly]="mHomeUpcomingFriendlyResponse.data"></app-card-page>
+      </div>
+      <div class="w-full xl:w-6/12 mb-12 xl:mb-0 px-4">
+        <app-card-page [upcomingEvent]="mHomeUpcomingEventResponse.data"></app-card-page>
+      </div>
+      <div class="w-full xl:w-6/12 mb-12 xl:mb-0 px-4">
+        <app-card-page [result]="mHomeResultResponse.data"></app-card-page>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #content let-modal data-backdrop="false">
+  <div class="modal-header">
+
+    <button
+      class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+      type="button" (click)="modal.dismiss('Cross click')">
+      <mat-icon>close</mat-icon>
+    </button>
+    <h4 class="modal-title" id="modal-basic-title">Create Post</h4>
+
+    <button style="float: right"
+      class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none ease-linear transition-all duration-150"
+      type="button">
+      <label for="image" class="input-group" class="align-center file-img">
+        <input type="file" name="image" id="image" class="displaynone" (change)="preview($event)" />
+        <mat-icon class="mr-3" (click)="removeImageVideo()">camera_enhance</mat-icon>
+      </label>
+      <mat-icon (click)="savePost()">send</mat-icon>
+    </button>
+  </div>
+  <div *ngIf="selectVideoImage == ''" class="modal-body modal-img">
+    <form [formGroup]="createPostForm">
+
+      <div class="form-group mb4 align-left">
+        <textarea style="
+          height: 300px;" type="text" id="content" name="content" class="form-control mt-2" formControlName="content"
+          required></textarea>
+        <label class="form-control-placeholder" for="content">Description</label>
+      </div>
+
+    </form>
+  </div>
+  <div *ngIf="selectVideoImage != ''" class="modal-body" style="padding: 5px !important;height: 530px">
+    <form [formGroup]="createPostForm">
+      <div *ngIf=" selectVideoImage !=''" style="margin: 0 auto; text-align: center;">
+        <label for="image" class="input-group" class="align-center width-size bg-trans">
+          <input type="file" name="image" id="image" style="display:none;" (change)="preview($event)" />
+
+          <img *ngIf=" selectVideoImage !='' && type && type.includes('image')" src="{{selectVideoImage}}"
+            class="back-black img-view" />
+          <video *ngIf="selectVideoImage != '' && type && type.includes('video')" controls
+            (canplay)="pauseVideo(videoplayer)" #videoPlayer style="width: 100%;height: 200px;">
+            <source src="{{selectVideoImage}}" type="video/mp4" class="back-black">
+            Your browser does not support the video tag.
+          </video>
+
+        </label>
+      </div>
+      <div class="form-group mb4 align-left">
+        <textarea style="
+          height: 300px;" type="text" id="content" class="form-control mt-2" formControlName="content"
+          required></textarea>
+        <label class="form-control-placeholder" for="content">Description</label>
+      </div>
+
+    </form>
+  </div>
+  <app-modaldialog *ngIf="loaderShow"></app-modaldialog>
+
+</ng-template>
+<app-modaldialog *ngIf="loaderShow"></app-modaldialog>

@@ -1,0 +1,32 @@
+@import "../home/home.component.scss";
+
+.frnd-request {
+  font-size: 16px;
+  color: red;
+  font-weight: 600;
+}
+
+.frnd-request-pending {
+  font-size: 16px;
+  color: red;
+}
+
+.reject-btn {
+  color: #fff !important;
+  font-size: 20px;
+  background: red !important;
+}
+
+.accept-btn {
+  color: #fff !important;
+  font-size: 20px;
+  background: #0b2d06 !important;
+}
+
+.m-10 {
+  margin: 10px;
+}
+
+.team-font {
+  font-size: 16px !important;
+}

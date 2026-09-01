@@ -1,0 +1,72 @@
+mat-toolbar {
+  position: fixed;
+  top: 0;
+  z-index: 100;
+
+}
+
+mat-toolbar-row {
+  background-image: linear-gradient(to right, rgba(255, 0, 0, 0), rgba(233, 169, 39));
+}
+
+ul {
+  li {
+    list-style: none;
+  }
+}
+
+button {
+  outline: none;
+  border: 0;
+  background: transparent;
+}
+
+.user {
+  font-size: 14px;
+}
+
+mat-toolbar {
+  background: #e9a927;
+  height: 50px;
+}
+
+.user-image {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+
+  &-icon {
+    height: 18px;
+    font-size: 16px;
+  }
+}
+
+::ng-deep {
+  .mat-menu-content {
+    width: 160px;
+  }
+}
+
+.logo {
+  text-align: center;
+
+  img {
+    width: 80px;
+    height: 40px;
+  }
+}
+
+.header-menu-icon {
+  font-size: 30px !important;
+  height: 30px !important;
+  width: 30px !important;
+}
+
+.header-title {
+  font-size: 25px;
+  margin-left: 15px;
+}
+
+.pad-0 {
+  padding: 0 !important;
+}

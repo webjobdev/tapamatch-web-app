@@ -1,0 +1,11 @@
+<div class="container-fluid page ">
+  <div class="d-flex page__box p-3 mt-2" style="min-height: 120px !important;">
+    Feeds
+  </div>
+  <div class=" page__content card-box-shadow p-2 position-relative">
+    <div class="container emp-profile p-2 feeds-page-post">
+      <app-card-page-small [feedposts]="posts"></app-card-page-small>
+    </div>
+  </div>
+</div>
+<app-modaldialog *ngIf="loaderShow"></app-modaldialog>

@@ -1,0 +1,11 @@
+<mat-sidenav-container style="background: #3f8935;">
+  <mat-sidenav *ngIf="sidebar" mode="side" opened="true" class="sidemenu" autosize fixedTopGap="56" style="border-radius: 10px;
+  margin: 5px;">
+    <app-sidenav></app-sidenav>
+    <!-- <router-outlet></router-outlet> -->
+  </mat-sidenav>
+  <mat-sidenav-content [ngStyle]="{'margin-left': sidebarState == 'open' ? '220px' : '60px'}">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

@@ -1,0 +1,19 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+// mat-drawer {
+//   width: 260px;
+// }
+mat-drawer-container {
+  height: 100%;
+}
+
+mat-drawer {
+  background: rgba(233, 169, 39);
+  position: fixed;
+  // border: 10px solid #e4e2ee;
+  // border-radius: 20px;
+}

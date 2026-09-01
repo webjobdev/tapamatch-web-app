@@ -1,0 +1,7 @@
+@import "../../home/home.component.scss";
+
+@media(min-width: 800px) {
+  .feeds-page-post {
+    width: 50% !important;
+  }
+}

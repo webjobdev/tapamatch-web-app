@@ -1,0 +1,22 @@
+@import "../home/home.component.scss";
+
+.venueData {
+  border-radius: 8px !important;
+  color: #0c3007;
+  font-size: 16px !important;
+}
+
+.venueId {
+  position: absolute !important;
+  top: 10px !important;
+  right: 18px !important;
+}
+
+.venueSave {
+  color: #0e3508 !important;
+  font-size: 30px !important;
+  height: 30px !important;
+  width: 30px !important;
+  font-weight: 700 !important;
+
+}

@@ -1,0 +1,54 @@
+<section class="background-radial-gradient overflow-scroll">
+  <div class="container px-4  px-md-5 text-center text-lg-start mt-5">
+    <div class="row gx-lg-5 align-items-center">
+      <div class="col-lg-5  mb-lg-0 position-relative">
+        <div class="card bg-glass card-box-shadow">
+          <div class="card-body px-4 pb-5 px-md-5">
+            <form [formGroup]="loginFormgroup">
+              <div class=" form-outline text-center">
+                <img src="../../../assets/images/Tap.png" style="width: 170px !important">
+              </div>
+              <div class="form-group form-outline mb-4 text-center">
+                <label class="slogan noteWorthy-fonts">Its everything to do with sports !</label>
+              </div>
+              <div>
+                <div class="form-group mb4 align-left">
+                  <input type="text" id="email" class="form-control" formControlName="email" [(ngModel)]="email"
+                    required>
+                  <label class="form-control-placeholder" for="email">Username or Email</label>
+                </div>
+
+                <div class="form-group  align-left">
+                  <input type="password" id="password" class="form-control" formControlName="password"
+                    [(ngModel)]="password" required>
+                  <label class="form-control-placeholder" for="password">Password</label>
+                </div>
+                <div class="form-check mb-4  checkbox-font">
+                  <input type="checkbox" class="form-check-input checkbox-clr" id="keepSignedIn"
+                    (input)="keepSignedIn($event)">
+                  <label class="form-check-label" for="keepSignedIn">Keep me signed in</label>
+                </div>
+
+                <div class="mb-4">
+                  <button type="submit" class="btn btn-success btn-block btn-fonts box-shad" (click)="login()">
+                    Login
+                  </button>
+                </div>
+                <div class="form-check mb-4  checkbox-font align-right">
+                  <label class="form-check-label" for="exampleCheck1" (click)="goToForgotPassword()">Forgot
+                    password ?</label>
+                </div>
+                <div>
+                  <button type="submit" class="btn btn-success btn-block  btn-fonts box-shad" (click)="goToSignup()">
+                    Sign up
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-modaldialog *ngIf="loaderShow"></app-modaldialog>

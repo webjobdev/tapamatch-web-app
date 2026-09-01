@@ -1,0 +1,279 @@
+<div class="container-fluid page">
+  <div class="d-flex page__box pt-2 pl-3 pr-3 pb-3 mt-2 min-height-wallet min-height-100">
+    <div class="row width-size">
+      <div class="col-md-6 h-60">
+        <label *ngIf="!update" class="bg-trans line-h">Create Match</label>
+        <label *ngIf="update" class="bg-trans line-h">Update Match</label>
+      </div>
+    </div>
+
+  </div>
+  <div class="page__content p-2 position-relative min-h-calc-90">
+    <div class="flex flex-wrap mt-2">
+      <div class="container text-center text-lg-start set-margin-zero">
+        <div class="row gx-lg-5 align-items-center">
+          <div class="col-lg-8 mb-5 mb-lg-0 position-relative m-0-auto">
+            <div class="card bg-glass card-box-shadow">
+              <div class="card-body">
+                <form [formGroup]="createEventFormgroup">
+
+                  <div class="form-group  align-left mb-3">
+                    <input type="text" id="title" class="form-control" name="title" formControlName="title" required>
+                    <label class="form-control-placeholder" for="title">Match Title</label>
+                  </div>
+                  <!-- <div class="form-group  align-left mb-3">
+                    <input type="text" id="friendly" class="form-control" name="friendly" formControlName="friendly"
+                      required (click)="getFriendlyList(content)">
+                    <label class="form-control-placeholder" for="friendly">Select Friendly</label>
+                  </div> -->
+                  <div class="form-group  align-left mb-3">
+                    <input type="submit" id="friend" class="form-control align-left" name="friend"
+                      formControlName="friend" required (click)="getFriendList(content)">
+                    <label class="form-control-placeholder" for="friend">Select User</label>
+                  </div>
+                  <div class="form-group align-left mb-3">
+                    <select class="form-select" name="sport" id="floatingSelectGrid"
+                      aria-label="Floating label select example" formControlName="sport">
+                      <option value="" [disabled]=true>Select</option>
+                      <option *ngFor="let sport of mSportsResponse.data" value="{{sport.id}}">
+                        {{sport.sport_name}}
+                      </option>
+                    </select>
+                    <label class="form-control-placeholder" for="floatingSelectGrid">Select Sport</label>
+                  </div>
+                  <div class="form-group  align-left mb-3">
+                    <input type="submit" id="venue" class="form-control align-left" name="venue" formControlName="venue"
+                      required (click)="getVenueList(content)">
+                    <label class="form-control-placeholder" for="venue">Select Venue</label>
+                  </div>
+                  <div class="form-group  align-left mb-3">
+                    <input type="datetime-local" id="date" class="form-control" name="date" formControlName="date"
+                      required>
+                  </div>
+                  <div class="row g-2">
+                    <div class="col-md-9">
+                      <div class="form-group  align-left">
+                        <textarea style="
+              height: 120px;" type="text" id="description" name="description" class="form-control "
+                          formControlName="description" required></textarea>
+                        <label class="form-control-placeholder" for="description">About This Match</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="form-group  align-left ">
+                        <label for="image" class="align-center width-size">
+                          <input type="file" name="image" id="image" class="displaynone" (change)="preview($event)" />
+                          <img src="{{imgView}}" class="img-preview" />
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <button *ngIf="!update" type="submit"
+                      class="btn btn-success btn-block btn-fonts box-shad update-btn" (click)="createNewEvent()">
+                      Create Match
+                    </button>
+                    <button *ngIf="update" type="submit" class="btn btn-success btn-block btn-fonts box-shad update-btn"
+                      (click)="updateEvent()">
+                      Update Match
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-modaldialog *ngIf="loaderShow"></app-modaldialog>
+<ng-template #content let-modal data-backdrop="false">
+  <div *ngIf="createFriendlyVenue">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Venue</h4>
+      <button
+        class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        type="button" (click)="saveVenue()">
+        <mat-icon>done</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body p-1 friendlyshow">
+      <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search"
+        (input)=" searchVenue($event)">
+      <div *ngIf="!searchtoggle" class="pt-3">
+        <div *ngFor="let venue of mListVenueResponse.data; let i=index" class="col-xl-12 col-sm-12 mb-3"
+          (click)="selectVenue(venue)">
+          <div class="rounded py-3 px-3 align-center box-shad venueData"
+            [ngStyle]="{'border': mCreateEventRequest.e_location_id != venue.id ? 'none' : '2px solid #0c3007','background-color': mCreateEventRequest.e_location_id != venue.id ? '#fff' : '#e9a927'}">
+            <label class="width-size align-left bg-trans font-600">{{venue.name}}</label><br>
+            <label class="width-size align-left bg-trans">{{venue.description}}</label><br>
+            <label class="width-size align-right bg-trans">€ {{venue.price}}</label><br>
+            <button [hidden]="mCreateEventRequest.e_location_id != venue.id"
+              class=" venueId btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button" (click)="modal.dismiss('Cross click')">
+              <mat-icon class="venueSave">done_outline</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="searchtoggle" class="pt-3">
+        <div *ngFor="let venue of searchVenueList; let i=index" class="col-xl-12 col-sm-12 mb-3"
+          (click)="selectVenue(venue)">
+          <div class=" rounded py-3 px-3 align-center box-shad venueData"
+            [ngStyle]="{'border': mCreateEventRequest.e_location_id != venue.id ? 'none' : '2px solid #0c3007','background-color': mCreateEventRequest.e_location_id != venue.id ? '#fff' : '#e9a927'}">
+            <label class="width-size align-left bg-trans font-600">{{venue.name}}</label><br>
+            <label class="width-size align-left bg-trans">{{venue.description}}</label><br>
+            <label class="width-size align-right bg-trans">€ {{venue.price}}</label><br>
+            <button [hidden]="mCreateEventRequest.e_location_id != venue.id"
+              class="venueId btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button">
+              <mat-icon class="venueSave">done_outline</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="createFriendlyUser">
+    <!-- <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Upcoming Friendly</h4>
+      <button
+        class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        type="button">
+        <mat-icon *ngIf="mHomeUpcomingFriendlyResponse.data.length > 0" (click)="saveFriendly()">done</mat-icon>
+        <mat-icon *ngIf="mHomeUpcomingFriendlyResponse.data.length == 0" (click)="modal.dismiss('Cross click')">close
+        </mat-icon>
+      </button>
+    </div>
+    <div class="modal-body p-1 friendlyshow">
+      <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search"
+        (input)="searchFriendly($event)">
+      <div *ngIf="!searchtoggle" class="pt-3">
+        <div class="task" *ngFor="let friendly of mHomeUpcomingFriendlyResponse.data; let i=index"
+          (click)="selectFriendly(friendly)"
+          [ngStyle]="{'border': mCreateEventRequest.e_invite != friendly.id ? 'none' : '2px solid #0c3007','background-color': mCreateEventRequest.e_invite != friendly.id ? '#fff' : '#e9a927'}">
+          <div class="task-title">
+            Match
+          </div>
+          <div class="row set-row">
+            <div class="col-4 align-center">
+              <img
+                *ngIf="friendly?.team_a?.profile_image == '' || friendly?.team_a?.profile_image == null || !friendly?.team_a?.profile_image.includes('http')"
+                class="img-size-set" src="../../../assets/images/Gender.png">
+              <img
+                *ngIf="friendly?.team_a?.profile_image != '' && friendly?.team_a?.profile_image != null && friendly?.team_a?.profile_image.includes('http')"
+                class="img-size-set" src="{{friendly?.team_a?.profile_image}}">
+              <label class="name">{{friendly?.user_a?.fname}} {{friendly?.user_a?.lname}}</label>
+            </div>
+            <div class="col-4 align-center">
+              <img class="img-size-set m-0-auto" src="../../../assets/images/versus.png">
+              <label class="date">{{friendly?.frd_date}}</label>
+            </div>
+            <div class="col-4 align-center">
+              <img
+                *ngIf="friendly?.user_b != null && (friendly?.user_b?.profile_image == '' || friendly?.user_b?.profile_image == null || !friendly?.user_b?.profile_image.includes('http'))"
+                class="img-size-set" src="../../../assets/images/Gender.png">
+              <img
+                *ngIf="friendly?.user_b != null && friendly?.user_b?.profile_image != '' && friendly?.user_b?.profile_image != null && friendly?.user_b?.profile_image.includes('http')"
+                class="img-size-set" src="{{friendly?.user_b?.profile_image}}">
+              <img *ngIf="friendly?.user_b == null;" class="img-size-set" src="../../../assets/images/Gender.png">
+              <label *ngIf="friendly?.user_b != null" class="name">{{friendly?.user_b?.fname}}
+                {{friendly?.user_b?.lname}}</label>
+              <label *ngIf="friendly?.user_b == null" class="name">Pending</label>
+            </div>
+          </div>
+          <div class="align-center frndtitle">
+            <label class="name frnd-margin">{{friendly?.frd_title}}</label>
+          </div>
+
+        </div>
+      </div>
+      <div *ngIf="searchtoggle" class="pt-3">
+        <div class="task" *ngFor="let friendly of searchFriendlyList; let i=index" (click)="selectFriendly(friendly)"
+          [ngStyle]="{'border': mCreateEventRequest.e_invite != friendly.id ? 'none' : '2px solid #0c3007','background-color': mCreateEventRequest.e_invite != friendly.id ? '#fff' : '#e9a927'}">
+          <div class="task-title">
+            Match
+          </div>
+          <div class="row set-row">
+            <div class="col-4 align-center">
+              <img
+                *ngIf="friendly?.team_a?.profile_image == '' || friendly?.team_a?.profile_image == null || !friendly?.team_a?.profile_image.includes('http')"
+                class="img-size-set" src="../../../assets/images/Gender.png">
+              <img
+                *ngIf="friendly?.team_a?.profile_image != '' && friendly?.team_a?.profile_image != null && friendly?.team_a?.profile_image.includes('http')"
+                class="img-size-set" src="{{friendly?.team_a?.profile_image}}">
+              <label class="name">{{friendly?.user_a?.fname}} {{friendly?.user_a?.lname}}</label>
+            </div>
+            <div class="col-4 align-center">
+              <img class="img-size-set m-0-auto" src="../../../assets/images/versus.png">
+              <label class="date">{{friendly?.frd_date}}</label>
+            </div>
+            <div class="col-4 align-center">
+              <img
+                *ngIf="friendly?.user_b != null && (friendly?.user_b?.profile_image == '' || friendly?.user_b?.profile_image == null || !friendly?.user_b?.profile_image.includes('http'))"
+                class="img-size-set" src="../../../assets/images/Gender.png">
+              <img
+                *ngIf="friendly?.user_b != null && friendly?.user_b?.profile_image != '' && friendly?.user_b?.profile_image != null && friendly?.user_b?.profile_image.includes('http')"
+                class="img-size-set" src="{{friendly?.user_b?.profile_image}}">
+              <img *ngIf="friendly?.user_b == null;" class="img-size-set" src="../../../assets/images/Gender.png">
+              <label *ngIf="friendly?.user_b != null" class="name">{{friendly?.user_b?.fname}}
+                {{friendly?.user_b?.lname}}</label>
+              <label *ngIf="friendly?.user_b == null" class="name">Pending</label>
+            </div>
+          </div>
+          <div class="align-center frndtitle">
+            <label class="name frnd-margin">{{friendly?.frd_title}}</label>
+          </div>
+
+        </div>
+      </div>
+    </div> -->
+
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Friends</h4>
+      <button
+        class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        type="button" (click)="saveFriend()">
+        <mat-icon>done</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body p-1 friendlyshow">
+      <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search"
+        (input)="searchFriend($event)">
+      <div *ngIf="!searchtoggle" class="pt-3">
+        <div *ngFor="let friend of mFriendListResponse.data; let i=index" class="col-xl-12 col-sm-12 mb-3"
+          (click)="selectFriend(friend)">
+          <div class="rounded py-3 px-3 align-center box-shad venueData"
+            [ngStyle]="{'border': !friendId.includes(','+friend.user.id+',') ? 'none' : '2px solid #0c3007','background-color': !friendId.includes(','+friend.user.id+',') ? '#fff' : '#e9a927'}">
+            <label class="width-size align-left bg-trans font-600">{{friend?.user?.fname}}
+              {{friend?.user?.lname}}</label><br>
+            <label class="width-size align-left bg-trans">{{friend?.user?.banner_description}}</label><br>
+            <button [hidden]="!friendId.includes(','+friend.user.id+',')"
+              class="venueId btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button">
+              <mat-icon class="venueSave">done_outline</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="searchtoggle" class="pt-3">
+        <div *ngFor="let friend of searchFriendList; let i=index" class="col-xl-12 col-sm-12 mb-3"
+          (click)="selectFriend(friend)">
+          <div class="rounded py-3 px-3 align-center box-shad venueData"
+            [ngStyle]="{'border': !friendId.includes(','+friend.user.id+',') ? 'none' : '2px solid #0c3007','background-color': !friendId.includes(','+friend.user.id+',') ? '#fff' : '#e9a927'}">
+            <label class="width-size align-left bg-trans font-600">{{friend?.user?.fname}}
+              {{friend?.user?.lname}}</label><br>
+            <label class="width-size align-left bg-trans">{{friend?.user?.banner_description}}</label><br>
+            <button [hidden]="!friendId.includes(','+friend.user.id+',')"
+              class="venueId btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button">
+              <mat-icon class="venueSave">done_outline</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

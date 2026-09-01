@@ -1,0 +1,536 @@
+<div class="container-fluid page">
+  <div class="d-flex page__box pt-2 pl-3 pr-3 pb-3 mt-2 min-height-wallet min-height-100">
+    <div class="row width-size">
+      <div class="col-md-6 h-60">
+        <label class="bg-trans line-h">Lists</label>
+      </div>
+    </div>
+
+  </div>
+  <div class="page__content p-2 position-relative min-h-calc-90">
+    <div class="flex flex-wrap mt-2">
+      <div class="board">
+        <div class="board-wrapper">
+
+          <div class="board-columns">
+            <div class="board-column">
+
+              <div class="column-title">
+                <p class="title-list">CHALLENGES</p>
+                <button data-bs-toggle="modal" data-bs-target="#addPost" (click)="goToCreateChallenge()"
+                  class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none ease-linear transition-all duration-150"
+                  type="button">
+                  <mat-icon>add_box</mat-icon>
+                </button>
+              </div>
+              <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item segment-title">
+                  <a class="nav-link active label-profile child-tab m-0-i" id="upcoming-challenge-tab"
+                    data-toggle="pill" href="#upcoming-challenge" role="tab" aria-controls="upcoming-challenge"
+                    aria-selected="true">Upcoming</a>
+                </li>
+                <li class="nav-item segment-title">
+                  <a class="nav-link label-profile child-tab m-0-i" id="history-challenge-tab" data-toggle="pill"
+                    href="#history-challenge" role="tab" aria-controls="history-challenge"
+                    aria-selected="false">History</a>
+                </li>
+              </ul>
+              <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="upcoming-challenge" role="tabpanel"
+                  aria-labelledby="upcoming-challenge-tab">
+                  <div class="tasks-container">
+                    <div class="task block  overflow-x-auto set-no-record"
+                      *ngIf="mListUpChallengeResponse?.data?.length < 1">No
+                      upcoming challenge Available!
+                    </div>
+                    <div class="task" *ngFor="let challenge of mListUpChallengeResponse.data; let i=index">
+                      <div class="task-title">
+                        <p class="match-title">Match</p>
+                        <button data-bs-toggle="modal" data-bs-target="#addPost" (click)="updateChallenge(challenge)"
+                          class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold upperc0ase px-2 py-1 rounded outline-none focus:outline-none ease-linear transition-all duration-150"
+                          type="button">
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                      </div>
+                      <div class="row set-row">
+                        <div class="col-4 align-center">
+                          <img
+                            *ngIf="challenge?.team_a?.c_image == '' || challenge?.team_a?.c_image == null || !challenge?.team_a?.c_image.includes('http')"
+                            class="img-size-set" src="../../../assets/images/Gender.png">
+                          <img
+                            *ngIf="challenge?.team_a?.c_image != '' && challenge?.team_a?.c_image != null && challenge?.team_a?.c_image.includes('http')"
+                            class="img-size-set" src="{{challenge?.team_a?.c_image}}">
+                          <label class="name">{{challenge?.team_a?.grp_name}}</label>
+                        </div>
+                        <div class="col-4 align-center">
+                          <img class="img-size-set" style="margin: 0 auto !important;"
+                            src="../../../assets/images/versus.png">
+                          <label class="date">{{challenge?.c_date}}</label>
+                        </div>
+                        <div class="col-4 align-center">
+
+                          <img
+                            *ngIf="challenge?.team_b != null && (challenge?.team_b?.c_image == '' || challenge?.team_b?.c_image == null || !challenge?.team_b?.c_image.includes('http'))"
+                            class="img-size-set" src="../../../assets/images/Gender.png">
+                          <img
+                            *ngIf="challenge?.team_b != null && challenge?.team_b?.c_image != '' && challenge?.team_b?.c_image != null && challenge?.team_b?.c_image.includes('http')"
+                            class="img-size-set" src="{{challenge?.team_b?.c_image}}">
+                          <img *ngIf="challenge?.team_b == null;" class="img-size-set"
+                            src="../../../assets/images/Gender.png">
+                          <label *ngIf="challenge?.team_b != null" class="name">{{challenge?.team_a?.grp_name}}</label>
+                          <label *ngIf="challenge?.team_b == null" class="name">Pending</label>
+                        </div>
+                      </div>
+                      <div class="align-center div-title">
+                        <label class="name div-label-title">{{challenge.c_title}}</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane fade show" id="history-challenge" role="tabpanel"
+                  aria-labelledby="history-challenge-tab">
+                  <div class="tasks-container">
+                    <div class="task block  overflow-x-auto set-no-record"
+                      *ngIf="mListChallengeResponse?.data?.length < 1">No
+                      challenge available!
+                    </div>
+                    <div class="task" *ngFor="let challenge of mListChallengeResponse.data; let i=index">
+                      <div class="task-title">
+                        Match
+                      </div>
+                      <div class="row set-row">
+                        <div class="col-4 align-center">
+                          <img
+                            *ngIf="challenge?.team_a?.c_image == '' || challenge?.team_a?.c_image == null || !challenge?.team_a?.c_image.includes('http')"
+                            class="img-size-set" src="../../../assets/images/Gender.png">
+                          <img
+                            *ngIf="challenge?.team_a?.c_image != '' && challenge?.team_a?.c_image != null && challenge?.team_a?.c_image.includes('http')"
+                            class="img-size-set" src="{{challenge?.team_a?.c_image}}">
+                          <label class="name">{{challenge?.team_a?.grp_name}}</label>
+                        </div>
+                        <div class="col-4 align-center">
+                          <img class="img-size-set m-0-auto" src="../../../assets/images/versus.png">
+                          <label class="date">{{challenge?.c_date}}</label>
+                        </div>
+                        <div class="col-4 align-center">
+
+                          <img
+                            *ngIf="challenge?.team_b != null && (challenge?.team_b?.c_image == '' || challenge?.team_b?.c_image == null || !challenge?.team_b?.c_image.includes('http'))"
+                            class="img-size-set" src="../../../assets/images/Gender.png">
+                          <img
+                            *ngIf="challenge?.team_b != null && challenge?.team_b?.c_image != '' && challenge?.team_b?.c_image != null && challenge?.team_b?.c_image.includes('http')"
+                            class="img-size-set" src="{{challenge?.team_b?.c_image}}">
+                          <img *ngIf="challenge?.team_b == null;" class="img-size-set"
+                            src="../../../assets/images/Gender.png">
+                          <label *ngIf="challenge?.team_b != null" class="name">{{challenge?.team_a?.grp_name}}</label>
+                          <label *ngIf="challenge?.team_b == null" class="name">Pending</label>
+                        </div>
+                      </div>
+                      <div class="align-center div-title">
+                        <label class="name div-label-title">{{challenge.c_title}}</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="board-columns">
+            <div class="board-column">
+
+              <div class="column-title">
+                <p class="title-list">FRIENDLY</p>
+                <button data-bs-toggle="modal" data-bs-target="#addPost" (click)="goToCreateFriendly()"
+                  class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none ease-linear transition-all duration-150"
+                  type="button">
+                  <mat-icon>add_box</mat-icon>
+                </button>
+              </div>
+              <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item segment-title">
+                  <a class="nav-link active label-profile child-tab m-0-i" id="upcoming-friendly-tab" data-toggle="pill"
+                    href="#upcoming-friendly" role="tab" aria-controls="upcoming-friendly"
+                    aria-selected="true">Upcoming</a>
+                </li>
+                <li class="nav-item segment-title">
+                  <a class="nav-link label-profile child-tab m-0-i" id="history-friendly-tab" data-toggle="pill"
+                    href="#history-friendly" role="tab" aria-controls="history-friendly"
+                    aria-selected="false">History</a>
+                </li>
+              </ul>
+              <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="upcoming-friendly" role="tabpanel"
+                  aria-labelledby="upcoming-friendly-tab">
+                  <div class="tasks-container">
+                    <div class="task block  overflow-x-auto set-no-record"
+                      *ngIf="mHomeUpcomingFriendlyResponse?.data?.length < 1">No
+                      upcoming friendly available!
+                    </div>
+                    <div class="task" *ngFor="let friendly of mHomeUpcomingFriendlyResponse.data; let i=index">
+                      <div class="task-title">
+                        <p class="match-title">Match</p>
+                        <button data-bs-toggle="modal" data-bs-target="#addPost" (click)="updateFriendly(friendly)"
+                          class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold upperc0ase px-2 py-1 rounded outline-none focus:outline-none ease-linear transition-all duration-150"
+                          type="button">
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                      </div>
+                      <div class="row set-row">
+                        <div class="col-4 align-center">
+                          <img
+                            *ngIf="friendly?.team_a?.profile_image == '' || friendly?.team_a?.profile_image == null || !friendly?.team_a?.profile_image.includes('http')"
+                            class="img-size-set" src="../../../assets/images/Gender.png">
+                          <img
+                            *ngIf="friendly?.team_a?.profile_image != '' && friendly?.team_a?.profile_image != null && friendly?.team_a?.profile_image.includes('http')"
+                            class="img-size-set" src="{{friendly?.team_a?.profile_image}}">
+                          <label class="name">{{friendly?.user_a?.fname}} {{friendly?.user_a?.lname}}</label>
+                        </div>
+                        <div class="col-4 align-center">
+                          <img class="img-size-set" style="margin: 0 auto !important;"
+                            src="../../../assets/images/versus.png">
+                          <label class="date">{{friendly?.frd_date}}</label>
+                        </div>
+                        <div class="col-4 align-center">
+                          <img
+                            *ngIf="friendly?.user_b != null && (friendly?.user_b?.profile_image == '' || friendly?.user_b?.profile_image == null || !friendly?.user_b?.profile_image.includes('http'))"
+                            class="img-size-set" src="../../../assets/images/Gender.png">
+                          <img
+                            *ngIf="friendly?.user_b != null && friendly?.user_b?.profile_image != '' && friendly?.user_b?.profile_image != null && friendly?.user_b?.profile_image.includes('http')"
+                            class="img-size-set" src="{{friendly?.user_b?.profile_image}}">
+                          <img *ngIf="friendly?.user_b == null;" class="img-size-set"
+                            src="../../../assets/images/Gender.png">
+                          <label *ngIf="friendly?.user_b != null" class="name">{{friendly?.user_b?.fname}}
+                            {{friendly?.user_b?.lname}}</label>
+                          <label *ngIf="friendly?.user_b == null" class="name">Pending</label>
+                        </div>
+                      </div>
+                      <div class="align-center div-title">
+                        <label class="name div-label-title">{{friendly?.frd_title}}</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane fade show" id="history-friendly" role="tabpanel"
+                  aria-labelledby="history-friendly-tab">
+                  <div class="tasks-container">
+                    <div class="task block overflow-x-auto set-no-record"
+                      *ngIf="mListFriendlyResponse?.data?.length < 1">No
+                      friendly available!
+                    </div>
+                    <div class="task" *ngFor="let friendly of mListFriendlyResponse.data; let i=index">
+                      <div class="task-title">
+                        Match
+                      </div>
+                      <div class="row set-row">
+                        <div class="col-4 align-center">
+                          <img
+                            *ngIf="friendly?.team_a?.profile_image == '' || friendly?.team_a?.profile_image == null || !friendly?.team_a?.profile_image.includes('http')"
+                            class="img-size-set" src="../../../assets/images/Gender.png">
+                          <img
+                            *ngIf="friendly?.team_a?.profile_image != '' && friendly?.team_a?.profile_image != null && friendly?.team_a?.profile_image.includes('http')"
+                            class="img-size-set" src="{{friendly?.team_a?.profile_image}}">
+                          <label class="name">{{friendly?.user_a?.fname}} {{friendly?.user_a?.lname}}</label>
+                        </div>
+                        <div class="col-4 align-center">
+                          <img class="img-size-set m-0-auto" src="../../../assets/images/versus.png">
+                          <label class="date">{{friendly?.frd_date}}</label>
+                        </div>
+                        <div class="col-4 align-center">
+                          <img
+                            *ngIf="friendly?.user_b != null && (friendly?.user_b?.profile_image == '' || friendly?.user_b?.profile_image == null || !friendly?.user_b?.profile_image.includes('http'))"
+                            class="img-size-set" src="../../../assets/images/Gender.png">
+                          <img
+                            *ngIf="friendly?.user_b != null && friendly?.user_b?.profile_image != '' && friendly?.user_b?.profile_image != null && friendly?.user_b?.profile_image.includes('http')"
+                            class="img-size-set" src="{{friendly?.user_b?.profile_image}}">
+                          <img *ngIf="friendly?.user_b == null;" class="img-size-set"
+                            src="../../../assets/images/Gender.png">
+                          <label *ngIf="friendly?.user_b != null" class="name">{{friendly?.user_b?.fname}}
+                            {{friendly?.user_b?.lname}}</label>
+                          <label *ngIf="friendly?.user_b == null" class="name">Pending</label>
+                        </div>
+                      </div>
+                      <div class="align-center div-title">
+                        <label class="name div-label-title">{{friendly?.frd_title}}</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="board-columns">
+            <div class="board-column">
+
+              <div class="column-title">
+                <p class="title-list">MATCHES</p>
+                <button data-bs-toggle="modal" data-bs-target="#addPost" (click)="goToCreateEvent()"
+                  class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none ease-linear transition-all duration-150"
+                  type="button">
+                  <mat-icon>add_box</mat-icon>
+                </button>
+              </div>
+              <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item segment-title">
+                  <a class="nav-link active label-profile child-tab m-0-i" id="upcoming-event-tab" data-toggle="pill"
+                    href="#upcoming-event" role="tab" aria-controls="upcoming-event" aria-selected="true">Upcoming</a>
+                </li>
+                <li class="nav-item segment-title">
+                  <a class="nav-link label-profile child-tab m-0-i" id="history-event-tab" data-toggle="pill"
+                    href="#history-event" role="tab" aria-controls="history-event" aria-selected="false">History</a>
+                </li>
+              </ul>
+              <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="upcoming-event" role="tabpanel"
+                  aria-labelledby="upcoming-event-tab">
+                  <div class="tasks-container">
+                    <div class="task block overflow-x-auto set-no-record"
+                      *ngIf="mHomeUpcomingEventResponse?.data?.length < 1">No
+                      Matches Available!
+                    </div>
+                    <div class="task" *ngFor="let event of mHomeUpcomingEventResponse.data; let i=index">
+                      <div class="task-title">
+                        <p class="match-title">{{event?.event_name}}</p>
+                        <button data-bs-toggle="modal" data-bs-target="#addPost" (click)="updateEvent(event)"
+                          class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold upperc0ase px-2 py-1 rounded outline-none focus:outline-none ease-linear transition-all duration-150"
+                          type="button">
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                      </div>
+                      <div class="row set-row">
+                        <div class="col-4 align-center">
+                          <img *ngIf="event?.e_image == null || event?.e_image == ''" class="event-image-set"
+                            src="../../../assets/images/Gender.png">
+                          <img *ngIf="event?.e_image != null && event?.e_image != ''" class="event-image-set"
+                            src="{{event?.e_image}}">
+                        </div>
+                        <div class="col-8 event-data">
+                          <label class="name align-left">{{event?.e_date}}</label>
+                          <label class="name align-left">{{event?.e_time}}</label>
+                          <label class="name align-left">{{event?.e_group}}</label>
+                          <label class="name align-left seemore" (click)="seeMore(content)">See Invities</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane fade show" id="history-event" role="tabpanel" aria-labelledby="history-event-tab">
+                  <div class="tasks-container">
+                    <div class="task block overflow-x-auto set-no-record" *ngIf="mListEventResponse?.data?.length < 1">
+                      No
+                      Matches Available!
+                    </div>
+                    <div class="task" *ngFor="let event of mListEventResponse.data; let i=index">
+                      <div class="task-title">
+                        {{event?.event_name}}
+                      </div>
+                      <div class="row set-row">
+                        <div class="col-4 align-center">
+                          <img *ngIf="event?.e_image == null || event?.e_image == ''" class="event-image-set"
+                            src="../../../assets/images/Gender.png">
+                          <img *ngIf="event?.e_image != null && event?.e_image != ''" class="event-image-set"
+                            src="{{event?.e_image}}">
+                        </div>
+                        <div class="col-8 event-data">
+                          <label class="name align-left">{{event?.e_date}}</label>
+                          <label class="name align-left">{{event?.e_time}}</label>
+                          <label class="name align-left">{{event?.e_group}}</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="board-columns">
+            <div class="board-column">
+
+              <div class="column-title">
+                <p class="title-list">TEAMS</p>
+                <button data-bs-toggle="modal" data-bs-target="#addPost" (click)="goToCreateTeam()"
+                  class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none ease-linear transition-all duration-150"
+                  type="button">
+                  <mat-icon>add_box</mat-icon>
+                </button>
+              </div>
+              <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" role="tabpanel">
+                  <div class="tasks-container" style="height: calc(100vh - 230px) !important;">
+                    <div class="task block overflow-x-auto set-no-record"
+                      *ngIf="mHomeUserTeamResponse?.data?.length < 1">No
+                      Team Available!
+                    </div>
+                    <div class="task" *ngFor="let team of mHomeUserTeamResponse.data; let i=index">
+                      <div class="task-title">
+                        <p class="match-title">{{team?.event_name}}</p>
+                        <button data-bs-toggle="modal" data-bs-target="#addPost" (click)="updateTeam(team)"
+                          class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold upperc0ase px-2 py-1 rounded outline-none focus:outline-none ease-linear transition-all duration-150"
+                          type="button">
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                      </div>
+                      <div class="row set-row">
+                        <div class="col-4 align-center">
+                          <img *ngIf="team?.grp_image == null || team?.grp_image == ''" class="event-image-set"
+                            src="../../../assets/images/Gender.png">
+                          <img *ngIf="team?.grp_image != null && team?.grp_image != ''" class="event-image-set"
+                            src="{{team?.grp_image}}">
+                        </div>
+                        <div class="col-8 event-data">
+                          <label class="name align-left">{{team?.grp_name}}</label>
+                          <label class="name align-left">{{team?.grp_gender}}</label>
+                          <label class="name align-left">{{team?.created_at}}</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="board-columns">
+            <div class="board-column">
+
+              <div class="column-title">
+                RESULTS </div>
+              <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item segment-title">
+                  <a class="nav-link active label-profile child-tab m-0-i" id="resultc-event-tab" data-toggle="pill"
+                    href="#resultc-event" role="tab" aria-controls="resultc-event" aria-selected="true">CHALLENGES</a>
+                </li>
+                <li class="nav-item segment-title">
+                  <a class="nav-link label-profile child-tab m-0-i" id="resultf-event-tab" data-toggle="pill"
+                    href="#resultf-event" role="tab" aria-controls="resultf-event" aria-selected="false">FRIENDLY</a>
+                </li>
+              </ul>
+              <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="resultc-event" role="tabpanel"
+                  aria-labelledby="resultc-event-tab">
+                  <div class="tasks-container">
+                    <div class="task block overflow-x-auto set-no-record"
+                      *ngIf="mHomeResultResponse?.data?.challenge.length < 1">No
+                      challenge results Available!
+                    </div>
+                    <div class="task" *ngFor="let challenge of mHomeResultResponse?.data?.challenge; let i = index;">
+                      <div class="task-title">
+                        Match
+                      </div>
+                      <div class="row set-row">
+                        <div class="col-4 align-center">
+                          <img
+                            *ngIf="challenge?.team_a?.c_image == '' || challenge?.team_a?.c_image == null || !challenge?.team_a?.c_image.includes('http')"
+                            class="img-size-set" src="../../../assets/images/Gender.png">
+                          <img
+                            *ngIf="challenge?.team_a?.c_image != '' && challenge?.team_a?.c_image != null && challenge?.team_a?.c_image.includes('http')"
+                            class="img-size-set" src="{{challenge?.team_a?.c_image}}">
+                          <label class="name">{{challenge?.team_a?.grp_name}}</label>
+                          <label class="score-size">Score: {{challenge?.team_a_score}}</label>
+                        </div>
+                        <div class="col-4 align-center div-title">
+                          <img class="img-size-set m-0-auto" src="../../../assets/images/versus.png">
+                          <label class="date">{{challenge?.challenge?.c_date}}</label>
+                          <label class="game-type">::Refree::</label>
+                          <label class="name">{{challenge?.referee?.fname}} {{challenge?.referee?.lname}}</label>
+                        </div>
+                        <div class="col-4 align-center">
+                          <img
+                            *ngIf="challenge?.team_b != null && (challenge?.team_b?.c_image == '' || challenge?.team_b?.c_image == null || !challenge?.team_b?.c_image.includes('http'))"
+                            class="img-size-set" src="../../../assets/images/Gender.png">
+                          <img
+                            *ngIf="challenge?.team_b != null && challenge?.team_b?.c_image != '' && challenge?.team_b?.c_image != null && challenge?.team_b?.c_image.includes('http')"
+                            class="img-size-set" src="{{challenge?.team_b?.c_image}}">
+                          <img *ngIf="challenge?.team_b == null;" class="img-size-set"
+                            src="../../../assets/images/Gender.png">
+                          <label *ngIf="challenge?.team_b != null" class="name">{{challenge?.team_b?.grp_name}}</label>
+                          <label *ngIf="challenge?.team_b == null" class="name">Pending</label>
+                          <label class="score-size">Score: {{challenge?.team_b_score}}</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane fade show " id="resultf-event" role="tabpanel" aria-labelledby="resultf-event-tab">
+                  <div class="task block overflow-x-auto set-no-record"
+                    *ngIf="mHomeResultResponse?.data?.friendly.length < 1">No
+                    friendly results Available!
+                  </div>
+                  <div class="tasks-container">
+                    <div class="task" *ngFor="let friendly of mHomeResultResponse?.data?.friendly; let i = index;">
+                      <div class="task-title">
+                        Match
+                      </div>
+                      <div class="row set-row">
+                        <div class="col-4 align-center">
+                          <img
+                            *ngIf="friendly?.user_a?.profile_image == '' || friendly?.user_a?.profile_image == null || !friendly?.user_a?.profile_image.includes('http')"
+                            class="img-size-set" src="../../../assets/images/Gender.png">
+                          <img
+                            *ngIf="friendly?.user_a?.profile_image != '' && friendly?.user_a?.profile_image != null && friendly?.user_a?.profile_image.includes('http')"
+                            class="img-size-set" src="{{friendly?.user_a?.profile_image}}">
+                          <label class="name">{{friendly?.user_a?.fname}} {{friendly?.user_a?.lname}}</label>
+                          <label class="score-size">Score: {{friendly?.team_a_score}}</label>
+                        </div>
+                        <div class="col-4 align-center div-title">
+                          <img class="img-size-set m-0-auto" src="../../../assets/images/versus.png">
+                          <label class="date">{{friendly?.friendly?.frd_date}}</label>
+                          <label class="game-type">::Refree::</label>
+                          <label class="name">{{friendly?.referee?.fname}} {{friendly?.referee?.lname}}</label>
+                        </div>
+                        <div class="col-4 align-center">
+                          <img
+                            *ngIf="friendly?.user_b != null && (friendly?.user_b?.profile_image == '' || friendly?.user_b?.profile_image == null || !friendly?.user_b?.profile_image.includes('http'))"
+                            class="img-size-set" src="../../../assets/images/Gender.png">
+                          <img
+                            *ngIf="friendly?.user_b != null && friendly?.user_b?.profile_image != '' && friendly?.user_b?.profile_image != null && friendly?.user_b?.profile_image.includes('http')"
+                            class="img-size-set" src="{{friendly?.user_b?.profile_image}}">
+                          <img *ngIf="friendly?.user_b == null;" class="img-size-set"
+                            src="../../../assets/images/Gender.png">
+                          <label *ngIf="friendly?.user_b != null" class="name">{{friendly?.user_b?.fname}}
+                            {{friendly?.user_b?.lname}}</label>
+                          <label *ngIf="friendly?.user_b == null" class="name">Pending</label>
+                          <label class="score-size">Score: {{friendly?.team_b_score}}</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-modal data-backdrop="false">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">MATCH INVITIES</h4>
+    <button
+      class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+      type="button" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="modal-body p-1 friendlyshow">
+    <div class="pt-3">
+      <div *ngFor="let friend of mHomeUpcomingEventResponse.data; let i=index" class="col-xl-12 col-sm-12 mb-3">
+        <div *ngFor="let invite of friend.event_invite; let i = index" class="rounded py-2 px-2 box-shad venueData">
+          <ion-row>
+            <ion-col size="6">
+              <label class=" bg-trans font-600">{{invite?.user?.fname}}
+                {{invite?.user?.lname}}</label>
+            </ion-col>
+            <ion-col size="6">
+              <label *ngIf="invite.status == 0" class="pending-color bg-trans font-600">Pending</label>
+              <label *ngIf="invite.status == 1" class="accepted-color bg-trans font-600">Accepted</label>
+              <label *ngIf="invite.status == 2" class="rejected-color bg-trans font-600">Rejected</label>
+            </ion-col>
+          </ion-row>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,464 @@
+<div class="container-fluid page">
+  <div class="d-flex page__box pt-2 pl-3 pr-3 pb-3 mt-2 min-height-wallet min-height-100">
+    <div class="row width-size">
+      <div class="col-md-6 h-60">
+        <label class="bg-trans line-h">Notification List</label>
+      </div>
+    </div>
+
+  </div>
+  <div class="page__content p-2 position-relative min-h-calc-90">
+    <div class="flex flex-wrap mt-2">
+      <div *ngFor="let not of mNotificationListResponse; let i=index" class="tasks-container width-size">
+        <div *ngIf="not.type == 'friend_request'" class="task box-shad m-10">
+          <div class="task-title">
+            FRIEND REQUEST
+          </div>
+          <div *ngIf="not.status == 'pending'" class="align-center p-2 frnd-request">
+            {{not.title}}
+          </div>
+          <div *ngIf="not.status == 'accept'" class="align-center p-2 frnd-request">
+            {{not.name}} friend request accepted.
+          </div>
+          <div *ngIf="not.status == 'reject'" class="align-center p-2 frnd-request">
+            {{not.name}} friend request rejected.
+          </div>
+          <div *ngIf="not.status == 'pending'" class="align-center p-2 frnd-request-pending">
+            <button
+              class="reject-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 rounded outline-none focus:outline-none mr-3 ease-linear transition-all duration-150"
+              type="button" (click)="reject(not)">
+              REJECT
+            </button>
+            <button
+              class="accept-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button" (click)="accept(not)">
+              ACCEPT
+            </button>
+          </div>
+        </div>
+        <div *ngIf="not.type == 'event_invitation'" class="task box-shad m-10">
+          <div class="task-title">
+            MATCH INVITE
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">INVITED BY</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{not?.details?.user?.fname}} {{not?.details?.user?.lname}}</label>
+            </div>
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">VENUE</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{not?.details?.e_location}}</label>
+            </div>
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">SPORT</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{not?.details?.sports?.sport_name}}</label>
+            </div>
+          </div>
+          <div *ngIf="not.status == '0'" class="align-center p-2 frnd-request">
+            {{not.title}}
+          </div>
+          <div *ngIf="not.status == '1'" class="align-center p-2 frnd-request">
+            "{{not.details.event_name}}" event request accepted.
+          </div>
+          <div *ngIf="not.status == '2'" class="align-center p-2 frnd-request">
+            "{{not.details.event_name}}" event request rejected.
+          </div>
+          <div *ngIf="not.status == '0'" class="align-center p-2 frnd-request-pending">
+            <button
+              class="reject-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 rounded outline-none focus:outline-none mr-3 ease-linear transition-all duration-150"
+              type="button" (click)="reject(not)">
+              REJECT
+            </button>
+            <button
+              class="accept-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button" (click)="accept(not)">
+              ACCEPT
+            </button>
+          </div>
+        </div>
+        <div *ngIf="not.type == 'event_invitation_rejected' || not.type == 'event_invitation_accepted'"
+          class="task box-shad m-10">
+          <div class="task-title">
+            MATCH INVITE
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">INVITED BY</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{not?.details?.user?.fname}} {{not?.details?.user?.lname}}</label>
+            </div>
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">VENUE</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{not?.details?.e_location}}</label>
+            </div>
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">SPORT</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{not?.details?.sports?.sport_name}}</label>
+            </div>
+          </div>
+          <div class="align-center p-2 frnd-request">
+            {{not.title}}
+          </div>
+        </div>
+        <div *ngIf="not.type == 'group_request'" class="task box-shad m-10">
+          <div class="task-title">
+            TEAM INVITE
+          </div>
+          <div *ngIf="not.status == 'pending'" class="align-center p-2 frnd-request">
+            {{not.title}}
+          </div>
+          <div *ngIf="not.status == 'yes'" class="align-center p-2 frnd-request">
+            Team invitation from {{not.name}} accepted.
+          </div>
+          <div *ngIf="not.status == 'no'" class="align-center p-2 frnd-request">
+            Team invitation from {{not.name}} rejected.
+          </div>
+          <div *ngIf="not.status == 'pending'" class="align-center p-2 frnd-request-pending">
+            <button
+              class="reject-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 rounded outline-none focus:outline-none mr-3 ease-linear transition-all duration-150"
+              type="button" (click)="reject(not)">
+              REJECT
+            </button>
+            <button
+              class="accept-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button" (click)="accept(not)">
+              ACCEPT
+            </button>
+          </div>
+        </div>
+        <div *ngIf="not.type == 'friend_request_accepted'" class="task box-shad m-10">
+          <div class="task-title">
+            FRIEND
+          </div>
+          <div class="align-center p-2 frnd-request">
+            {{not.title}}
+          </div>
+        </div>
+        <div *ngIf="not.type == 'friend_request_rejected'" class="task box-shad m-10">
+          <div class="task-title">
+            FRIEND
+          </div>
+          <div class="align-center p-2 frnd-request">
+            {{not.title}}
+          </div>
+        </div>
+        <div *ngIf="not.type == 'group_request_rejected'" class="task box-shad m-10">
+          <div class="task-title">
+            GROUP
+          </div>
+          <div class="align-center p-2 frnd-request">
+            {{not.title}}
+          </div>
+        </div>
+        <div *ngIf="not.type == 'group_request_accepted'" class="task box-shad m-10">
+          <div class="task-title">
+            GROUP
+          </div>
+          <div class="align-center p-2 frnd-request">
+            {{not.title}}
+          </div>
+        </div>
+        <div
+          *ngIf="not.type == 'challenge_invitation_accepted' || not.type == 'challenge_invitation_rejected' || not.type == 'challenge_refree_invitation_accepted' || not.type == 'challenge_refree_invitation_rejected' ||  not.type == 'friendly_request_accepted' || not.type == 'friendly_request_rejected' || not.type == 'friendly_refree_request_accepted' || not.type == 'friendly_refree_request_rejected' || not.type == 'challenge_invitation' || not.type == 'friendly_invitation' || not.type == 'challenge_refree_invitation' || not.type == 'friendly_refree_invitation'"
+          class="task box-shad m-10">
+          <div
+            *ngIf="not.type == 'challenge_invitation' || not.type == 'challenge_invitation_accepted' || not.type == 'challenge_invitation_rejected'"
+            class="task-title">
+            CHALLENGE
+          </div>
+          <div
+            *ngIf="not.type == 'friendly_invitation' || not.type == 'friendly_request_accepted' || not.type == 'friendly_request_rejected'"
+            class="task-title">
+            FRIENDLY
+          </div>
+          <div
+            *ngIf="not.type == 'challenge_refree_invitation' || not.type == 'challenge_refree_invitation_accepted' || not.type == 'challenge_refree_invitation_rejected' || not.type == 'friendly_refree_invitation' || not.type == 'friendly_refree_request_accepted' || not.type == 'friendly_refree_request_rejected'"
+            class="task-title">
+            REFREE
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">TEAM A</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{setValue('team_a',not)}}</label>
+            </div>
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">TEAM B</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{setValue('team_b',not)}}</label>
+            </div>
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">REFREE</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{setValue('refree',not)}}</label>
+            </div>
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">SPORT</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{setValue('sport',not)}}</label>
+            </div>
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">LOCATION</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{setValue('location',not)}}</label>
+            </div>
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">DATE</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{setValue('date',not)}}</label>
+            </div>
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">TIME</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{setValue('time',not)}}</label>
+            </div>
+          </div>
+          <div *ngIf="not.status == 'pending'" class="align-center p-2 frnd-request">
+            {{not.title}}
+          </div>
+          <div *ngIf="not.status == 'yes' && not.type == 'challenge_invitation'" class="align-center p-2 frnd-request">
+            Challenge request accepted!
+          </div>
+          <div *ngIf="not.status == 'no' && not.type == 'challenge_invitation'" class="align-center p-2 frnd-request">
+            Challenge request rejected.
+          </div>
+          <div *ngIf="not.status == 'yes' && not.type == 'friendly_invitation'" class="align-center p-2 frnd-request">
+            Friendly request accepted!
+          </div>
+          <div *ngIf="not.status == 'no' && not.type == 'friendly_invitation'" class="align-center p-2 frnd-request">
+            Friendly request rejected.
+          </div>
+          <div *ngIf="not.status == 'yes' && not.type == 'challenge_refree_invitation'"
+            class="align-center p-2 frnd-request">
+            Challenge refree request accepted!
+          </div>
+          <div *ngIf="not.status == 'no' && not.type == 'challenge_refree_invitation'"
+            class="align-center p-2 frnd-request">
+            Challenge refree request rejected.
+          </div>
+          <div *ngIf="not.status == 'yes' && not.type == 'friendly_refree_invitation'"
+            class="align-center p-2 frnd-request">
+            Friendly refree request accepted!
+          </div>
+          <div *ngIf="not.status == 'no' && not.type == 'friendly_refree_invitation'"
+            class="align-center p-2 frnd-request">
+            Friendly refree request rejected.
+          </div>
+          <div *ngIf="not.status == 'pending'" class="align-center p-2 frnd-request-pending">
+            <button
+              class="reject-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 rounded outline-none focus:outline-none mr-3 ease-linear transition-all duration-150"
+              type="button" (click)="reject(not)">
+              REJECT
+            </button>
+            <button
+              class="accept-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button" (click)="accept(not)">
+              ACCEPT
+            </button>
+          </div>
+        </div>
+        <div
+          *ngIf="not.type == 'venue_request_for_challenge' || not.type == 'venue_request_for_challenge_rejected' || not.type == 'venue_request_for_challenge_accepted' || not.type == 'venue_request_for_friendly' ||  not.type == 'venue_request_for_friendly_rejected' || not.type == 'venue_request_for_friendly_accepted'"
+          class="task box-shad m-10">
+          <div class="task-title">
+            VENUE REQUEST
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">TEAM A</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{setValue('team_a',not)}}</label>
+            </div>
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">TEAM B</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{setValue('team_b',not)}}</label>
+            </div>
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">REFREE</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{setValue('refree',not)}}</label>
+            </div>
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">SPORT</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{setValue('sport',not)}}</label>
+            </div>
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">LOCATION</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{setValue('location',not)}}</label>
+            </div>
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">DATE</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{setValue('date',not)}}</label>
+            </div>
+          </div>
+          <div class="row set-row team-font">
+            <div class="col-6">
+              <label class="bg-trans font-600">TIME</label>
+            </div>
+            <div class="col-6 align-right">
+              <label class="timeopen time">{{setValue('time',not)}}</label>
+            </div>
+          </div>
+          <div
+            *ngIf="not.status == '0' || not.type == 'venue_request_for_challenge_accepted' || not.type == 'venue_request_for_challenge_rejected' || not.type == 'venue_request_for_friendly_accepted' || not.type == 'venue_request_for_friendly_rejected'"
+            class="align-center p-2 frnd-request">
+            {{not.title}}
+          </div>
+          <div *ngIf="not.status == '1' && not.type == 'venue_request_for_challenge'"
+            class="align-center p-2 frnd-request">
+            Venue challenge request accepted!
+          </div>
+          <div *ngIf="not.status == '2' && not.type == 'venue_request_for_challenge'"
+            class="align-center p-2 frnd-request">
+            Venue challenge request rejected!
+          </div>
+          <div *ngIf="not.status == '1' && not.type == 'venue_request_for_friendly'"
+            class="align-center p-2 frnd-request">
+            Venue friendly request accepted!
+          </div>
+          <div *ngIf="not.status == '2' && not.type == 'venue_request_for_friendly'"
+            class="align-center p-2 frnd-request">
+            Venue friendly request rejected!
+          </div>
+          <div *ngIf="not.status == '3' && not.type == 'venue_request_for_challenge_rejected'"
+            class="align-center p-2 frnd-request">
+            Challenge Venue updated!
+          </div>
+          <div *ngIf="not.status == '3' && not.type == 'venue_request_for_friendly_rejected'"
+            class="align-center p-2 frnd-request">
+            Friendly Venue updated!
+          </div>
+
+          <div *ngIf="not.status == '0'" class="align-center p-2" style="font-size: 16px; color: red;">
+            <button
+              class="reject-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 rounded outline-none focus:outline-none mr-3 ease-linear transition-all duration-150"
+              type="button" (click)="reject(not)">
+              REJECT
+            </button>
+            <button
+              class="accept-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button" (click)="accept(not)">
+              ACCEPT
+            </button>
+          </div>
+          <div
+            *ngIf="not.status == '2' && (not.type == 'venue_request_for_challenge_rejected' || not.type == 'venue_request_for_friendly_rejected')"
+            class="align-center p-2 frnd-request-pending">
+            <button
+              class="accept-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button" (click)="getVenueList(content,not)">
+              CLICK HERE TO CHANGE VENUE
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-modaldialog *ngIf="loaderShow"></app-modaldialog>
+<ng-template #content let-modal data-backdrop="false">
+  <div *ngIf="selectVenueNew">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Venue</h4>
+      <button
+        class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        type="button" (click)="saveVenue()">
+        <mat-icon>done</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body p-1 friendlyshow">
+      <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search"
+        (input)=" searchVenue($event)">
+      <div *ngIf="!searchtoggle" class="pt-3">
+        <div *ngFor="let venue of mListVenueResponse.data; let i=index" class="col-xl-12 col-sm-12 mb-3"
+          (click)="selectVenue(venue)">
+          <div class="rounded py-3 px-3 align-center box-shad venueData"
+            [ngStyle]="{'border': mChallengeFriendlyChangeVenue.venue_id != venue.id ? 'none' : '2px solid #0c3007','background-color': mChallengeFriendlyChangeVenue.venue_id != venue.id ? '#fff' : '#e9a927'}">
+            <label class="width-size align-left bg-trans font-600">{{venue.name}}</label><br>
+            <label class="width-size align-left bg-trans">{{venue.description}}</label><br>
+            <label class="width-size align-right bg-trans">€ {{venue.price}}</label><br>
+            <button [hidden]="mChallengeFriendlyChangeVenue.venue_id != venue.id"
+              class="venueId btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button" (click)="modal.dismiss('Cross click')">
+              <mat-icon class="venueSave">done_outline</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="searchtoggle" class="pt-3">
+        <div *ngFor="let venue of searchVenueList; let i=index" class="col-xl-12 col-sm-12 mb-3"
+          (click)="selectVenue(venue)">
+          <div class=" rounded py-3 px-3 align-center box-shad venueData"
+            [ngStyle]="{'border': mChallengeFriendlyChangeVenue.venue_id != venue.id ? 'none' : '2px solid #0c3007','background-color': mChallengeFriendlyChangeVenue.venue_id != venue.id ? '#fff' : '#e9a927'}">
+            <label class="width-size align-left bg-trans font-600">{{venue.name}}</label><br>
+            <label class="width-size align-left bg-trans">{{venue.description}}</label><br>
+            <label class="width-size align-right bg-trans">€ {{venue.price}}</label><br>
+            <button [hidden]="mChallengeFriendlyChangeVenue.venue_id != venue.id"
+              class="venueId btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button">
+              <mat-icon class="venueSave">done_outline</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

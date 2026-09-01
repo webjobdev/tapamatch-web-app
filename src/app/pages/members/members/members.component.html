@@ -1,0 +1,281 @@
+<div class="container-fluid page">
+  <div class="d-flex page__box p-3 mt-2 minimum-h">
+    <text *ngIf="friends != 'friends'">Browse Members</text>
+    <text *ngIf="friends == 'friends'">My Friends </text>
+    <nav class="navbar navbar-light bg-light set-transparent-members">
+      <form class="form-inline">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search"
+          (input)="searchMember($event)">
+        <button
+          class=" btn-filter btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          type="button" (click)="filterModal(content)">
+          <mat-icon class="btn-mat-filter">filter_list</mat-icon>
+        </button>
+      </form>
+    </nav>
+  </div>
+  <div class="page__content card-box-shadow p-2 position-relative">
+
+    <div *ngIf="!searchtoggle && friends != 'friends'" class="flex flex-wrap mt-4">
+      <div *ngIf="mUserListResponse?.data?.length < 1" class="col--xl3 col-sm-6 mb-5 no-members">
+        <div class="bg-white rounded py-4 px-4 align-center box-shad" style="height: 100px;">
+          No Member Available!
+        </div>
+      </div>
+      <div *ngFor="let user of mUserListResponse.data; let i=index" class="col-xl-3 col-sm-6 mb-5 member-list-card">
+        <div class="bg-white rounded py-4 px-4 align-center box-shad member-data">
+          <img *ngIf="user?.profile_image == '' || user?.profile_image == null"
+            src="../../../../assets/images/Gender.png" alt="" width="100"
+            class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+          <img *ngIf="user?.profile_image != '' && user?.profile_image != null" src="{{user?.profile_image}}" alt=""
+            width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+          <h5 class="mb-0">{{user?.fname}} {{user?.lname}}</h5><span
+            class="small text-uppercase text-muted">{{user?.user_type}}</span>
+          <div>
+            <button *ngIf="!user?.is_friend && user?.request_receive.length == 0"
+              class="add-frnd btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button" (click)="addNextFriend($event.target,user?.id)">
+              Add Friend
+            </button>
+            <button *ngIf="user?.is_friend"
+              class="frnd btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button">
+              Friend
+            </button>
+            <button *ngIf="!user?.is_friend && user?.request_receive.length > 0"
+              class="frnd btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button">
+              Request Sent
+            </button>
+            <button
+              class="profile-set btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button" (click)="viewProfile(user?.id)">
+              <mat-icon>account_circle</mat-icon>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div *ngIf="searchtoggle && friends != 'friends'" class="flex flex-wrap mt-4">
+      <div *ngIf="searchList.length == 0" class="col--xl3 col-sm-6 mb-5 no-members">
+        <div class="bg-white rounded py-4 px-4 align-center box-shad" style="height: 100px;">
+          No Member Available!
+        </div>
+      </div>
+      <div *ngFor="let user of searchList; let i=index" class="col-xl-3 col-sm-6 mb-5 member-list-card">
+        <div class="bg-white rounded py-4 px-4 align-center box-shad member-data">
+          <img *ngIf="user?.profile_image == '' || user?.profile_image == null"
+            src="../../../../assets/images/Gender.png" alt="" width="100"
+            class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+          <img *ngIf="user?.profile_image != '' && user?.profile_image != null" src="{{user?.profile_image}}" alt=""
+            width="100" class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+          <h5 class="mb-0">{{user?.fname}} {{user?.lname}}</h5><span
+            class="small text-uppercase text-muted">{{user?.user_type}}</span>
+          <div>
+            <button *ngIf="!user?.is_friend && user?.request_receive.length == 0"
+              class="add-frnd btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button" (click)="addNextFriend($event.target,user?.id)">
+              Add Friend
+            </button>
+            <button *ngIf="user?.is_friend"
+              class="frnd btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button">
+              Friend
+            </button>
+            <button *ngIf="!user?.is_friend && user?.request_receive.length > 0"
+              class="frnd btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button">
+              Request Sent
+            </button>
+            <button
+              class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button" (click)="viewProfile(user?.id)">
+              <mat-icon>account_circle</mat-icon>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div *ngIf="searchtoggle && friends == 'friends'" class="flex flex-wrap mt-4">
+      <div *ngIf="searchList.length == 0" class="col--xl3 col-sm-6 mb-5 no-members">
+        <div class="bg-white rounded py-4 px-4 align-center box-shad" style="height: 100px;">
+          No Friend Available!
+        </div>
+      </div>
+      <div *ngFor="let user of searchList; let i=index" class="col-xl-3 col-sm-6 mb-5 member-list-card">
+        <div class="bg-white rounded py-4 px-4 align-center box-shad member-data">
+          <img *ngIf="user?.user?.profile_image == '' || user?.user?.profile_image == null"
+            src="../../../../assets/images/Gender.png" alt="" width="100"
+            class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+          <img *ngIf="user?.user?.profile_image != '' && user?.user?.profile_image != null"
+            src="{{user?.user?.profile_image}}" alt="" width="100"
+            class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+          <h5 class="mb-0">{{user?.user?.fname}} {{user?.user?.lname}}</h5><span
+            class="small text-uppercase text-muted">{{user?.user?.user_type}}</span>
+          <div>
+            <button
+              class="profile-set btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button" (click)="viewProfile(user?.user?.id)">
+              <mat-icon>account_circle</mat-icon>
+            </button>
+            <button
+              class="add-frnd btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button" (click)="goToChat(user?.user)">
+              Chat
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div *ngIf="!searchtoggle && friends == 'friends'" class="flex flex-wrap mt-4">
+      <div *ngIf="mFriendListResponse?.data?.length == 0" class="col--xl3 col-sm-6 mb-5 no-members">
+        <div class="bg-white rounded py-4 px-4 align-center box-shad" style="height: 100px;">
+          No Friend Available!
+        </div>
+      </div>
+      <div *ngFor="let user of mFriendListResponse.data; let i=index" class="col-xl-3 col-sm-6 mb-5 member-data">
+        <div class="bg-white rounded py-4 px-4 align-center box-shad member-list-card">
+          <img *ngIf="user?.user?.profile_image == '' || user?.user?.profile_image == null"
+            src="../../../../assets/images/Gender.png" alt="" width="100"
+            class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+          <img *ngIf="user?.user?.profile_image != '' && user?.user?.profile_image != null"
+            src="{{user?.user?.profile_image}}" alt="" width="100"
+            class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
+          <h5 class="mb-0">{{user?.user?.fname}} {{user?.user?.lname}}</h5><span
+            class="small text-uppercase text-muted">{{user?.user?.user_type}}</span>
+          <div>
+            <button
+              class="profile-set btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button" (click)="viewProfile(user?.user?.id)">
+              <mat-icon>account_circle</mat-icon>
+            </button>
+            <button
+              class="add-frnd btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button" (click)="goToChat(user?.user)">
+              Chat
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<app-modaldialog *ngIf="loaderShow"></app-modaldialog>
+<ng-template #content let-modal data-backdrop="false">
+  <div>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Select Filters</h4>
+    </div>
+    <div class="modal-body p-1">
+      <form [formGroup]="filterUserFormgroup" class="m-t-10">
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-group  align-left mb-3">
+              <input type="text" id="name" class="form-control" name="name" formControlName="name" required>
+              <label class="form-control-placeholder" for="name">Name</label>
+            </div>
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-group  align-left mb-3">
+              <input type="text" id="uname" class="form-control" name="uname" formControlName="uname" required>
+              <label class="form-control-placeholder" for="uname">Username</label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group align-left mb-3">
+          <select class="form-select" name="userType" id="floatingSelectGrid" aria-label="Floating label select example"
+            formControlName="userType">
+            <option value="">Select</option>
+            <option *ngFor="let uT of mGetUserTypeRes.data" value="{{uT.id}}">{{uT.name}}</option>
+          </select>
+          <label class="form-control-placeholder" for="floatingSelectGrid">UserType</label>
+        </div>
+        <div class="form-group align-left mb-3">
+          <select class="form-select" name="sport" id="floatingSelectGrid" aria-label="Floating label select example"
+            formControlName="sport">
+            <option value="">Select</option>
+            <option *ngFor="let sp of mSportsResponse.data" value="{{sp.id}}">{{sp.sport_name}}</option>
+          </select>
+          <label class="form-control-placeholder" for="floatingSelectGrid">Sport</label>
+        </div>
+
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-group  align-left mb-3">
+              <select class="form-select" name="activity" aria-label="Floating label select example"
+                formControlName="activity">
+                <option value="">Select</option>
+                <option *ngFor="let ac of mActivitiesResponse.data" value="{{ac.id}}">{{ac.name}}</option>
+              </select>
+              <label class="form-control-placeholder" for="floatingSelectGrid">Activity</label>
+            </div>
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-group  align-left mb-3">
+              <select class="form-select" name="gender" aria-label="Floating label select example"
+                formControlName="gender">
+                <option value="">Select</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Male & Female</option>
+              </select>
+              <label class="form-control-placeholder" for="floatingSelectGrid">Gender</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-group align-left mb-3">
+              <select class="form-select" name="country" id="floatingSelectGrid"
+                aria-label="Floating label select example" formControlName="country" (change)="selectCountry()">
+                <option value="">Select</option>
+                <option *ngFor="let countries of mGetCountriesRes.data" value="{{countries.id}}">
+                  {{countries.country_name}}</option>
+              </select>
+              <label class="form-control-placeholder" for="floatingSelectGrid">Country</label>
+            </div>
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-md">
+            <div class="form-group  align-left mb-3">
+              <select class="form-select" name="city" id="floatingSelectGrid" aria-label="Floating label select example"
+                formControlName="city">
+                <option value="">Select</option>
+                <option *ngFor="let cities of mGetCitiesRes.data" value="{{cities.id}}">
+                  {{cities.city_name}}</option>
+              </select>
+              <label class="form-control-placeholder" for="city">City</label>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer p-1">
+      <button
+        class="close-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        type="button" (click)="modal.dismiss('Cross click')">
+        Close
+      </button>
+      <button
+        class="clear-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        type="button" (click)="clearAll()">
+        Clear
+      </button>
+      <button
+        class="filter-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        type="button" (click)="filterData()">
+        Filter
+      </button>
+    </div>
+  </div>
+</ng-template>

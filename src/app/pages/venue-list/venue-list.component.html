@@ -1,0 +1,29 @@
+<div class="container-fluid page">
+  <div class="d-flex page__box pt-2 pl-3 pr-3 pb-3 mt-2 min-height-wallet min-height-100">
+    <div class="row width-size">
+      <div class="col-md-6 h-60">
+        <label class="bg-trans line-h">Venues</label>
+      </div>
+    </div>
+
+  </div>
+  <div class="page__content p-2 position-relative min-h-calc-90s">
+    <div class="task block box-shad overflow-x-auto set-no-record" style="margin: 10px;"
+      *ngIf="mVenueListResponse.data?.length < 1">No
+      Venue Available!
+    </div>
+    <div *ngIf="!loaderShow" class="flex flex-wrap mt-4">
+
+      <div class="w-full xl:w-6/12 mb-12 xl:mb-0 px-4" *ngFor="let v of mVenueListResponse.data; let i=index">
+        <div
+          class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded set-border-tables">
+          <div class="block w-full overflow-x-auto  h-100">
+            <app-card-page [venue]="v">
+            </app-card-page>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-modaldialog *ngIf="loaderShow"></app-modaldialog>

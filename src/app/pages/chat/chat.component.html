@@ -1,0 +1,153 @@
+<div class="container-fluid page">
+  <div class="d-flex page__box pt-2 pl-3 pr-3 pb-3 mt-2 min-height-wallet min-height-100">
+    <div class="row width-size">
+      <div class="col-md-6 h-60">
+        <label class="bg-trans line-h">Chat</label>
+      </div>
+    </div>
+
+  </div>
+  <div class="page__content p-2 position-relative min-h-calc-110">
+    <div class="flex flex-wrap mt-2">
+      <div class="container-fluid h-50">
+        <div class="row justify-content-center h-100">
+          <div class="col-md-4 col-xl-4 chat">
+            <div class="card mb-sm-3 mb-md-0 contacts_card">
+              <div class="card-header">
+                <div class="input-group">
+                  <input type="text" placeholder="Search..." name="" class="form-control search"
+                    (input)="searchUser($event.target.value)">
+                </div>
+              </div>
+              <div *ngIf="searchToggle" class="card-body contacts_body">
+                <ul class="contacts">
+                  <li *ngFor="let u of searchUsers; let i=index" (click)="openChat(u,target)"
+                    [ngStyle]="{'background': otherUserDetail?.id == u?.id ? 'rgba(0, 0, 0, 0.3)' : 'none'}">
+                    <div class="d-flex bd-highlight">
+                      <div class="img_cont">
+                        <img *ngIf="u?.image_profile != '' && u?.image_profile != null" src="{{u?.image_profile}}"
+                          class="rounded-circle user_img">
+                        <img *ngIf="u?.image_profile == '' || u?.image_profile == null"
+                          src="../../../assets/images/Gender.png" class="rounded-circle user_img">
+                      </div>
+                      <div class="user_info">
+                        <span>{{u.username}}</span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div *ngIf="!searchToggle" class="card-body contacts_body">
+                <ul class="contacts">
+                  <li *ngFor="let u of userDetails; let i=index" (click)="openChat(u,target)"
+                    [ngStyle]="{'background': otherUserDetail?.id == u?.id ? 'rgba(0, 0, 0, 0.3)' : 'none'}">
+                    <div class="d-flex bd-highlight">
+                      <div class="img_cont">
+                        <img *ngIf="u?.image_profile != '' && u?.image_profile != null" src="{{u?.image_profile}}"
+                          class="rounded-circle user_img">
+                        <img *ngIf="u?.image_profile == '' || u?.image_profile == null"
+                          src="../../../assets/images/Gender.png" class="rounded-circle user_img">
+                      </div>
+                      <div class="user_info">
+                        <span>{{u.username}}</span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="card-footer"></div>
+            </div>
+          </div>
+          <div class="col-md-8 col-xl-8 chat">
+            <div *ngIf="!selectedUser" class="card">
+              <div class="card-body msg_card_body">
+                <img class="noMessage" src="../../../assets/images/noMessages.webp">
+              </div>
+            </div>
+            <div *ngIf="selectedUser" class="card">
+              <div class="card-header msg_head">
+                <div class="d-flex bd-highlight">
+                  <div class="img_cont">
+                    <img *ngIf="otherUserDetail?.image_profile != '' && otherUserDetail?.image_profile != null"
+                      src="{{otherUserDetail?.image_profile}}" class="rounded-circle user_img">
+                    <img *ngIf="otherUserDetail?.image_profile == '' || otherUserDetail?.image_profile == null"
+                      src="../../../assets/images/Gender.png" class="rounded-circle user_img">
+                  </div>
+                  <div class="user_info">
+                    <span>Chat with {{otherUserDetail?.username}}</span>
+                    <p>{{messages?.length}} Messages</p>
+                  </div>
+
+                </div>
+                <span class="loc-color">
+                  <mat-icon (click)="shareLocation(target)">location_on</mat-icon>
+                </span>
+              </div>
+              <div class="card-body msg_card_body" #target>
+                <div *ngFor="let m of messages; let i=index" class="d-flex justify-content-start mb-4">
+                  <div *ngIf="m.id != profile.id" class="img_cont_msg">
+                    <img *ngIf="otherUserDetail?.image_profile != '' && otherUserDetail?.image_profile != null"
+                      src="{{otherUserDetail?.image_profile}}" class="rounded-circle user_img_msg">
+                    <img *ngIf="otherUserDetail?.image_profile == '' || otherUserDetail?.image_profile == null"
+                      src="../../../assets/images/Gender.png" class="rounded-circle user_img_msg">
+                  </div>
+                  <div *ngIf="m.id != profile.id && m.type == 'MESSAGE_TYPE_TEXT'" class="msg_cotainer">
+                    {{m.message}}
+                  </div>
+                  <div *ngIf="m.id != profile.id && m.type == 'MESSAGE_TYPE_IMAGE'" class="msg_cotainer"
+                    style="width: 50% !important;">
+                    <img src="{{m.message}}" style="border-radius: 8px !important;background: black;">
+                  </div>
+                  <div *ngIf="m.id != profile.id && m.type == 'MESSAGE_TYPE_LOCATION'" class="msg_cotainer"
+                    style="width: 50% !important;">
+                    <img src="../../../assets/images/maps.png" (click)="goToLocation(m.message)">
+                  </div>
+                  <div *ngIf="m.id == profile.id && m.type == 'MESSAGE_TYPE_TEXT'" class="msg_cotainer_send ml-10">
+                    {{m.message}}
+                  </div>
+                  <div *ngIf="m.id == profile.id && m.type == 'MESSAGE_TYPE_IMAGE'" class="msg_cotainer_send" style="width: 50% !important;
+                  margin-left: 40% !important;background: none !important;">
+                    <img src="{{m.message}}" style="border-radius: 8px !important;background: black;">
+                  </div>
+                  <div *ngIf="m.id == profile.id && m.type == 'MESSAGE_TYPE_LOCATION'" class="msg_cotainer_send" style="    width: 50% !important;
+                  margin-left: 40% !important;
+                  background: none !important;">
+                    <img src="../../../assets/images/maps.png" (click)="goToLocation(m.message)">
+                  </div>
+                  <div *ngIf="m.id == profile.id" class="img_cont_msg">
+                    <img *ngIf="profile.profile_image != '' && profile.profile_image != null"
+                      src="{{profile.profile_image}}" class="rounded-circle user_img_msg">
+                    <img *ngIf="profile.profile_image == '' || profile.profile_image == null"
+                      src="../../../assets/images/Gender.png" class="rounded-circle user_img_msg">
+                  </div>
+                </div>
+
+              </div>
+              <div class="row attachment">
+                <div class="col-1 p-0">
+                  <label for="image" class="align-center width-size attachment-img">
+                    <input type="file" name="image" id="image" style="display:none;"
+                      (change)="preview($event,target)" />
+                    <mat-icon>attachment</mat-icon>
+                  </label>
+                </div>
+                <div class="col-10">
+                  <form [formGroup]="sendMessageFormGroup">
+                    <input name='message' class="form-control type_msg bg-trans" accept="image/*"
+                      placeholder="Type your message..." formControlName='message' name="message"
+                      (input)="writeMessage($event)" />
+                  </form>
+                </div>
+                <div class="col-1 send-sms">
+                  <mat-icon (click)="sendMessage('text',target)">send</mat-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<app-modaldialog *ngIf="loaderShow"></app-modaldialog>

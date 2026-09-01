@@ -1,0 +1,228 @@
+@import '../../global.scss';
+
+.switch {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  width: 62px;
+  height: 27px;
+  background-color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.switch-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.switch-label {
+  position: relative;
+  display: block;
+  height: inherit;
+  font-size: 10px;
+  text-transform: uppercase;
+  background: #e9a927;
+  border: 1px solid #0b2d06;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12), inset 0 0 2px rgba(0, 0, 0, 0.15);
+  -webkit-transition: 0.15s ease-out;
+  -moz-transition: 0.15s ease-out;
+  -o-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  -webkit-transition-property: opacity background;
+  -moz-transition-property: opacity background;
+  -o-transition-property: opacity background;
+  transition-property: opacity background;
+}
+
+.switch-label:before,
+.switch-label:after {
+  position: absolute;
+  top: 50%;
+  margin-top: -.5em;
+  line-height: 1;
+  -webkit-transition: inherit;
+  -moz-transition: inherit;
+  -o-transition: inherit;
+  transition: inherit;
+}
+
+.switch-label:before {
+  content: attr(data-off);
+  right: 11px;
+  color: #0b2d06;
+  text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+  font-weight: 700;
+}
+
+.switch-label:after {
+  content: attr(data-on);
+  left: 11px;
+  color: #fff;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  font-weight: 700;
+}
+
+.switch-input:checked~.switch-label {
+  background: #0b2d06;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15), inset 0 0 3px rgba(0, 0, 0, 0.2);
+}
+
+.switch-input:checked~.switch-label:before {
+  opacity: 0;
+}
+
+.switch-input:checked~.switch-label:after {
+  opacity: 1;
+}
+
+.switch-handle {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 10px;
+  -webkit-transition: left 0.15s ease-out;
+  -moz-transition: left 0.15s ease-out;
+  -o-transition: left 0.15s ease-out;
+  transition: left 0.15s ease-out;
+}
+
+.switch-handle:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -6px 0 0 -6px;
+  width: 12px;
+  height: 12px;
+  background: #f9f9f9;
+  border-radius: 6px;
+}
+
+.switch-input:checked~.switch-handle {
+  left: 40px;
+  box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+.switch-green>.switch-input:checked~.switch-label {
+  background: #4fb845;
+}
+
+.timeCss {
+  height: 28px !important;
+  font-size: 10px !important;
+  padding: 6px !important;
+  color: #fff !important;
+}
+
+.timeopen {
+  background: green !important;
+}
+
+.timeclose {
+  background: red !important;
+}
+
+.time {
+  width: 50px;
+  border-radius: 8px;
+}
+
+.priceCss {
+  height: 28px !important;
+  font-size: 12px !important;
+  padding: 6px !important;
+  width: 50px;
+}
+
+.font-18 {
+  font-size: 18px !important;
+}
+
+.h-300 {
+  height: 300px !important
+}
+
+.table-collapse {
+  border-collapse: separate;
+  border-spacing: 0 0.7em;
+  padding: 0 10px;
+}
+
+.b-last {
+  border-radius: 0 8px 8px 0
+}
+
+.b-first {
+  border-radius: 8px 0 0 8px
+}
+
+.th-css {
+  position: relative;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.img-grp-leaderboard {
+  margin: 2px auto;
+  width: 60px !important;
+  height: 60px !important;
+  position: absolute;
+  top: -10px;
+  left: 55px;
+  border-radius: 50%;
+  object-fit: contain;
+  background: black;
+  border: 2px solid #0e3508;
+}
+
+.label-margin {
+  margin-left: 75px;
+}
+
+
+.title-div {
+  height: 30px;
+  padding: 5px 0;
+}
+
+.title {
+  margin-bottom: 0.5rem !important;
+}
+
+.e-image {
+  height: 80px !important;
+}
+
+.e-col {
+  padding: 10px 10px 10px 0 !important;
+}
+
+.venue-day {
+  font-size: 16px !important;
+  padding: 7px 0 0;
+}
+
+.bg-lightgrey {
+  background: lightgrey
+}
+
+.venue-price-div {
+  font-size: 16px !important;
+  background: #e9a927;
+  border-radius: 0 0 8px 8px;
+  padding: 8px 0 0 0;
+}
+
+.venue-price-label {
+  background: transparent !important;
+  font-size: 18px;
+  font-weight: 600;
+}

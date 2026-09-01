@@ -1,0 +1,143 @@
+<section class="background-radial-gradient overflow-scroll">
+  <div class="container px-4 px-md-5 text-center text-lg-start mt-4 set-margin-zero">
+    <div class="row gx-lg-5 align-items-center mb-5">
+      <div class="col-lg-8 mb-5 mb-lg-0 position-relative">
+        <div class="card bg-glass card-box-shadow">
+          <div class="card-body px-4 px-md-5">
+            <form [formGroup]="signUpFormgroup">
+
+              <div class="form-check checkbox-font align-center">
+                <label class="form-check-label" for="exampleCheck1">Personal Details</label>
+              </div>
+              <div class="mb-3">
+                <label for="image" class="align-center width-size">
+                  <input type="file" name="image" id="image" style="display:none;" (change)="preview($event)" />
+                  <img src="{{imgView}}" class="img-view" />
+                </label>
+              </div>
+              <div class="form-group align-left mb-3">
+                <select class="form-select" name="userType" id="floatingSelectGrid"
+                  aria-label="Floating label select example" formControlName="userType">
+                  <option value="">Select</option>
+                  <option *ngFor="let uT of mGetUserTypeRes.data" value="{{uT.id}}">{{uT.name}}</option>
+                </select>
+                <label class="form-control-placeholder" for="floatingSelectGrid">UserType</label>
+              </div>
+              <div class="row g-2">
+                <div class="col-md">
+                  <div class="form-group  align-left mb-3">
+                    <input type="text" id="fname" class="form-control" name="fname" formControlName="fname" required>
+                    <label class="form-control-placeholder" for="fname">First Name</label>
+                  </div>
+                </div>
+                <div class="col-md">
+                  <div class="form-group  align-left mb-3">
+                    <input type="text" id="lname" class="form-control" name="lname" formControlName="lname" required>
+                    <label class="form-control-placeholder" for="lname">Last Name</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group  align-left mb-3">
+                <input type="number" id="phone" class="form-control" name="phone" formControlName="phone" required>
+                <label class="form-control-placeholder" for="phone">Phone Number</label>
+              </div>
+
+              <div class="row g-2">
+                <div class="col-md">
+                  <div class="form-group  align-left mb-3">
+                    <input type="date" id="dob" class="form-control" name="dob" formControlName="dob" required>
+                    <label class="form-control-placeholder" for="dob">Date of Birth</label>
+                  </div>
+                </div>
+                <div class="col-md">
+                  <div class="form-group  align-left mb-3">
+                    <select class="form-select" name="gender" aria-label="Floating label select example"
+                      formControlName="gender">
+                      <option value="">Select</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Male & Female</option>
+                    </select>
+                    <label class="form-control-placeholder" for="floatingSelectGrid">Gender</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row g-2">
+                <div class="col-md">
+                  <div class="form-group align-left mb-3">
+                    <select class="form-select" name="country" id="floatingSelectGrid"
+                      aria-label="Floating label select example" formControlName="country" (change)="selectCountry()">
+                      <option value="">Select</option>
+                      <option *ngFor="let countries of mGetCountriesRes.data" value="{{countries.id}}">
+                        {{countries.country_name}}</option>
+                    </select>
+                    <label class="form-control-placeholder" for="floatingSelectGrid">Country</label>
+                  </div>
+                </div>
+                <div class="col-md">
+                  <div class="form-group  align-left mb-3">
+                    <select class="form-select" name="city" id="floatingSelectGrid"
+                      aria-label="Floating label select example" formControlName="city">
+                      <option value="">Select</option>
+                      <option *ngFor="let cities of mGetCitiesRes.data" value="{{cities.id}}">
+                        {{cities.city_name}}</option>
+                    </select>
+                    <label class="form-control-placeholder" for="city">City</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-check mb-3  checkbox-font align-center">
+                <label class="form-check-label" for="exampleCheck1">Account Details</label>
+              </div>
+
+              <div class="row g-2">
+                <div class="col-md">
+                  <div class="form-group  align-left mb-3">
+                    <input type="text" id="uname" class="form-control" name="uname" formControlName="uname" required>
+                    <label class="form-control-placeholder" for="uname">Username</label>
+                  </div>
+                </div>
+                <div class="col-md">
+                  <div class="form-group  align-left mb-3">
+                    <input type="text" id="email" class="form-control" name="email" formControlName="email" required>
+                    <label class="form-control-placeholder" for="email">Email</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row g-2">
+                <div class="col-md">
+                  <div class="form-group  align-left mb-3">
+                    <input type="password" id="password" class="form-control" name="password" formControlName="password"
+                      required>
+                    <label class="form-control-placeholder" for="password">Password</label>
+                  </div>
+                </div>
+                <div class="col-md">
+                  <div class="form-group  align-left mb-3">
+                    <input type="password" id="cpassword" class="form-control" name="cpassword"
+                      formControlName="cpassword" required>
+                    <label class="form-control-placeholder" for="cpassword">Confirm Password</label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <button type="submit" class="btn btn-success btn-block btn-fonts box-shad" (click)="signUp()">
+                  Sign Up
+                </button>
+              </div>
+              <div class="form-check  checkbox-font align-center">
+                <label class="form-check-label" for="exampleCheck1">Already have an account ? <label
+                    class="login-label-signup" (click)="goToLogin()">Login</label></label>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-modaldialog *ngIf="loaderShow"></app-modaldialog>
