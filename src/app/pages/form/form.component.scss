@@ -1,1 +1,221 @@
+// Keep original global page classes (.page, .page__box, .page__content, etc.)
+// so nothing that depends on them elsewhere breaks.
 @import "../home/home.component.scss";
+
+// ===== DESIGN TOKENS (from brand palette) =====
+$color-blue: #18227b;
+$color-green: #4cb050;
+$color-btn-green: #058749;      // buttons / profile action color
+$color-bg-dark-green: #08332c;  // card dark background accent
+$color-card-light-green: #a5d6a7; // light card / selected background
+
+// ===== PAGE HEADER =====
+.page__box {
+  background: linear-gradient(135deg, $color-blue 0%, darken($color-blue, 8%) 100%) !important;
+
+  .title-icon {
+    vertical-align: middle;
+    margin-right: 8px;
+    color: #fff;
+  }
+}
+
+// ===== CHALLENGE CARD =====
+.challenge-card {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(8, 51, 44, 0.15);
+  border: none;
+
+  .card-body {
+    padding: 28px 24px;
+  }
+}
+
+// ===== FIELD ROWS =====
+.field-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  &--textarea {
+    align-items: flex-start;
+  }
+}
+
+.field-icon {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $color-card-light-green;
+  color: $color-bg-dark-green;
+  margin-top: 4px;
+
+  mat-icon {
+    font-size: 22px;
+    height: 22px;
+    width: 22px;
+  }
+
+  &--sport { background: rgba($color-green, 0.18); color: $color-green; }
+  &--venue { background: rgba($color-blue, 0.12); color: $color-blue; }
+  &--title { background: rgba($color-btn-green, 0.15); color: $color-btn-green; }
+  &--date  { background: rgba($color-blue, 0.12); color: $color-blue; }
+  &--desc  { background: rgba($color-green, 0.18); color: $color-green; }
+  &--team  { background: rgba($color-btn-green, 0.15); color: $color-btn-green; }
+  &--refree{ background: rgba($color-blue, 0.12); color: $color-blue; }
+}
+
+.field-input-wrap {
+  flex: 1;
+  position: relative;
+}
+
+// ===== INPUT / SELECT STYLING =====
+.form-control,
+.form-select {
+  border-radius: 10px !important;
+  border: 1.5px solid #e1eae1 !important;
+  padding: 1px 14px !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background-color: #fbfdfb !important;
+
+  &:focus {
+    border-color: $color-btn-green !important;
+    box-shadow: 0 0 0 3px rgba($color-btn-green, 0.15) !important;
+    outline: none;
+  }
+}
+
+.form-control-placeholder {
+  color: #6b7d6e;
+  font-size: 0.85rem;
+}
+
+// ===== SUBMIT BUTTON =====
+.submit-row {
+  margin-top: 8px;
+}
+
+.update-btn {
+  background: linear-gradient(135deg, $color-green 0%, $color-btn-green 100%) !important;
+  border: none !important;
+  border-radius: 30px !important;
+  padding: 12px 24px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 15px rgba($color-btn-green, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba($color-btn-green, 0.5);
+  }
+
+  .btn-icon {
+    vertical-align: middle;
+    margin-right: 6px;
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+  }
+}
+
+// ===== MODAL (Venue / Team / Referee pickers) =====
+.modal-header--themed {
+  background: linear-gradient(135deg, $color-bg-dark-green 0%, $color-btn-green 100%);
+  border-bottom: none;
+
+  .modal-title {
+    color: #fff;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+  }
+
+  .modal-title-icon {
+    margin-right: 8px;
+    color: #fff;
+  }
+}
+
+.icon-done-btn {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+//   border-radius: 8px !important;
+  border-radius: 12px !important;
+    padding: 3px 30px;
+  border: none;
+}
+
+.search-wrap {
+  position: relative;
+  margin-bottom: 4px;
+
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #8a9c8b;
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+  }
+}
+
+.search-input {
+  padding-left: 40px !important;
+  border-radius: 24px !important;
+  border: 1.5px solid #e1eae1 !important;
+  background: #f6faf6 !important;
+}
+
+// Venue / Team list items
+.venueData {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 12px !important;
+
+  &:hover {
+    box-shadow: 0 4px 14px rgba(8, 51, 44, 0.12);
+    transform: translateY(-1px);
+  }
+}
+
+.venueId,
+.venueSave {
+  background: $color-btn-green !important;
+}
+
+// Referee list items
+.refreeSelect {
+  cursor: pointer;
+  border-radius: 12px !important;
+  overflow: hidden;
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 14px rgba(8, 51, 44, 0.12);
+  }
+}
+
+.refree-img {
+  border-radius: 50%;
+  border: 2px solid $color-card-light-green;
+}
+
+.refree-name {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .name {
+    font-weight: 600;
+    color: $color-bg-dark-green;
+  }
+}

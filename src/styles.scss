@@ -245,7 +245,9 @@ select:focus {
 }
 
 .bg-img-table {
-  background: #0e3508;
+  // background: #0e3508;
+    // background: #18227b;
+    background: #18227b;
 }
 
 .bg-img-table-body {
@@ -325,7 +327,7 @@ select:focus {
   text-align: center;
   font-size: 16px;
   font-weight: 700;
-  color: #0e3508;
+  color: #18227b;
   // padding: 10px;
   height: 100%;
   padding: 80px 0;
@@ -352,9 +354,10 @@ select:focus {
   font-size: 16px;
   font-weight: 500;
   color: #fff;
-  background-image: linear-gradient(to right, #14874b, #0c2e07) !important;
+  // background-image: linear-gradient(to right, #14874b, #0c2e07) !important;
+  background-color: #4cb050 !important;
   padding: 6px !important;
-  border-radius: 0 0 8px 8px;
+  border-radius: 8px 8px 8px 8px;
 }
 
 .float-left {
@@ -822,7 +825,8 @@ app-modaldialog {
   text-align: center;
   font-size: 16px;
   font-weight: 700;
-  color: #0e3508;
+  // color: #0e3508;
+  color: #18227b;
   padding: 20px 0;
 }
 

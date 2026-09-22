@@ -1,4 +1,4 @@
-<div class="container-fluid page">
+<!-- <div class="container-fluid page">
   <div class="d-flex page__box p-3 mt-2">
     <div class="px-4 md:px-10 mx-auto w-full">
       <div>
@@ -51,6 +51,120 @@
         <app-card-page-small [posts]="mHomePostResponse.data"></app-card-page-small>
       </div>
     </div>
+    <div class="flex flex-wrap mt-4">
+      <div class="w-full xl:w-12/12 mb-12 xl:mb-0 px-4">
+        <app-card-page [leaderboard]="mHomeLeaderBoardResponse.data"></app-card-page>
+      </div>
+      <div class="w-full xl:w-6/12 mb-12 xl:mb-0 px-4">
+        <app-card-page [challenges]="mHomeUpcomingChallengeResponse.data"></app-card-page>
+      </div>
+      <div class="w-full xl:w-6/12 mb-12 xl:mb-0 px-4">
+        <app-card-page [upcomingFriendly]="mHomeUpcomingFriendlyResponse.data"></app-card-page>
+      </div>
+      <div class="w-full xl:w-6/12 mb-12 xl:mb-0 px-4">
+        <app-card-page [upcomingEvent]="mHomeUpcomingEventResponse.data"></app-card-page>
+      </div>
+      <div class="w-full xl:w-6/12 mb-12 xl:mb-0 px-4">
+        <app-card-page [result]="mHomeResultResponse.data"></app-card-page>
+      </div>
+    </div>
+  </div>
+</div> -->
+<div class="container-fluid page">
+  <div class="d-flex page__box p-3 mt-2">
+    <div class="px-4 md:px-10 mx-auto w-full">
+      <div>
+        <div class="flex flex-wrap">
+          <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
+            <app-card-counts [challenges]="mHomeUpcomingChallengeResponse.data"></app-card-counts>
+          </div>
+          <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
+            <app-card-counts [upcomingEvent]="mHomeUpcomingEventResponse.data"></app-card-counts>
+          </div>
+          <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
+            <app-card-counts [upcomingFriendly]="mHomeUpcomingFriendlyResponse.data"></app-card-counts>
+          </div>
+          <div class="w-full lg:w-6/12 xl:w-3/12 px-4">
+            <app-card-counts [teamData]="mHomeUserTeamResponse.data"></app-card-counts>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="page__content card-box-shadow p-4 position-relative">
+    <!-- Improved Banner Section -->
+    <div class="flex flex-wrap">
+      <div class="w-full xl:w-8/12 xl:mb-0 p-4">
+        <div class="banner-wrapper">
+          <div id="mainCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+            <!-- Carousel Indicators -->
+            <div class="carousel-indicators">
+              <button type="button" 
+                      *ngFor="let banner of mHomeBannerResponse.data; let i = index"
+                      [attr.data-bs-target]="'#mainCarousel'"
+                      [attr.data-bs-slide-to]="i"
+                      [class.active]="selectedIndex === i"
+                      [attr.aria-current]="selectedIndex === i ? 'true' : null"
+                      [attr.aria-label]="'Slide ' + (i + 1)">
+              </button>
+            </div>
+
+            <!-- Carousel Items -->
+            <div class="carousel-inner">
+              <div class="carousel-item" 
+                   *ngFor="let banner of mHomeBannerResponse.data; let i = index"
+                   [class.active]="selectedIndex === i">
+                <div class="banner-slide">
+                  <img class="d-block w-100 banner-image" 
+                       src="{{banner}}" 
+                       alt="Banner {{i + 1}}"
+                       (error)="handleImageError($event)">
+                  <div class="banner-overlay">
+                    <div class="banner-content">
+                      <h2 class="banner-title">Welcome to TapaMatch</h2>
+                      <p class="banner-subtitle">Discover amazing matches and challenges</p>
+                      <!-- <button class="btn btn-primary banner-btn">Explore Now</button> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Carousel Controls -->
+            <button class="carousel-control-prev" 
+                    type="button" 
+                    data-bs-target="#mainCarousel" 
+                    data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" 
+                    type="button" 
+                    data-bs-target="#mainCarousel" 
+                    data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Latest Posts Section -->
+      <div class="w-full xl:w-4/12 xl:mb-0 p-4">
+        <div class="post-card-header">
+          <p class="latest-post">LATEST POSTS</p>
+          <button data-bs-toggle="modal" data-bs-target="#addPost" (click)="open(content)"
+            class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none ease-linear transition-all duration-150"
+            type="button">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+        <app-card-page-small [posts]="mHomePostResponse.data"></app-card-page-small>
+      </div>
+    </div>
+
+    <!-- Other Sections -->
     <div class="flex flex-wrap mt-4">
       <div class="w-full xl:w-12/12 mb-12 xl:mb-0 px-4">
         <app-card-page [leaderboard]="mHomeLeaderBoardResponse.data"></app-card-page>

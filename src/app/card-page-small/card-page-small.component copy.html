@@ -1,0 +1,510 @@
+<!-- Posts Section -->
+<div *ngIf="posts" class="posts-container">
+  <div *ngIf="posts.length > 0" class="posts-list">
+    <div *ngFor="let post of posts; let i = index;" class="post-item">
+      <div class="post-card">
+        <!-- Post Header -->
+        <div class="post-header">
+          <div class="post-user">
+            <img *ngIf="post?.user?.profile_image == '' || post?.user?.profile_image == null"
+                 src="../../../assets/images/Gender.png"
+                 alt="User"
+                 class="user-avatar">
+            <img *ngIf="post?.user?.profile_image != '' && post?.user?.profile_image != null"
+                 src="{{post?.user?.profile_image}}"
+                 alt="{{post?.user?.name}}"
+                 class="user-avatar">
+            <div class="user-info">
+              <span class="user-name">{{post?.user?.name}}</span>
+              <span class="post-time">{{getDate(post?.created_at)}}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Post Content -->
+        <div class="post-content">
+          <p class="post-text">{{post?.content}}</p>
+        </div>
+
+        <!-- Post Media -->
+        <div *ngIf="post?.attachement != ''" class="post-media">
+          <video *ngIf="post?.attachement_type && post?.attachement_type.includes('video')" 
+                 controls
+                 (canplay)="pauseVideo(videoplayer)" 
+                 #videoPlayer 
+                 class="post-video">
+            <source src="{{post?.attachement}}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <img *ngIf="post?.attachement_type && !post?.attachement_type.includes('video') && post?.attachement != ''"
+               src="{{post?.attachement}}" 
+               class="post-image" 
+               alt="Post image">
+        </div>
+
+        <!-- Post Actions -->
+        <div class="post-actions">
+          <div class="action-group">
+            <button class="action-btn like-btn" 
+                    (click)="likeUnlikePost(post.id, post?.is_like ? 'unlike' : 'like')"
+                    [class.liked]="post?.is_like || likeStatus == post.id+'like'">
+              <mat-icon class="like-icon">
+                {{ (post?.is_like || likeStatus == post.id+'like') ? 'favorite' : 'favorite_border' }}
+              </mat-icon>
+              <span class="action-count">{{post?.like_count}}</span>
+            </button>
+          </div>
+          <div class="action-group">
+            <button class="action-btn comment-btn" (click)="open(content, post)">
+              <mat-icon>comment</mat-icon>
+              <span class="action-count">{{post?.comment_count}}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- View Comments -->
+        <p *ngIf="post?.comment_count > 0" class="view-comments" (click)="open(content, post)">
+          View all {{post?.comment_count}} comments
+        </p>
+
+        <!-- Comment Input -->
+        <div class="comment-box">
+          <div class="comment-input-wrapper">
+            <img *ngIf="userProfileImage" 
+                 src="{{userProfileImage}}" 
+                 alt="Your avatar" 
+                 class="comment-avatar">
+            <img *ngIf="!userProfileImage" 
+                 src="../../../assets/images/Gender.png" 
+                 alt="Your avatar" 
+                 class="comment-avatar">
+            <input class="comment-input" 
+                   type="text" 
+                   id="content" 
+                   [(ngModel)]="comment"
+                   (input)="changeComment($event.target.value)" 
+                   placeholder="Add a comment..."
+                   aria-label="Add a comment">
+            <button class="send-btn" (click)="sendComment(post.id)" [disabled]="!comment?.trim()">
+              <mat-icon>send</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="posts.length < 1">
+    <mat-icon class="empty-icon">chat_bubble_outline</mat-icon>
+    <h3 class="empty-title">No Posts Available</h3>
+    <p class="empty-desc">Be the first to share something</p>
+  </div>
+</div>
+
+<!-- User Posts Section -->
+<div *ngIf="userposts" class="posts-container">
+  <div *ngIf="userposts.length > 0" class="posts-list">
+    <div *ngFor="let post of userposts; let i = index;" class="post-item">
+      <div class="post-card">
+        <!-- Post Header -->
+        <div class="post-header">
+          <div class="post-user">
+            <img *ngIf="post?.user?.profile_image == '' || post?.user?.profile_image == null"
+                 src="../../../assets/images/Gender.png"
+                 alt="User"
+                 class="user-avatar">
+            <img *ngIf="post?.user?.profile_image != '' && post?.user?.profile_image != null"
+                 src="{{post?.user?.profile_image}}"
+                 alt="{{post?.user?.name}}"
+                 class="user-avatar">
+            <div class="user-info">
+              <span class="user-name">{{post?.user?.name}}</span>
+              <span class="post-time">{{getDate(post?.created_at)}}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Post Content -->
+        <div class="post-content">
+          <p class="post-text">{{post?.content}}</p>
+        </div>
+
+        <!-- Post Media -->
+        <div *ngIf="post?.attachement != ''" class="post-media">
+          <video *ngIf="post?.attachement_type && post?.attachement_type.includes('video')" 
+                 controls
+                 (canplay)="pauseVideo(videoplayer)" 
+                 #videoPlayer 
+                 class="post-video">
+            <source src="{{post?.attachement}}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <img *ngIf="post?.attachement_type && !post?.attachement_type.includes('video') && post?.attachement != ''"
+               src="{{post?.attachement}}" 
+               class="post-image" 
+               alt="Post image">
+        </div>
+
+        <!-- Post Actions -->
+        <div class="post-actions">
+          <div class="action-group">
+            <button class="action-btn like-btn" 
+                    (click)="likeUnlikePost(post.id, post?.is_like ? 'unlike' : 'like')"
+                    [class.liked]="post?.is_like || likeStatus == post.id+'like'">
+              <mat-icon class="like-icon">
+                {{ (post?.is_like || likeStatus == post.id+'like') ? 'favorite' : 'favorite_border' }}
+              </mat-icon>
+              <span class="action-count">{{post?.like_count}}</span>
+            </button>
+          </div>
+          <div class="action-group">
+            <button class="action-btn comment-btn" (click)="open(content, post)">
+              <mat-icon>comment</mat-icon>
+              <span class="action-count">{{post?.comment_count}}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- View Comments -->
+        <p *ngIf="post?.comment_count > 0" class="view-comments" (click)="open(content, post)">
+          View all {{post?.comment_count}} comments
+        </p>
+
+        <!-- Comment Input -->
+        <div class="comment-box">
+          <div class="comment-input-wrapper">
+            <img *ngIf="userProfileImage" 
+                 src="{{userProfileImage}}" 
+                 alt="Your avatar" 
+                 class="comment-avatar">
+            <img *ngIf="!userProfileImage" 
+                 src="../../../assets/images/Gender.png" 
+                 alt="Your avatar" 
+                 class="comment-avatar">
+            <input class="comment-input" 
+                   type="text" 
+                   id="content" 
+                   [(ngModel)]="comment"
+                   (input)="changeComment($event.target.value)" 
+                   placeholder="Add a comment..."
+                   aria-label="Add a comment">
+            <button class="send-btn" (click)="sendComment(post.id)" [disabled]="!comment?.trim()">
+              <mat-icon>send</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="userposts.length < 1">
+    <mat-icon class="empty-icon">person_outline</mat-icon>
+    <h3 class="empty-title">No Posts</h3>
+    <p class="empty-desc">This user hasn't posted anything yet</p>
+  </div>
+</div>
+
+<!-- Feed Posts Section -->
+<div *ngIf="feedposts" class="posts-container">
+  <div *ngIf="feedposts.length > 0" id="scrollview" class="posts-list">
+    <div *ngFor="let post of feedposts; let i = index;" class="post-item">
+      <div class="post-card">
+        <!-- Post Header -->
+        <div class="post-header">
+          <div class="post-user">
+            <img *ngIf="post?.user?.profile_image == '' || post?.user?.profile_image == null"
+                 src="../../../assets/images/Gender.png"
+                 alt="User"
+                 class="user-avatar">
+            <img *ngIf="post?.user?.profile_image != '' && post?.user?.profile_image != null"
+                 src="{{post?.user?.profile_image}}"
+                 alt="{{post?.user?.name}}"
+                 class="user-avatar">
+            <div class="user-info">
+              <span class="user-name">{{post?.user?.name}}</span>
+              <span class="post-time">{{getDate(post?.created_at)}}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Post Content -->
+        <div class="post-content">
+          <p class="post-text">{{post?.content}}</p>
+        </div>
+
+        <!-- Post Media -->
+        <div *ngIf="post?.attachement != ''" class="post-media">
+          <video *ngIf="post?.attachement_type && post?.attachement_type.includes('video')" 
+                 controls
+                 (canplay)="pauseVideo(videoplayer)" 
+                 #videoPlayer 
+                 class="post-video">
+            <source src="{{post?.attachement}}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <img *ngIf="post?.attachement_type && !post?.attachement_type.includes('video') && post?.attachement != ''"
+               src="{{post?.attachement}}" 
+               class="post-image" 
+               alt="Post image">
+        </div>
+
+        <!-- Post Actions -->
+        <div class="post-actions">
+          <div class="action-group">
+            <button class="action-btn like-btn" 
+                    (click)="likeUnlikePost(post.id, post?.is_like ? 'unlike' : 'like')"
+                    [class.liked]="post?.is_like || likeStatus == post.id+'like'">
+              <mat-icon class="like-icon">
+                {{ (post?.is_like || likeStatus == post.id+'like') ? 'favorite' : 'favorite_border' }}
+              </mat-icon>
+              <span class="action-count">{{post?.like_count}}</span>
+            </button>
+          </div>
+          <div class="action-group">
+            <button class="action-btn comment-btn" (click)="open(content, post)">
+              <mat-icon>comment</mat-icon>
+              <span class="action-count">{{post?.comment_count}}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- View Comments -->
+        <p *ngIf="post?.comment_count > 0" class="view-comments" (click)="open(content, post)">
+          View all {{post?.comment_count}} comments
+        </p>
+
+        <!-- Comment Input -->
+        <div class="comment-box">
+          <div class="comment-input-wrapper">
+            <img *ngIf="userProfileImage" 
+                 src="{{userProfileImage}}" 
+                 alt="Your avatar" 
+                 class="comment-avatar">
+            <img *ngIf="!userProfileImage" 
+                 src="../../../assets/images/Gender.png" 
+                 alt="Your avatar" 
+                 class="comment-avatar">
+            <input class="comment-input" 
+                   type="text" 
+                   id="content" 
+                   [(ngModel)]="comment"
+                   (input)="changeComment($event.target.value)" 
+                   placeholder="Add a comment..."
+                   aria-label="Add a comment">
+            <button class="send-btn" (click)="sendComment(post.id)" [disabled]="!comment?.trim()">
+              <mat-icon>send</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load More -->
+    <div class="load-more-container">
+      <div *ngIf="showButton && !showNoItem">
+        <button #yourElement
+                class="load-more-btn"
+                type="button" 
+                (click)="LoadMore()">
+          Load More Posts
+          <mat-icon>expand_more</mat-icon>
+        </button>
+      </div>
+      <div *ngIf="!showButton && !showNoItem" class="loading-state">
+        <div class="loading-spinner"></div>
+        <span>Loading more...</span>
+      </div>
+      <div *ngIf="showNoItem" class="end-state">
+        <span>No more posts to load</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="feedposts.length < 1">
+    <mat-icon class="empty-icon">rss_feed</mat-icon>
+    <h3 class="empty-title">No Feed Posts</h3>
+    <p class="empty-desc">Follow users to see their posts</p>
+  </div>
+</div>
+
+<!-- Comment Modal -->
+<ng-template #content let-modal data-backdrop="false">
+  <div class="modal-overlay">
+    <div class="modal-container">
+      <!-- Modal Header -->
+      <div class="modal-header-custom">
+        <h4 class="modal-title-custom">Post</h4>
+        <button class="modal-close-btn" type="button" (click)="modal.dismiss('Cross click')">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <!-- Modal Body (single scroll region, scrollbar on the right edge) -->
+      <div class="modal-body-custom">
+        <!-- Post Header -->
+        <div class="post-header">
+          <div class="post-user">
+            <img *ngIf="singlePost?.user?.profile_image == '' || singlePost?.user?.profile_image == null"
+                 src="../../../assets/images/Gender.png"
+                 alt="User"
+                 class="user-avatar">
+            <img *ngIf="singlePost?.user?.profile_image != '' && singlePost?.user?.profile_image != null"
+                 src="{{singlePost?.user?.profile_image}}"
+                 alt="{{singlePost?.user?.name}}"
+                 class="user-avatar">
+            <div class="user-info">
+              <span class="user-name">{{singlePost?.user?.name}}</span>
+              <span class="post-time">{{getDate(singlePost?.created_at)}}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Post Content -->
+        <div class="post-content">
+          <p class="post-text">{{singlePost?.content}}</p>
+        </div>
+
+        <!-- Post Media -->
+        <div *ngIf="singlePost?.attachement != ''" class="post-media">
+          <video *ngIf="singlePost?.attachement_type && singlePost?.attachement_type.includes('video')" 
+                 controls
+                 (canplay)="pauseVideo(videoplayer)" 
+                 #videoPlayer 
+                 class="post-video">
+            <source src="{{singlePost?.attachement}}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <img *ngIf="singlePost?.attachement_type && !singlePost?.attachement_type.includes('video') && singlePost?.attachement != ''"
+               src="{{singlePost?.attachement}}" 
+               class="post-image" 
+               alt="Post image">
+        </div>
+
+        <!-- Post Actions -->
+        <div class="post-actions">
+          <div class="action-group">
+            <button class="action-btn like-btn" 
+                    (click)="likeUnlikePost(singlePost.id, singlePost?.is_like ? 'unlike' : 'like')"
+                    [class.liked]="singlePost?.is_like || likeStatus == singlePost.id+'like'">
+              <mat-icon class="like-icon">
+                {{ (singlePost?.is_like || likeStatus == singlePost.id+'like') ? 'favorite' : 'favorite_border' }}
+              </mat-icon>
+              <span class="action-count">{{singlePost?.like_count}}</span>
+            </button>
+          </div>
+          <div class="action-group">
+            <span class="comment-count-label">{{singlePost?.comment_count}} Comments</span>
+          </div>
+        </div>
+
+        <!-- Comment Input -->
+        <div class="comment-box modal-comment-box top-comment-box">
+          <div class="comment-input-card">
+            <div class="comment-input-wrapper">
+              <img *ngIf="userProfileImage" 
+                   src="{{userProfileImage}}" 
+                   alt="Your avatar" 
+                   class="comment-avatar">
+              <img *ngIf="!userProfileImage" 
+                   src="../../../assets/images/Gender.png" 
+                   alt="Your avatar" 
+                   class="comment-avatar">
+              <input class="comment-input" 
+                     type="text" 
+                     id="content" 
+                     [(ngModel)]="comment"
+                     (input)="changeComment($event.target.value)" 
+                     placeholder="Add a comment..."
+                     aria-label="Add a comment">
+            </div>
+            <div class="comment-submit-row">
+              <button class="send-btn submit-pill-btn" (click)="sendComment(singlePost.id)" [disabled]="!comment?.trim()">
+                <mat-icon>send</mat-icon>
+                <span>Submit</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comments Heading -->
+        <h5 class="comments-heading">Comments ({{singlePost?.comment_count}})</h5>
+
+        <!-- Comments Section with Scroll -->
+        <div class="comments-section-wrapper">
+          <div class="comments-section">
+            <div class="comments-list">
+              <div class="comment-thread" *ngFor="let com of singlePost?.comment; let i=index;">
+                <div class="comment-item">
+                  <img *ngIf="com?.user?.profile_image == ''"
+                       src="../../../assets/images/Gender.png"
+                       alt="User"
+                       class="comment-avatar-small">
+                  <img *ngIf="com?.user?.profile_image != ''"
+                       src="{{com?.user?.profile_image}}"
+                       alt="{{com?.user?.name}}"
+                       class="comment-avatar-small">
+                  <div class="comment-details">
+                    <div class="comment-header">
+                      <span class="comment-username">{{com?.user?.name}}</span>
+                      <span class="comment-time">. 12 mins ago</span>
+                    </div>
+                    <p class="comment-text">{{com?.content}}</p>
+                    <div class="comment-actions-small">
+                      <button class="comment-action-btn like-action">
+                        <mat-icon>thumb_up</mat-icon>100
+                      </button>
+                      <button class="comment-action-btn dislike-action">
+                        <mat-icon>thumb_down</mat-icon>5
+                      </button>
+                      <button class="comment-action-btn reply-action">
+                        <mat-icon>reply</mat-icon>Reply
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Replies -->
+                <details class="replies-toggle" open>
+                  <summary class="replies-label">Replies</summary>
+
+                  <div class="comment-item reply-item" *ngFor="let reply of singlePost?.comment; let j=index;">
+                    <div class="reply-line"></div>
+                    <img *ngIf="reply?.user?.profile_image == ''"
+                         src="../../../assets/images/Gender.png"
+                         alt="User"
+                         class="comment-avatar-small">
+                    <img *ngIf="reply?.user?.profile_image != ''"
+                         src="{{reply?.user?.profile_image}}"
+                         alt="{{reply?.user?.name}}"
+                         class="comment-avatar-small">
+                    <div class="comment-details">
+                      <div class="comment-header">
+                        <span class="comment-username">{{reply?.user?.name}}</span>
+                        <span class="comment-time">. 12 mins ago</span>
+                      </div>
+                      <p class="comment-text">{{reply?.content}}</p>
+                      <div class="comment-actions-small">
+                        <button class="comment-action-btn like-action">
+                          <mat-icon>thumb_up</mat-icon>100
+                        </button>
+                        <button class="comment-action-btn dislike-action">
+                          <mat-icon>thumb_down</mat-icon>5
+                        </button>
+                        <button class="comment-action-btn reply-action">
+                          <mat-icon>reply</mat-icon>Reply
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </details>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

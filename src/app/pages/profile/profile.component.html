@@ -1,245 +1,345 @@
 <div class="container-fluid page">
-  <div class="d-flex page__box p-3 mt-2 h-banner"
-    style="background-image: url({{profile?.banner_image}});
-    background-repeat: no-repeat;
-    background-size: cover;box-shadow: rgb(50 50 93 / 80%) 0px 30px 60px -12px inset, rgb(0 0 0 / 80%) 0px 18px 80px -18px">
-    Profile
-    <button *ngIf="user_id == undefined || user_id == 'undefined'" data-bs-toggle="modal" data-bs-target="#addPost"
-      class=" btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none
-    focus:outline-none ease-linear transition-all duration-150 camera-img" type="button">
-      <mat-icon class="camera-mat" (click)="changeBannerModal(content,profile?.banner_image)">camera_enhance
-      </mat-icon>
-    </button>
+  <!-- Profile Banner -->
+  <div class="profile-banner" 
+       style="background-image: url({{profile?.banner_image}});">
+    <div class="banner-gradient">
+      <div class="banner-content">
+        <h1 class="banner-title">Profile</h1>
+        <button *ngIf="user_id == undefined || user_id == 'undefined'" 
+                class="banner-edit-btn"
+                data-bs-toggle="modal" 
+                data-bs-target="#addPost"
+                (click)="changeBannerModal(content,profile?.banner_image)"
+                aria-label="Change banner">
+          <mat-icon>camera_enhance</mat-icon>
+        </button>
+      </div>
+    </div>
   </div>
 
-  <div class=" page__content shadow p-3 position-relative">
-    <div class="container emp-profile">
+  <!-- Profile Main Content -->
+  <div class="profile-main">
+    <div class="profile-card">
       <form method="post">
-        <div class="row pb-2">
-          <div class="col-md-3">
-            <div class="profile-img">
+        <!-- Profile Header -->
+        <div class="profile-header">
+          <!-- Avatar -->
+          <div class="avatar-wrapper">
+            <div class="avatar-container">
               <img *ngIf="profile?.profile_image != '' && profile?.profile_image != null"
-                src="{{profile?.profile_image}}" alt="" style="background: black;
-                object-fit: contain;" />
+                   src="{{profile?.profile_image}}" 
+                   alt="Profile"
+                   class="avatar-image">
               <img *ngIf="profile?.profile_image == '' || profile?.profile_image == null"
-                src="../../../assets/images/Gender.png" alt="" style="background: black;
-                object-fit: contain;" />
+                   src="../../../assets/images/Gender.png" 
+                   alt="Profile"
+                   class="avatar-image">
               <div *ngIf="user_id == undefined || user_id == 'undefined'"
-                class="file btn btn-lg btn-primary f-w-600 f-w-back">
-                <mat-icon class="camera-mat">
-                  camera_enhance
-                </mat-icon>
-                <input type="file" name="file" [(ngModel)]="imageset" (change)="preview($event,'profile')" />
+                   class="avatar-upload">
+                <mat-icon>camera_enhance</mat-icon>
+                <input type="file" 
+                       name="file" 
+                       [(ngModel)]="imageset" 
+                       (change)="preview($event,'profile')">
               </div>
             </div>
           </div>
-          <div class="col-md-9">
 
-            <div class="profile-head card card-shadow">
-              <div class="row">
-
-                <div class="col-md-8">
-                  <h5 class="label-profile">
+          <!-- User Info -->
+          <div class="user-info-wrapper">
+            <div class="user-info-card">
+              <div class="user-info-grid">
+                <div class="info-left">
+                  <div class="info-item">
                     <mat-icon>account_circle</mat-icon>
-                    {{profile?.fname}} {{profile?.lname}}
-                  </h5>
-                  <h6 class="label-type">
+                    <span>{{profile?.fname}} {{profile?.lname}}</span>
+                  </div>
+                  <div class="info-item">
                     <mat-icon>games</mat-icon>
-                    {{profile?.user_type}}
-                  </h6>
-                  <h5 class="label-email">
-                    <mat-icon>email</mat-icon>
-                    {{profile?.email}}
-                  </h5>
-                  <h5 class="label-type">
-                    <mat-icon>perm_contact_calendar</mat-icon>
-                    {{profile?.dob}}
-                  </h5>
-                  <h5 class="label-email">
-                    <mat-icon> phone</mat-icon>
-                    {{profile?.phone}}
-                  </h5>
-                  <h5 class="label-type">
-                    <mat-icon>account_circle</mat-icon>
-                    {{profile?.gender}}
-                  </h5>
-                </div>
-                <div class="col-md-4">
-                  <div *ngIf="user_id == undefined || user_id == 'undefined'">
-                    <button
-                      class="edit-btn-change btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                      type="button" (click)="editProfile(content)">
-                      <mat-icon>edit</mat-icon>
-                    </button>
-                    <div class="mt-2 private-public">
-                      <label class="switch">
-                        <input type="checkbox" class="switch-input" [checked]="profile.is_profile_private == 1"
-                          (input)="privatePublic($event)">
-                        <span class="switch-label" data-on="private" data-off="public"></span>
-                        <span class="switch-handle"></span>
-                      </label>
-                    </div>
-                    <button
-                      class="edit-btn-change btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                      type="button" (click)="friends()">
-                      <mat-icon>people</mat-icon>
-                    </button>
+                    <span>{{profile?.user_type}}</span>
                   </div>
-                  <div *ngIf="user_id != 'undefined' && user_id != undefined">
-                    <button *ngIf="showButton == 'UnFriend'"
-                      class="edit-btn-change btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                      type="button">
-                      <mat-icon>message</mat-icon>
-                    </button>
-                    <button *ngIf="showButton == 'UnFriend'"
-                      class="edit-btn-change btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                      type="button" (click)="unFriend($event,profile.id)">
-                      UnFriend
-                    </button>
-                    <button *ngIf="showButton == 'Request Sent'"
-                      class="edit-btn-change btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                      type="button">
-                      Request Sent
-                    </button>
-                    <button *ngIf="showButton == 'Add Friend'"
-                      class="edit-btn-change btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                      type="button" (click)="addNextFriend($event.target,profile.id)">
-                      Add Friend
-                    </button>
-                    <button
-                      class="edit-btn-change btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                      type="button" (click)="confirmBlockUser(content)">
-                      <mat-icon>block</mat-icon>
-                    </button>
+                  <div class="info-item email-item">
+                    <mat-icon>email</mat-icon>
+                    <span>{{profile?.email}}</span>
+                  </div>
+                </div>
+                <div class="info-right">
+                  <div class="info-item">
+                    <mat-icon>perm_contact_calendar</mat-icon>
+                    <span>{{profile?.dob}}</span>
+                  </div>
+                  <div class="info-item">
+                    <mat-icon>phone</mat-icon>
+                    <span>{{profile?.phone}}</span>
+                  </div>
+                  <div class="info-item">
+                    <mat-icon>account_circle</mat-icon>
+                    <span>{{profile?.gender}}</span>
                   </div>
                 </div>
               </div>
 
+              <!-- Actions -->
+              <div class="profile-actions">
+                <!-- Own Profile Actions -->
+                <div *ngIf="user_id == undefined || user_id == 'undefined'" class="action-group">
+                  <button class="action-btn edit-btn" type="button" (click)="editProfile(content)">
+                    <mat-icon>edit</mat-icon>
+                    <span>Edit</span>
+                  </button>
+                  
+                  <div class="privacy-toggle">
+                    <label class="toggle">
+                      <input type="checkbox" 
+                             [checked]="profile.is_profile_private == 1"
+                             (input)="privatePublic($event)">
+                      <span class="toggle-slider"></span>
+                      <span class="toggle-text">
+                        {{ profile.is_profile_private == 1 ? 'Private' : 'Public' }}
+                      </span>
+                    </label>
+                  </div>
+                  
+                  <button class="action-btn friends-btn" type="button" (click)="friends()">
+                    <mat-icon>people</mat-icon>
+                    <span>Friends</span>
+                  </button>
+                </div>
+
+                <!-- Other User Actions -->
+                <div *ngIf="user_id != 'undefined' && user_id != undefined" class="action-group">
+                  <button *ngIf="showButton == 'UnFriend'" class="action-btn message-btn" type="button">
+                    <mat-icon>message</mat-icon>
+                    <span>Message</span>
+                  </button>
+                  <button *ngIf="showButton == 'UnFriend'" class="action-btn unfriend-btn" type="button" 
+                          (click)="unFriend($event,profile.id)">
+                    <span>Unfriend</span>
+                  </button>
+                  <button *ngIf="showButton == 'Request Sent'" class="action-btn request-sent-btn" type="button" disabled>
+                    <span>Request Sent</span>
+                  </button>
+                  <button *ngIf="showButton == 'Add Friend'" class="action-btn add-friend-btn" type="button" 
+                          (click)="addNextFriend($event.target,profile.id)">
+                    <mat-icon>person_add</mat-icon>
+                    <span>Add Friend</span>
+                  </button>
+                  <button class="action-btn block-btn" type="button" (click)="confirmBlockUser(content)">
+                    <mat-icon>block</mat-icon>
+                    <span>Block</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-
         </div>
 
-        <div class="row mt-2">
-          <div class="col-md-3">
-            <div class="nav flex-column nav-pills mb-4 segments-new" id="v-pills-tab" role="tablist"
-              aria-orientation="vertical">
-              <a class="nav-link active label-profile main-tab" id="about-tab" data-toggle="pill" href="#about"
-                role="tab" aria-controls="about" aria-selected="true">About me</a>
-              <a class="nav-link label-profile main-tab" id="posts-tab" data-toggle="pill" href="#posts" role="tab"
-                aria-controls="posts" aria-selected="false" (click)="openPosts()">Posts</a>
-              <a *ngIf="user_id == undefined || user_id == 'undefined'" class="nav-link label-profile main-tab"
-                id="blocked-tab" data-toggle="pill" href="#blocked" role="tab" aria-controls="blocked"
-                aria-selected="false">Blocked</a>
+        <!-- Tabs Section -->
+        <div class="tabs-section">
+          <div class="tabs-container">
+            <!-- Sidebar Tabs -->
+            <div class="tabs-sidebar">
+              <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist">
+                <a class="nav-link active tab-item" 
+                   id="about-tab" 
+                   data-toggle="pill" 
+                   href="#about" 
+                   role="tab" 
+                   aria-selected="true">
+                  <mat-icon>person</mat-icon>
+                  About Me
+                </a>
+                <a class="nav-link tab-item" 
+                   id="posts-tab" 
+                   data-toggle="pill" 
+                   href="#posts" 
+                   role="tab" 
+                   aria-selected="false" 
+                   (click)="openPosts()">
+                  <mat-icon>article</mat-icon>
+                  Posts
+                </a>
+                <a *ngIf="user_id == undefined || user_id == 'undefined'" 
+                   class="nav-link tab-item" 
+                   id="blocked-tab" 
+                   data-toggle="pill" 
+                   href="#blocked" 
+                   role="tab" 
+                   aria-selected="false">
+                  <mat-icon>block</mat-icon>
+                  Blocked
+                </a>
+              </div>
             </div>
-          </div>
-          <div class="col-md-9">
-            <div class="tab-content" id="about-tabContent">
 
-              <div class="tab-pane fade show active" id="about" role="tabpanel" aria-labelledby="about-tab"
-                style="font-size: 20px;">
-                <div>
-                  <textarea style="height: 80px;" [disabled]="user_id != undefined && user_id != 'undefined'"
-                    (input)="changeDescription($event)">{{profile?.banner_description}}</textarea>
+            <!-- Content -->
+            <div class="tabs-content">
+              <div class="tab-content" id="about-tabContent">
+                <!-- About Tab -->
+                <div class="tab-pane fade show active" id="about" role="tabpanel">
+                  <!-- Description -->
+                  <div class="description-area">
+                    <textarea 
+                      [disabled]="user_id != undefined && user_id != 'undefined'"
+                      (input)="changeDescription($event)"
+                      placeholder="Write something about yourself..."
+                      class="description-input">{{profile?.banner_description}}</textarea>
+                  </div>
+
+                  <!-- Sub Tabs -->
+                  <div class="sub-tabs-wrapper">
+                    <ul class="nav nav-pills sub-tabs" id="pills-tab" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active sub-tab" 
+                           id="sports-tab" 
+                           data-toggle="pill" 
+                           href="#sports" 
+                           role="tab" 
+                           aria-selected="true">
+                          Sports
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link sub-tab" 
+                           id="activities-tab" 
+                           data-toggle="pill" 
+                           href="#activities" 
+                           role="tab" 
+                           aria-selected="false">
+                          Activities
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link sub-tab" 
+                           id="clubs-tab" 
+                           data-toggle="pill" 
+                           href="#clubs" 
+                           role="tab" 
+                           aria-selected="false">
+                          Clubs
+                        </a>
+                      </li>
+                    </ul>
+
+                    <div class="tab-content" id="pills-tabContent">
+                      <!-- Sports -->
+                      <div class="tab-pane fade show active" id="sports" role="tabpanel">
+                        <div class="section-header">
+                          <span class="section-title">Sports</span>
+                        </div>
+                        <div class="items-list">
+                          <div *ngFor="let sport of mSportsResponse.data; let i = index" 
+                               class="item-check">
+                            <input *ngIf="checkedSports.includes(','+sport.id+',')" 
+                                   type="checkbox" 
+                                   class="item-checkbox" 
+                                   checked
+                                   [disabled]="user_id != undefined && user_id != 'undefined'"
+                                   (change)="checkSportsAvailable($event,sport)"
+                                   [id]="'sport-'+sport.id">
+                            <input *ngIf="!checkedSports.includes(','+sport.id+',')" 
+                                   type="checkbox" 
+                                   class="item-checkbox" 
+                                   [disabled]="user_id != undefined && user_id != 'undefined'"
+                                   (change)="checkSportsAvailable($event,sport)"
+                                   [id]="'sport-'+sport.id">
+                            <label class="item-label" [for]="'sport-'+sport.id">
+                              {{sport.sport_name}}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Activities -->
+                      <div class="tab-pane fade" id="activities" role="tabpanel">
+                        <div class="section-header">
+                          <span class="section-title">Activities</span>
+                        </div>
+                        <div class="items-list">
+                          <div *ngFor="let activity of mActivitiesResponse.data; let i = index" 
+                               class="item-check">
+                            <input *ngIf="checkedActivity.includes(','+activity.id+',')" 
+                                   type="checkbox" 
+                                   class="item-checkbox" 
+                                   checked
+                                   [disabled]="user_id != undefined && user_id != 'undefined'"
+                                   (change)="checkActivityAvailable($event,activity)"
+                                   [id]="'activity-'+activity.id">
+                            <input *ngIf="!checkedActivity.includes(','+activity.id+',')" 
+                                   type="checkbox" 
+                                   class="item-checkbox" 
+                                   [disabled]="user_id != undefined && user_id != 'undefined'"
+                                   (change)="checkActivityAvailable($event,activity)"
+                                   [id]="'activity-'+activity.id">
+                            <label class="item-label" [for]="'activity-'+activity.id">
+                              {{activity.name}}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Clubs -->
+                      <div class="tab-pane fade" id="clubs" role="tabpanel">
+                        <div class="section-header">
+                          <span class="section-title">Clubs</span>
+                          <mat-icon *ngIf="user_id == undefined || user_id == 'undefined'" 
+                                    class="add-club-icon"
+                                    (click)="addNewClub(content)">
+                            add_circle
+                          </mat-icon>
+                        </div>
+                        <div class="clubs-list">
+                          <div *ngFor="let club of profile?.club; let i = index" 
+                               class="club-item">
+                            <div class="club-details">
+                              <h4 class="club-name">{{club.name}}</h4>
+                              <p class="club-location">
+                                <mat-icon>location_on</mat-icon>
+                                {{club.location}}, {{club.city}}
+                              </p>
+                            </div>
+                            <mat-icon *ngIf="user_id == undefined || user_id == 'undefined'" 
+                                      class="delete-club-icon"
+                                      (click)="deleteClubs(content, club.id)">
+                              delete_forever
+                            </mat-icon>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Save Button -->
+                      <div *ngIf="user_id == undefined || user_id == 'undefined'" class="save-wrapper">
+                        <button type="submit" class="save-btn" (click)="saveSportActivity()">
+                          Save Changes
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                  <li class="nav-item mr-2">
-                    <a class="nav-link active label-profile child-tab" id="sports-tab" data-toggle="pill" href="#sports"
-                      role="tab" aria-controls="sports" aria-selected="true">Sports</a>
-                  </li>
-                  <li class="nav-item mr-2">
-                    <a class="nav-link label-profile child-tab" id="activities-tab" data-toggle="pill"
-                      href="#activities" role="tab" aria-controls="activities" aria-selected="false">Activities</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link label-profile child-tab" id="clubs-tab" data-toggle="pill" href="#clubs"
-                      role="tab" aria-controls="clubs" aria-selected="false">Clubs</a>
-                  </li>
-                </ul>
-                <div class="tab-content" id="pills-tabContent">
-                  <div class="tab-pane fade show active" id="sports" role="tabpanel" aria-labelledby="sports-tab">
-                    <div class="sports">
-                      Sports
-                    </div>
-                    <div class="list-sac">
-                      <div *ngFor="let sport of mSportsResponse.data; let i = index"
-                        class="form-check mt-2 checkbox-font box-shad sport-name">
-                        <input *ngIf="checkedSports.includes(','+sport.id+',')" type="checkbox" class="mt-1  
-                      form-check-input checkbox-clr sport-name-input" checked
-                          [disabled]="user_id != undefined && user_id != 'undefined'"
-                          (change)="checkSportsAvailable($event,sport)">
-                        <input *ngIf="!checkedSports.includes(','+sport.id+',')" type="checkbox" class="mt-1 
-                      form-check-input checkbox-clr sport-name-input"
-                          [disabled]="user_id != undefined && user_id != 'undefined'"
-                          (change)="checkSportsAvailable($event,sport)">
-                        <label class="form-check-label sport-name-label">{{sport.sport_name}}</label>
-                      </div>
-                    </div>
 
-                  </div>
-
-                  <div class="tab-pane fade" id="activities" role="tabpanel" aria-labelledby="activities-tab">
-                    <div class="sports">
-                      Activities
-                    </div>
-                    <div class="list-sac">
-                      <div *ngFor="let activity of mActivitiesResponse.data; let i = index"
-                        class="form-check mt-2 checkbox-font box-shad sport-name">
-                        <input *ngIf="checkedActivity.includes(','+activity.id+',')" type="checkbox" class="mt-1  
-                      form-check-input checkbox-clr sport-name-input" checked
-                          [disabled]="user_id != undefined && user_id != 'undefined'"
-                          (change)="checkActivityAvailable($event,activity)">
-                        <input *ngIf="!checkedActivity.includes(','+activity.id+',')" type="checkbox" class="mt-1 
-                      form-check-input checkbox-clr sport-name-input"
-                          [disabled]="user_id != undefined && user_id != 'undefined'"
-                          (change)="checkActivityAvailable($event,activity)">
-                        <label class="form-check-label sport-name-label">{{activity.name}}</label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="tab-pane fade" id="clubs" role="tabpanel" aria-labelledby="clubs-tab">
-                    <div class="sports">
-                      Clubs<mat-icon *ngIf="user_id == undefined || user_id == 'undefined'" class="btn-add-club"
-                        (click)="addNewClub(content)">add_circle</mat-icon>
-                    </div>
-                    <div class="list-sac">
-                      <div *ngFor="let club of profile?.club; let i = index"
-                        class="form-check mt-2 checkbox-font pl-1 pr-1 box-shad sport-name">
-                        <h5 class="label-profile club-name">
-                          Name: {{club.name}}
-                        </h5>
-                        <h3 class="club-location">Location: {{club.location}}</h3>
-                        <mat-icon *ngIf="user_id == undefined || user_id == 'undefined'" class="set-mat-icon-delete"
-                          (click)="deleteClubs(content, club.id)">
-                          delete_forever
-                        </mat-icon>
-                        <h3 class="club-location">City: {{club.city}}</h3>
-                      </div>
-                    </div>
-                  </div>
-                  <div *ngIf="user_id == undefined || user_id == 'undefined'" class="mt-3">
-                    <button type="submit" class="btn btn-success btn-block btn-fonts box-shad btn-save"
-                      (click)="saveSportActivity()">
-                      Save
-                    </button>
-                  </div>
+                <!-- Posts Tab -->
+                <div class="tab-pane fade post-profile" id="posts" role="tabpanel">
+                  <app-card-page-small [userposts]="mHomePostResponse.data"></app-card-page-small>
                 </div>
-              </div>
-              <div class="tab-pane fade" id="posts" role="tabpanel" aria-labelledby="posts-tab">
-                <app-card-page-small [userposts]="mHomePostResponse.data"></app-card-page-small>
-              </div>
-              <div class="tab-pane fade" id="blocked" role="tabpanel" aria-labelledby="blocked-tab">
-                <div class="row mb-3 box-shad block-tab" *ngFor="let blockuser of mBlockedResponse.data; let i = index">
-                  <div class="col-2">
-                    <img *ngIf="blockuser?.profile_image == ''" class="h-50-px" src="../../../assets/images/Gender.png">
-                    <img *ngIf="blockuser?.profile_image != ''" class="h-50-px" src="{{blockuser?.profile_image}}">
-                  </div>
-                  <div class="col-8 set-block-name">
-                    {{blockuser?.fname}} {{blockuser?.lname}}
-                  </div>
-                  <div class="col-2">
-                    <mat-icon (click)="blockUnblockUser('unblock' , blockuser?.id)" class="color-green">lock_open
-                    </mat-icon>
+
+                <!-- Blocked Tab -->
+                <div class="tab-pane fade" id="blocked" role="tabpanel">
+                  <div class="blocked-list">
+                    <div class="blocked-item" *ngFor="let blockuser of mBlockedResponse.data; let i = index">
+                      <div class="blocked-user">
+                        <img *ngIf="blockuser?.profile_image == ''" 
+                             class="blocked-avatar" 
+                             src="../../../assets/images/Gender.png">
+                        <img *ngIf="blockuser?.profile_image != ''" 
+                             class="blocked-avatar" 
+                             src="{{blockuser?.profile_image}}">
+                        <span class="blocked-name">{{blockuser?.fname}} {{blockuser?.lname}}</span>
+                      </div>
+                      <button class="unblock-btn" (click)="blockUnblockUser('unblock' , blockuser?.id)">
+                        <mat-icon>lock_open</mat-icon>
+                        <span>Unblock</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -250,169 +350,189 @@
     </div>
   </div>
 </div>
+
+<!-- Modals -->
 <app-modaldialog *ngIf="loaderShow"></app-modaldialog>
+
 <ng-template #content let-modal data-backdrop="false">
-  <div *ngIf="deleteClub">
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Delete Club</h4>
+  <!-- Delete Club Modal -->
+  <div *ngIf="deleteClub" class="modal-modern">
+    <div class="modal-header-custom">
+      <h4 class="modal-title-custom">Delete Club</h4>
     </div>
-    <div class="modal-body label-profile p-1">
-      <h4>Do you want to delete this Club?</h4>
+    <div class="modal-body-custom">
+      <p class="modal-text">Do you want to delete this Club?</p>
     </div>
-    <div class=" modal-footer p-1">
-      <button
-        class="close-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-        type="button" (click)="modal.dismiss('Cross click')">
+    <div class="modal-footer-custom">
+      <button class="btn-cancel" type="button" (click)="modal.dismiss('Cross click')">
         Cancel
       </button>
-      <button
-        class="filter-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-        type="button" (click)="confirm()">
-        Confirm
+      <button class="btn-confirm btn-danger" type="button" (click)="confirm()">
+        Delete
       </button>
     </div>
   </div>
-  <div *ngIf="blockuser">
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Block User</h4>
+
+  <!-- Block User Modal -->
+  <div *ngIf="blockuser" class="modal-modern">
+    <div class="modal-header-custom">
+      <h4 class="modal-title-custom">Block User</h4>
     </div>
-    <div class="modal-body label-profile p-1">
-      <h4>Are you sure you want to block user?</h4>
+    <div class="modal-body-custom">
+      <p class="modal-text">Are you sure you want to block this user?</p>
     </div>
-    <div class=" modal-footer p-1">
-      <button
-        class="close-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-        type="button" (click)="modal.dismiss('Cross click')">
+    <div class="modal-footer-custom">
+      <button class="btn-cancel" type="button" (click)="modal.dismiss('Cross click')">
         Cancel
       </button>
-      <button
-        class="filter-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-        type="button" (click)="blockUnblockUser('block')">
-        Confirm
+      <button class="btn-confirm btn-block" type="button" (click)="blockUnblockUser('block')">
+        Block
       </button>
     </div>
   </div>
-  <div *ngIf="addClub">
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Add Club</h4>
+
+  <!-- Add Club Modal -->
+  <div *ngIf="addClub" class="modal-modern">
+    <div class="modal-header-custom">
+      <h4 class="modal-title-custom">Add Club</h4>
     </div>
-    <div class="modal-body p-1">
-      <form [formGroup]="addClubFormgroup" class="mt-2">
-        <div>
-          <div class="form-group mb4 align-left">
-            <input type="text" id="name" class="form-control" formControlName="name" [(ngModel)]="name" required>
-            <label class="form-control-placeholder" for="name">Name</label>
-          </div>
-          <div class="form-group mb4 align-left">
-            <input type="text" id="location" class="form-control" formControlName="location" [(ngModel)]="location"
-              required>
-            <label class="form-control-placeholder" for="location">Location</label>
-          </div>
-          <div class="form-group mb4 align-left">
-            <input type="text" id="city" class="form-control" formControlName="city" [(ngModel)]="city" required>
-            <label class="form-control-placeholder" for="city">City</label>
-          </div>
+    <div class="modal-body-custom">
+      <form [formGroup]="addClubFormgroup" class="modal-form">
+        <div class="form-group">
+          <label class="form-label" for="club-name">Name</label>
+          <input type="text" 
+                 id="club-name" 
+                 class="form-control-custom" 
+                 formControlName="name" 
+                 [(ngModel)]="name" 
+                 placeholder="Enter club name"
+                 required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="club-location">Location</label>
+          <input type="text" 
+                 id="club-location" 
+                 class="form-control-custom" 
+                 formControlName="location" 
+                 [(ngModel)]="location" 
+                 placeholder="Enter location"
+                 required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="club-city">City</label>
+          <input type="text" 
+                 id="club-city" 
+                 class="form-control-custom" 
+                 formControlName="city" 
+                 [(ngModel)]="city" 
+                 placeholder="Enter city"
+                 required>
         </div>
       </form>
     </div>
-    <div class="modal-footer p-1">
-      <button
-        class="close-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-        type="button" (click)="modal.dismiss('Cross click')">
+    <div class="modal-footer-custom">
+      <button class="btn-cancel" type="button" (click)="modal.dismiss('Cross click')">
         Cancel
       </button>
-      <button
-        class="filter-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-        type="button" (click)="saveClub()">
+      <button class="btn-confirm btn-add" type="button" (click)="saveClub()">
         Add Club
       </button>
     </div>
   </div>
-  <div *ngIf="editP">
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Update Profile</h4>
+
+  <!-- Edit Profile Modal -->
+  <div *ngIf="editP" class="modal-modern modal-lg">
+    <div class="modal-header-custom">
+      <h4 class="modal-title-custom">Update Profile</h4>
     </div>
-    <div class="modal-body p-1">
-      <form [formGroup]="updateProfileFormgroup" class=" mt-2">
-        <div class="form-group align-left mb-3">
-          <select class="form-select" name="userType" id="floatingSelectGrid" aria-label="Floating label select example"
-            formControlName="userType">
+    <div class="modal-body-custom">
+      <form [formGroup]="updateProfileFormgroup" class="modal-form">
+        <div class="form-group">
+          <label class="form-label" for="user-type">User Type</label>
+          <select class="form-control-custom" 
+                  id="user-type"
+                  formControlName="userType">
             <option value="">Select</option>
             <option *ngFor="let uT of mGetUserTypeRes.data" value="{{uT.id}}">{{uT.name}}</option>
           </select>
-          <label class="form-control-placeholder" for="floatingSelectGrid">UserType</label>
         </div>
-        <div class="row g-2">
-          <div class="col-md">
-            <div class="form-group  align-left mb-3">
-              <input type="text" id="fname" class="form-control" name="fname" formControlName="fname" required>
-              <label class="form-control-placeholder" for="fname">First Name</label>
-            </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="fname">First Name</label>
+            <input type="text" 
+                   id="fname" 
+                   class="form-control-custom" 
+                   formControlName="fname" 
+                   placeholder="Enter first name"
+                   required>
           </div>
-          <div class="col-md">
-            <div class="form-group  align-left mb-3">
-              <input type="text" id="lname" class="form-control" name="lname" formControlName="lname" required>
-              <label class="form-control-placeholder" for="lname">Last Name</label>
-            </div>
+          <div class="form-group">
+            <label class="form-label" for="lname">Last Name</label>
+            <input type="text" 
+                   id="lname" 
+                   class="form-control-custom" 
+                   formControlName="lname" 
+                   placeholder="Enter last name"
+                   required>
           </div>
         </div>
-
-        <div class="row g-2">
-          <div class="col-md">
-            <div class="form-group align-left mb-3">
-              <select class="form-select" name="country" id="floatingSelectGrid"
-                aria-label="Floating label select example" formControlName="country" (change)="selectCountry()">
-                <option value="">Select</option>
-                <option *ngFor="let countries of mGetCountriesRes.data" value="{{countries.id}}">
-                  {{countries.country_name}}</option>
-              </select>
-              <label class="form-control-placeholder" for="floatingSelectGrid">Country</label>
-            </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="country">Country</label>
+            <select class="form-control-custom" 
+                    id="country"
+                    formControlName="country" 
+                    (change)="selectCountry()">
+              <option value="">Select</option>
+              <option *ngFor="let countries of mGetCountriesRes.data" value="{{countries.id}}">
+                {{countries.country_name}}
+              </option>
+            </select>
           </div>
-          <div class="col-md">
-            <div class="form-group  align-left mb-3">
-              <select class="form-select" name="city" id="floatingSelectGrid" aria-label="Floating label select example"
-                formControlName="city">
-                <option value="">Select</option>
-                <option *ngFor="let cities of mGetCitiesRes.data" value="{{cities.id}}">
-                  {{cities.city_name}}</option>
-              </select>
-              <label class="form-control-placeholder" for="city">City</label>
-            </div>
+          <div class="form-group">
+            <label class="form-label" for="city">City</label>
+            <select class="form-control-custom" 
+                    id="city"
+                    formControlName="city">
+              <option value="">Select</option>
+              <option *ngFor="let cities of mGetCitiesRes.data" value="{{cities.id}}">
+                {{cities.city_name}}
+              </option>
+            </select>
           </div>
         </div>
       </form>
     </div>
-    <div class="modal-footer p-1">
-      <button
-        class="close-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-        type="button" (click)="modal.dismiss('Cross click')">
+    <div class="modal-footer-custom">
+      <button class="btn-cancel" type="button" (click)="modal.dismiss('Cross click')">
         Close
       </button>
-      <button
-        class="filter-btn btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-        type="button" (click)="updatePro()">
+      <button class="btn-confirm btn-update" type="button" (click)="updatePro()">
         Update
       </button>
     </div>
   </div>
-  <div *ngIf="bannerimg">
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Update Banner Image</h4>
+
+  <!-- Banner Update Modal -->
+  <div *ngIf="bannerimg" class="modal-modern modal-banner">
+    <div class="modal-header-custom">
+      <h4 class="modal-title-custom">Update Banner Image</h4>
+      <button class="modal-close" type="button" (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
     </div>
-    <div class="profile-img">
-      <img src="{{banner_image}}" alt="" />
-      <div class="file btn btn-lg btn-primary f-w-600">
-        Update Banner
-        <input type="file" name="file" [(ngModel)]="imageset" (change)="preview($event,'banner')" />
+    <div class="modal-body-custom">
+      <div class="banner-preview-wrapper">
+        <img src="{{banner_image}}" alt="Banner" class="banner-preview-img">
+        <div class="banner-upload-btn">
+          <mat-icon>cloud_upload</mat-icon>
+          <span>Update Banner</span>
+          <input type="file" 
+                 name="file" 
+                 [(ngModel)]="imageset" 
+                 (change)="preview($event,'banner')">
+        </div>
       </div>
     </div>
-    <button style="position: absolute;
-    top: 10px;
-    right: 0;"
-      class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-      type="button" (click)="modal.dismiss('Cross click')">
-      <mat-icon>close</mat-icon>
-    </button>
   </div>
 </ng-template>

@@ -1,43 +1,664 @@
 @import "../home/home.component.scss";
 
-.hide {
-  display: none;
+/* ==========================================================================
+   WALLET PAGE — Modern UI Refresh
+   Palette:
+     Blue                #18227b
+     Green               #4cb050
+     Dark Green          #058749
+     Background Dark Grn #08332c
+     Background Lt Green #a5d6a7
+   All existing class names preserved 1:1 with the HTML.
+   ========================================================================== */
+
+:host {
+  --wl-blue: #18227b;
+  --wl-green: #4cb050;
+  --wl-dark-green: #058749;
+  --wl-bg-dark: #08332c;
+  --wl-bg-light: #a5d6a7;
+
+  --wl-text: #08332c;
+  --wl-text-muted: #5a6b66;
+  --wl-surface: #ffffff;
+  --wl-bg: #f4f7f4;
+
+  --wl-border: rgba(8, 51, 44, 0.10);
+  --wl-border-strong: rgba(8, 51, 44, 0.20);
+
+  --wl-shadow-sm: 0 1px 2px rgba(8, 51, 44, 0.06);
+  --wl-shadow-md: 0 4px 16px rgba(8, 51, 44, 0.10);
+  --wl-shadow-lg: 0 14px 40px rgba(8, 51, 44, 0.16);
+  --wl-shadow-glow: 0 10px 30px rgba(5, 135, 73, 0.28);
+
+  --wl-r-sm: 8px;
+  --wl-r-md: 12px;
+  --wl-r-lg: 16px;
+  --wl-r-xl: 22px;
+
+  --wl-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --wl-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --wl-dur-fast: 140ms;
+  --wl-dur: 220ms;
+  --wl-dur-slow: 400ms;
+
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Inter",
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-.show {
-  display: block;
-}
-
-@media screen and (min-width: 800px) {
-  .min-height-wallet {
-    min-height: 120px !important;
+/* ---------- Motion safety ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
-.min-height-wallet {
-  min-height: 200px;
+/* ---------- Keyframes ---------- */
+@keyframes wl-fade-in-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes wl-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes wl-pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(76, 176, 80, 0.45); }
+  50%      { box-shadow: 0 0 0 12px rgba(76, 176, 80, 0); }
+}
+
+@keyframes wl-pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.18); }
+  70%  { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- Base ---------- */
+body {
+  background-color: var(--wl-bg);
+  color: var(--wl-text);
+}
+
+/* ============================================================
+   HIDE / SHOW UTILITIES (preserved)
+   ============================================================ */
+.hide { display: none; }
+.show { display: block; }
+
+/* ============================================================
+   PAGE SHELL
+   ============================================================ */
+.page {
+  padding: 0 1rem;
+  background: var(--wl-bg);
+  margin-top: -8px;
+  color: var(--wl-text);
+
+  &__box {
+    min-height: 120px;
+    border-radius: var(--wl-r-lg);
+    background-image: linear-gradient(120deg, var(--wl-dark-green) 0%, var(--wl-bg-dark) 100%);
+    margin: 0 -1rem;
+    padding: 1.5rem 2rem !important;
+    font-size: 28px;
+    font-weight: 700;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    position: relative;
+    box-shadow: var(--wl-shadow-md);
+    overflow: visible;
+    animation: wl-fade-in var(--wl-dur-slow) var(--wl-ease);
+
+    /* soft radial accent for depth */
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 30%, rgba(165, 214, 167, 0.25), transparent 55%);
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
+    .row {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      margin: 0;
+      align-items: center;
+    }
+  }
+
+  &__content {
+    min-height: calc(100vh - 178px);
+    border-radius: var(--wl-r-lg);
+    margin-top: -1.5rem;
+    background: #ffffff;
+    color: var(--wl-text);
+    padding: 1.5rem !important;
+    margin-bottom: 1.4rem;
+    box-shadow: var(--wl-shadow-lg);
+    position: relative;
+    z-index: 1;
+    animation: wl-fade-in var(--wl-dur-slow) var(--wl-ease);
+  }
+}
+
+/* ============================================================
+   WALLET HEADER INFO
+   ============================================================ */
+.min-height-wallet {
+  min-height: 120px;
+}
+
+/* Tablet+ keeps the original spec */
+@media screen and (min-width: 800px) {
+  .min-height-wallet {
+    min-height: 140px !important;
+  }
+}
+
+.h-60 {
+  display: flex;
+  align-items: center;
+  min-height: 60px;
+}
+
+.width-size {
+  width: 100%;
+}
+
+.line-h {
+  line-height: 1.3;
+}
+
+.bg-trans {
+  background: transparent !important;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.align-center {
+  text-align: center;
+}
+
+.font-600 {
+  font-weight: 600;
+}
+
+/* Wallet balance label (top of the gradient banner) */
+.line-h {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  animation: wl-fade-in-up var(--wl-dur-slow) var(--wl-ease) both;
+}
+
+/* ============================================================
+   WALLET ACTION BUTTON (top-right "add" + "check")
+   ============================================================ */
 .wallet-button {
-  color: #0e3508 !important;
-  font-size: 5px;
-  background: #fff !important;
-  height: 35px;
+  color: #ffffff !important;
+  background: var(--wl-green) !important;
+  border: none !important;
+  border-radius: 50% !important;
+  width: 44px;
+  height: 44px !important;
+  padding: 0 !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  box-shadow: 0 6px 20px rgba(76, 176, 80, 0.4);
+  transition: transform var(--wl-dur) var(--wl-ease-spring),
+              box-shadow var(--wl-dur) var(--wl-ease),
+              background var(--wl-dur) var(--wl-ease);
+
+  mat-icon {
+    font-size: 24px !important;
+    width: 24px !important;
+    height: 24px !important;
+    line-height: 24px !important;
+    color: #ffffff !important;
+  }
+
+  &:hover {
+    background: var(--wl-dark-green) !important;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 28px rgba(5, 135, 73, 0.5);
+    animation: wl-pulse-glow 1.6s var(--wl-ease) infinite;
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.96);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 3px;
+  }
 }
 
 .addmoney-btn {
-  font-size: 25px;
-  height: 25px;
-  width: 25px;
+  font-size: 24px;
+  height: 24px;
+  width: 24px;
+  line-height: 24px;
+  color: #ffffff !important;
 }
 
+/* ============================================================
+   AMOUNT INPUT (inside banner)
+   ============================================================ */
+.page__box input[type="number"] {
+  width: 75% !important;
+  padding: 10px 16px;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--wl-bg-dark);
+  font-size: 15px;
+  font-weight: 600;
+  transition: all var(--wl-dur) var(--wl-ease);
+  outline: none;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05);
+
+  &::placeholder {
+    color: var(--wl-text-muted);
+    font-weight: 500;
+  }
+
+  &:focus {
+    border-color: var(--wl-green);
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(76, 176, 80, 0.28),
+                inset 0 2px 6px rgba(0, 0, 0, 0.05);
+  }
+
+  /* remove number spinners */
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* ============================================================
+   TRANSACTION LIST
+   ============================================================ */
 .wallet-card {
-  border-radius: 8px !important;
-  color: #0c3007;
-  font-size: 16px !important;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+  border-radius: var(--wl-r-lg) !important;
+  background: #ffffff;
+  color: var(--wl-bg-dark);
+  font-size: 15px !important;
+  padding: 1.25rem 1.5rem !important;
+  border: 1px solid var(--wl-border) !important;
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--wl-dur) var(--wl-ease),
+              box-shadow var(--wl-dur) var(--wl-ease),
+              border-color var(--wl-dur) var(--wl-ease);
+  animation: wl-fade-in-up var(--wl-dur-slow) var(--wl-ease) both;
+  box-shadow: var(--wl-shadow-sm);
+
+  /* left accent bar */
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--wl-green), var(--wl-dark-green));
+    transition: width var(--wl-dur) var(--wl-ease);
+  }
+
+  /* soft hover glow */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 0% 50%, rgba(165, 214, 167, 0.22), transparent 55%);
+    opacity: 0;
+    transition: opacity var(--wl-dur) var(--wl-ease);
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--wl-shadow-lg) !important;
+    border-color: rgba(5, 135, 73, 0.35) !important;
+
+    &::before { width: 6px; }
+    &::after  { opacity: 1; }
+  }
+
+  /* labels inside wallet card */
+  label {
+    display: block;
+    line-height: 1.55;
+    letter-spacing: -0.005em;
+
+    &.font-600 {
+      font-weight: 700;
+      color: var(--wl-bg-dark);
+      font-size: 16px;
+    }
+
+    &:not(.font-600):not(.declined) {
+      color: var(--wl-text-muted);
+      font-size: 13.5px;
+    }
+  }
+
+  /* amount label is the first one — emphasize */
+  > label:first-child {
+    font-size: 18px !important;
+    font-weight: 700;
+    color: var(--wl-dark-green);
+    margin-bottom: 6px;
+  }
 }
 
+/* ---------- Status: success ---------- */
+.wallet-card label.font-600 {
+  /* "Payment Successful" */
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--wl-dark-green) !important;
+  background: rgba(165, 214, 167, 0.25);
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12.5px !important;
+  margin-top: 6px;
+
+  &::before {
+    content: "check_circle";
+    font-family: "Material Icons";
+    font-size: 16px;
+    color: var(--wl-dark-green);
+  }
+}
+
+/* ---------- Status: declined ---------- */
 .declined {
-  color: red !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #d32f2f !important;
+  background: rgba(211, 47, 47, 0.10);
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12.5px !important;
+  font-weight: 700;
+  margin-top: 6px;
+
+  &::before {
+    content: "cancel";
+    font-family: "Material Icons";
+    font-size: 16px;
+    color: #d32f2f;
+  }
+}
+
+/* ---------- Transaction list stagger ---------- */
+.page__content .col-xl-12:nth-child(1) .wallet-card { animation-delay: 0.04s; }
+.page__content .col-xl-12:nth-child(2) .wallet-card { animation-delay: 0.08s; }
+.page__content .col-xl-12:nth-child(3) .wallet-card { animation-delay: 0.12s; }
+.page__content .col-xl-12:nth-child(4) .wallet-card { animation-delay: 0.16s; }
+.page__content .col-xl-12:nth-child(5) .wallet-card { animation-delay: 0.20s; }
+.page__content .col-xl-12:nth-child(6) .wallet-card { animation-delay: 0.24s; }
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+.set-no-record {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--wl-text-muted);
+  padding: 40px 24px !important;
+  border-radius: var(--wl-r-md);
+  background: linear-gradient(180deg, #ffffff, var(--wl-bg-light)) !important;
+  border: 1.5px dashed rgba(5, 135, 73, 0.35) !important;
+  box-shadow: none !important;
+  animation: wl-fade-in-up var(--wl-dur-slow) var(--wl-ease) both;
+  letter-spacing: -0.005em;
+  margin: 10px !important;
+}
+
+/* ============================================================
+   MODAL (Card Details + Stripe)
+   ============================================================ */
+.modal-header {
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--wl-border);
+  border-top-left-radius: var(--wl-r-md);
+  border-top-right-radius: var(--wl-r-md);
+  background: linear-gradient(180deg, #ffffff, #f9fbf9);
+
+  .modal-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--wl-bg-dark);
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+}
+
+.modal-body {
+  padding: 24px 22px;
+  background: #ffffff;
+
+  #payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  #card-element {
+    background: #ffffff;
+    border: 1.5px solid var(--wl-border-strong);
+    border-radius: var(--wl-r-md);
+    padding: 14px 16px;
+    transition: border-color var(--wl-dur) var(--wl-ease),
+                box-shadow var(--wl-dur) var(--wl-ease);
+
+    &:focus-within {
+      border-color: var(--wl-dark-green);
+      box-shadow: 0 0 0 4px rgba(5, 135, 73, 0.15);
+    }
+  }
+}
+
+.modal-footer {
+  padding: 16px 22px;
+  border-top: 1px solid var(--wl-border);
+  background: #f9fbf9;
+}
+
+/* ============================================================
+   STRIPE PAY BUTTON
+   ============================================================ */
+.stripe-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 40%;
+  min-width: 200px;
+  padding: 12px 28px !important;
+  background: var(--wl-dark-green) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 999px !important;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  margin: 20px auto 0;
+  box-shadow: 0 8px 22px rgba(5, 135, 73, 0.35);
+  transition: transform var(--wl-dur) var(--wl-ease-spring),
+              box-shadow var(--wl-dur) var(--wl-ease),
+              background var(--wl-dur) var(--wl-ease);
+
+  &:hover {
+    background: var(--wl-bg-dark) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 32px rgba(5, 135, 73, 0.45);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--wl-green);
+    outline-offset: 3px;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+/* ============================================================
+   MODAL FOOTER BUTTONS (fallback if used)
+   ============================================================ */
+.modal-footer .close-btn,
+.modal-footer .filter-btn {
+  border-radius: 999px !important;
+  padding: 9px 22px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  letter-spacing: 0.01em;
+  border: none !important;
+  box-shadow: var(--wl-shadow-sm);
+  transition: transform var(--wl-dur) var(--wl-ease-spring),
+              box-shadow var(--wl-dur) var(--wl-ease);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--wl-shadow-md);
+  }
+}
+
+.modal-footer .close-btn {
+  background: #ffffff !important;
+  color: var(--wl-bg-dark) !important;
+  border: 2px solid var(--wl-bg-light) !important;
+}
+
+.modal-footer .filter-btn {
+  background: var(--wl-dark-green) !important;
+  color: #ffffff !important;
+}
+
+/* ============================================================
+   MISC
+   ============================================================ */
+::selection {
+  background: rgba(76, 176, 80, 0.28);
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--wl-green);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 992px) {
+  .page__box {
+    padding: 1.25rem 1.25rem !important;
+    font-size: 22px;
+  }
+
+  .line-h {
+    font-size: 20px;
+  }
+
+  .h-60 {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page__box {
+    min-height: 160px;
+  }
+
+  .wallet-card {
+    padding: 1rem 1.15rem !important;
+  }
+
+  .page__box input[type="number"] {
+    width: 100% !important;
+    margin-bottom: 10px;
+  }
+
+  .stripe-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .page__content {
+    padding: 1rem !important;
+    border-radius: var(--wl-r-md);
+  }
+
+  .line-h {
+    font-size: 18px;
+  }
+
+  .wallet-card {
+    font-size: 14px !important;
+
+    > label:first-child {
+      font-size: 16px !important;
+    }
+
+    label.font-600 {
+      font-size: 15px;
+    }
+  }
+
+  .wallet-button {
+    width: 40px;
+    height: 40px !important;
+
+    mat-icon {
+      font-size: 22px !important;
+      width: 22px !important;
+      height: 22px !important;
+    }
+  }
 }

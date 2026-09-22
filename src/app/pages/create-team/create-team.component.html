@@ -2,79 +2,124 @@
   <div class="d-flex page__box pt-2 pl-3 pr-3 pb-3 mt-2 min-height-wallet min-height-100">
     <div class="row width-size">
       <div class="col-md-6 h-60">
-        <label *ngIf="!update" class="bg-trans line-h">Create Team</label>
-        <label *ngIf="update" class="bg-trans line-h">Update Team</label>
+        <label *ngIf="!update" class="bg-trans line-h">
+          <mat-icon class="title-icon">groups</mat-icon>
+          Create Team
+        </label>
+        <label *ngIf="update" class="bg-trans line-h">
+          <mat-icon class="title-icon">edit_note</mat-icon>
+          Update Team
+        </label>
       </div>
     </div>
-
   </div>
+
   <div class="page__content p-2 position-relative min-h-calc-90">
     <div class="flex flex-wrap mt-2">
       <div class="container text-center text-lg-start set-margin-zero">
         <div class="row gx-lg-5 align-items-center">
           <div class="col-lg-8 mb-5 mb-lg-0 position-relative m-0-auto">
-            <div class="card bg-glass card-box-shadow">
+            <div class="card bg-glass card-box-shadow challenge-card">
               <div class="card-body">
                 <form [formGroup]="createTeamFormgroup">
 
-                  <div class="form-group  align-left mb-3">
-                    <input type="text" id="title" class="form-control" name="title" formControlName="title" required>
-                    <label class="form-control-placeholder" for="title">Enter Team Name</label>
-                  </div>
-                  <div class="form-group align-left mb-3">
-                    <select class="form-select" name="sport" id="floatingSelectGrid"
-                      aria-label="Floating label select example" formControlName="sport">
-                      <option value="">Select</option>
-                      <option *ngFor="let sport of mSportsResponse.data" value="{{sport.id}}">
-                        {{sport.sport_name}}
-                      </option>
-                    </select>
-                    <label class="form-control-placeholder" for="floatingSelectGrid">Select Sport</label>
-                  </div>
-                  <div class="form-group  align-left mb-3">
-                    <input type="submit" id="friend" class="form-control align-left" name="friend"
-                      formControlName="friend" required (click)="getFriendList(content)">
-                    <label class="form-control-placeholder" for="friend">Send Invitation</label>
-                  </div>
-                  <div class="form-group align-left mb-3">
-                    <select class="form-select" name="gender" id="floatingSelectGrid"
-                      aria-label="Floating label select example" formControlName="gender">
-                      <option value="">Select</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Male & Female">Male & Female</option>
-                    </select>
-                    <label class="form-control-placeholder" for="floatingSelectGrid">Select Gender</label>
+                  <!-- Team Name -->
+                  <div class="form-group align-left mb-3 field-row">
+                    <div class="field-icon field-icon--title">
+                      <mat-icon>badge</mat-icon>
+                    </div>
+                    <div class="field-input-wrap">
+                      <input type="text" id="title" class="form-control" name="title" formControlName="title" required>
+                      <label class="form-control-placeholder" for="title">Enter Team Name</label>
+                    </div>
                   </div>
 
+                  <!-- Sport -->
+                  <div class="form-group align-left mb-3 field-row">
+                    <div class="field-icon field-icon--sport">
+                      <mat-icon>sports_soccer</mat-icon>
+                    </div>
+                    <div class="field-input-wrap">
+                      <select class="form-select" name="sport" id="floatingSelectGrid"
+                        aria-label="Floating label select example" formControlName="sport">
+                        <option value="">Select</option>
+                        <option *ngFor="let sport of mSportsResponse.data" value="{{sport.id}}">
+                          {{sport.sport_name}}
+                        </option>
+                      </select>
+                      <label class="form-control-placeholder" for="floatingSelectGrid">Select Sport</label>
+                    </div>
+                  </div>
+
+                  <!-- Send Invitation -->
+                  <div class="form-group align-left mb-3 field-row">
+                    <div class="field-icon field-icon--team">
+                      <mat-icon>person_add</mat-icon>
+                    </div>
+                    <div class="field-input-wrap">
+                      <input type="submit" id="friend" class="form-control align-left" name="friend"
+                        formControlName="friend" required (click)="getFriendList(content)">
+                      <label class="form-control-placeholder" for="friend">Send Invitation</label>
+                    </div>
+                  </div>
+
+                  <!-- Gender -->
+                  <div class="form-group align-left mb-3 field-row">
+                    <div class="field-icon field-icon--refree">
+                      <mat-icon>wc</mat-icon>
+                    </div>
+                    <div class="field-input-wrap">
+                      <select class="form-select" name="gender" id="floatingSelectGrid"
+                        aria-label="Floating label select example" formControlName="gender">
+                        <option value="">Select</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Male & Female">Male & Female</option>
+                      </select>
+                      <label class="form-control-placeholder" for="floatingSelectGrid">Select Gender</label>
+                    </div>
+                  </div>
+
+                  <!-- Description + Image Upload -->
                   <div class="row g-2">
                     <div class="col-md-9">
-                      <div class="form-group  align-left">
-                        <textarea style="
-              height: 120px;" type="text" id="description" name="description" class="form-control "
-                          formControlName="description" required></textarea>
-                        <label class="form-control-placeholder" for="description">About This Team</label>
+                      <div class="form-group align-left field-row field-row--textarea">
+                        <div class="field-icon field-icon--desc">
+                          <mat-icon>notes</mat-icon>
+                        </div>
+                        <div class="field-input-wrap">
+                          <textarea style="height: 120px;" type="text" id="description" name="description"
+                            class="form-control" formControlName="description" required></textarea>
+                          <label class="form-control-placeholder" for="description">About This Team</label>
+                        </div>
                       </div>
                     </div>
                     <div class="col-md-3">
-                      <div class="form-group  align-left ">
-                        <label for="image" class="align-center width-size">
-                          <input type="file" name="image" id="image" class="displaynone" (change)="preview($event)" />
-                          <img src="{{imgView}}" class="img-preview" />
-                        </label>
+                      <div class="form-group align-left field-row">
+                        <div class="field-icon field-icon--title">
+                          <mat-icon>image</mat-icon>
+                        </div>
+                        <div class="field-input-wrap">
+                          <label for="image" class="align-center width-size upload-label">
+                            <input type="file" name="image" id="image" class="displaynone" (change)="preview($event)" />
+                            <img src="{{imgView}}" class="img-preview" />
+                          </label>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div>
+
+                  <div class="submit-row">
                     <button *ngIf="!update" type="submit"
                       class="btn btn-success btn-block btn-fonts box-shad update-btn" (click)="createNewTeam()">
+                      <mat-icon class="btn-icon">groups</mat-icon>
                       Create Team
                     </button>
                     <button *ngIf="update" type="submit" class="btn btn-success btn-block btn-fonts box-shad update-btn"
                       (click)="updateTeam()">
+                      <mat-icon class="btn-icon">save</mat-icon>
                       Update Team
                     </button>
-
                   </div>
                 </form>
               </div>
@@ -85,25 +130,33 @@
     </div>
   </div>
 </div>
+
 <app-modaldialog *ngIf="loaderShow"></app-modaldialog>
+
 <ng-template #content let-modal data-backdrop="false">
+
+  <!-- FRIEND PICKER -->
   <div *ngIf="createFriendTeam">
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Friends</h4>
-      <button
-        class="btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-        type="button" (click)="saveFriend()">
+    <div class="modal-header modal-header--themed">
+      <h4 class="modal-title" id="modal-basic-title">
+        <mat-icon class="modal-title-icon">person_add</mat-icon> Friends
+      </h4>
+      <button class="btn-set icon-done-btn" type="button" (click)="saveFriend()">
         <mat-icon>done</mat-icon>
       </button>
     </div>
     <div class="modal-body p-1 friendlyshow">
-      <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search"
-        (input)="searchFriend($event)">
+      <div class="search-wrap">
+        <mat-icon class="search-icon">search</mat-icon>
+        <input class="form-control mr-sm-2 search-input" type="text" placeholder="Search" aria-label="Search"
+          (input)="searchFriend($event)">
+      </div>
+
       <div *ngIf="!searchtoggle" class="pt-3">
         <div *ngFor="let friend of mFriendListResponse.data; let i=index"
           class="col-xl-12 col-sm-12 mb-3 box-shad refreeSelect" (click)="selectFriend(friend)">
           <div class="row set-row b-radius-8"
-            [ngStyle]="{'border': !friendId.includes(','+friend.id+',') ? 'none' : '2px solid #0c3007','background-color': !friendId.includes(','+friend.id+',') ? '#fff' : '#e9a927'}">
+            [ngStyle]="{'border': !friendId.includes(','+friend.id+',') ? 'none' : '2px solid #058749','background-color': !friendId.includes(','+friend.id+',') ? '#fff' : '#a5d6a7'}">
             <div class="col-4 align-center">
               <img *ngIf="friend?.profile_image == null || friend?.profile_image == ''"
                 class="event-image-set refree-img" src="../../../assets/images/Gender.png">
@@ -114,7 +167,7 @@
               <label class="name align-left bg-trans">{{friend?.fname}}
                 {{friend?.lname}}</label>
               <button [hidden]="!friendId.includes(','+friend.id+',')"
-                class="venueId btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                class="venueId btn-set icon-done-btn"
                 type="button">
                 <mat-icon class="venueSave">done_outline</mat-icon>
               </button>
@@ -122,11 +175,12 @@
           </div>
         </div>
       </div>
+
       <div *ngIf="searchtoggle" class="pt-3">
         <div *ngFor="let friend of searchFriendList; let i=index" class="col-xl-12 col-sm-12 mb-3 box-shad refreeSelect"
           (click)="selectFriend(friend)">
           <div class="row set-row b-radius-8"
-            [ngStyle]="{'border': !friendId.includes(','+friend.id+',') ? 'none' : '2px solid #0c3007','background-color': !friendId.includes(','+friend.id+',') ? '#fff' : '#e9a927'}">
+            [ngStyle]="{'border': !friendId.includes(','+friend.id+',') ? 'none' : '2px solid #058749','background-color': !friendId.includes(','+friend.id+',') ? '#fff' : '#a5d6a7'}">
             <div class="col-4 align-center">
               <img *ngIf="friend?.profile_image == null || friend?.profile_image == ''"
                 class="event-image-set refree-img" src="../../../assets/images/Gender.png">
@@ -137,7 +191,7 @@
               <label class="name align-left bg-trans">{{friend?.fname}}
                 {{friend?.lname}}</label>
               <button [hidden]="!friendId.includes(','+friend.id+',')"
-                class="venueId btn-set bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase px-2 py-1 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                class="venueId btn-set icon-done-btn"
                 type="button">
                 <mat-icon class="venueSave">done_outline</mat-icon>
               </button>

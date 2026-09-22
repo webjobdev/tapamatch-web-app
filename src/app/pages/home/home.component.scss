@@ -6,17 +6,20 @@
 
   &__box {
     min-height: 250px;
-    background-image: linear-gradient(to right, #3f8935, #1f6416, #0b2d06);
+    // background-image: linear-gradient(to right, #3f8935, #1f6416, #0b2d06);
+    background-color: #a5d6a7;
+    //  background-color: transparent;
+
     margin: 0 -1rem;
     font-size: 36px;
-
   }
 
   &__content {
     min-height: calc(100vh - 178px);
     border-radius: 10px;
-    margin-top: -2rem;
-    background-image: -webkit-linear-gradient(30deg, #0e3509 50%, #ffffff 50%);
+    margin-top: 2rem;
+    // background-image: -webkit-linear-gradient(30deg, #0e3509 50%, #ffffff 50%);
+    background-color: #ffffff;
     color: black;
     font-size: 2rem;
     margin-bottom: 1.4rem;
@@ -29,7 +32,282 @@
   }
 }
 
+// ===== IMPROVED BANNER STYLES =====
+.banner-wrapper {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background: #000;
+  
+  .carousel {
+    position: relative;
+    
+    .carousel-inner {
+      .carousel-item {
+        transition: transform 0.6s ease-in-out;
+        
+        .banner-slide {
+          position: relative;
+          // height: 400px;
+          overflow: hidden;
+          
+          .banner-image {
+            width: 100%;
+            height: 100%;
+            // object-fit: cover;
+            transition: transform 0.3s ease;
+          }
+          
+          .banner-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+              to right,
+              rgba(0, 0, 0, 0.7) 0%,
+              rgba(0, 0, 0, 0.3) 50%,
+              rgba(0, 0, 0, 0.1) 100%
+            );
+            display: flex;
+            align-items: center;
+            padding: 40px;
+            
+            .banner-content {
+              max-width: 50%;
+              animation: slideInLeft 0.8s ease-out;
+              
+              .banner-title {
+                color: #fff;
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin-bottom: 16px;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+                line-height: 1.2;
+              }
+              
+              .banner-subtitle {
+                color: rgba(255, 255, 255, 0.9);
+                font-size: 1.1rem;
+                margin-bottom: 24px;
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+              }
+              
+              .banner-btn {
+                background: linear-gradient(135deg, #4CAF50, #2E7D32);
+                border: none;
+                padding: 12px 32px;
+                font-weight: 600;
+                border-radius: 30px;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+                
+                &:hover {
+                  transform: translateY(-2px);
+                  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
+                  background: linear-gradient(135deg, #43A047, #1B5E20);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    // Carousel Indicators
+    .carousel-indicators {
+      bottom: 20px;
+      
+      button {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        margin: 0 6px;
+        transition: all 0.3s ease;
+        
+        &.active {
+          background: #4CAF50;
+          border-color: #4CAF50;
+          transform: scale(1.2);
+        }
+        
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+    }
+    
+    // Carousel Controls
+    .carousel-control-prev,
+    .carousel-control-next {
+      width: 50px;
+      height: 50px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+      opacity: 0;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background: rgba(0, 0, 0, 0.8);
+        opacity: 1;
+      }
+    }
+    
+    &:hover {
+      .carousel-control-prev,
+      .carousel-control-next {
+        opacity: 1;
+      }
+    }
+  }
+}
 
+// Animations
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// ===== POST CARD STYLES =====
+.post-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 2px solid #e8f5e9;
+  margin-bottom: 16px;
+  
+  .latest-post {
+    text-align: left;
+    font-weight: 700;
+    color: #0e3508;
+    font-size: 1.1rem;
+    margin: 0;
+    letter-spacing: 1px;
+  }
+}
+
+// ===== RESPONSIVE DESIGN =====
+@media (max-width: 1200px) {
+  .banner-wrapper {
+    .carousel {
+      .carousel-inner {
+        .carousel-item {
+          .banner-slide {
+            height: 350px;
+            
+            .banner-overlay {
+              .banner-content {
+                max-width: 70%;
+                
+                .banner-title {
+                  font-size: 2rem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .banner-wrapper {
+    border-radius: 8px;
+    
+    .carousel {
+      .carousel-inner {
+        .carousel-item {
+          .banner-slide {
+            height: 280px;
+            
+            .banner-overlay {
+              padding: 20px;
+              background: linear-gradient(
+                to top,
+                rgba(0, 0, 0, 0.8) 0%,
+                rgba(0, 0, 0, 0.2) 100%
+              );
+              
+              .banner-content {
+                max-width: 100%;
+                text-align: center;
+                animation: fadeIn 0.8s ease-out;
+                
+                .banner-title {
+                  font-size: 1.5rem;
+                  margin-bottom: 8px;
+                }
+                
+                .banner-subtitle {
+                  font-size: 0.9rem;
+                  margin-bottom: 16px;
+                }
+                
+                .banner-btn {
+                  padding: 8px 24px;
+                  font-size: 0.9rem;
+                }
+              }
+            }
+          }
+        }
+      }
+      
+      .carousel-control-prev,
+      .carousel-control-next {
+        width: 35px;
+        height: 35px;
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.6);
+      }
+      
+      .carousel-indicators {
+        button {
+          width: 10px;
+          height: 10px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .banner-wrapper {
+    .carousel {
+      .carousel-inner {
+        .carousel-item {
+          .banner-slide {
+            height: 220px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// ===== OTHER UTILITIES =====
 button.calendar,
 button.calendar:active {
   width: 2.75rem;
@@ -38,8 +316,6 @@ button.calendar:active {
   background-size: 23px;
   background-position: center;
 }
-
-/* Sortable table demo */
 
 th[sortable] {
   cursor: pointer;
@@ -64,12 +340,10 @@ th[sortable].desc:before {
   -ms-transform: rotate(180deg);
 }
 
-/* Filtering table demo */
 ngbd-table-filtering span.ngb-highlight {
   background-color: yellow;
 }
 
-/* Complete table demo */
 ngbd-table-complete span.ngb-highlight {
   background-color: yellow;
 }
@@ -78,7 +352,6 @@ ngb-carousel .picsum-img-wrapper {
   position: relative;
   height: 0;
   padding-top: 55%;
-  /* Keep ratio for 900x500 images */
 }
 
 ngb-carousel .picsum-img-wrapper>img {
@@ -87,13 +360,6 @@ ngb-carousel .picsum-img-wrapper>img {
   left: 0;
   bottom: 0;
   right: 0;
-}
-
-.latest-post {
-  text-align: left;
-  width: 85%;
-  float: left;
-  margin: 2px 0;
 }
 
 .file-img {
@@ -114,4 +380,4 @@ ngb-carousel .picsum-img-wrapper>img {
   object-fit: contain;
 }
 
-@import '../../../global.scss'
+@import '../../../global.scss';

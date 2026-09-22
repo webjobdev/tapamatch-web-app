@@ -1,110 +1,579 @@
+/* ==========================================================================
+   SIDEBAR MENU — Modern UI Refresh
+   Palette:
+     Blue                #18227b
+     Green               #4cb050
+     Dark Green          #058749
+     Background Dark Grn #08332c
+     Background Lt Green #a5d6a7
+   ========================================================================== */
+
 :host {
+  --sb-blue: #18227b;
+  --sb-green: #4cb050;
+  --sb-dark-green: #058749;
+  --sb-bg-dark: #08332c;
+  --sb-bg-light: #a5d6a7;
+
+  --sb-text: #08332c;
+  --sb-text-muted: #5a6b66;
+  --sb-surface: #ffffff;
+  --sb-border: rgba(8, 51, 44, 0.10);
+  --sb-border-strong: rgba(8, 51, 44, 0.22);
+
+  --sb-shadow-sm: 0 1px 2px rgba(8, 51, 44, 0.06);
+  --sb-shadow-md: 0 4px 16px rgba(8, 51, 44, 0.12);
+  --sb-shadow-lg: 0 14px 40px rgba(8, 51, 44, 0.18);
+
+  --sb-r-sm: 8px;
+  --sb-r-md: 12px;
+  --sb-r-lg: 16px;
+
+  --sb-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --sb-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --sb-dur: 220ms;
+  --sb-dur-slow: 400ms;
+
+  display: block;
+  height: 100%;
+
   .mat-icon {
     vertical-align: middle;
+    transition: color var(--sb-dur) var(--sb-ease),
+                transform var(--sb-dur) var(--sb-ease-spring);
   }
 }
 
+/* ---------- Motion safety ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 
+/* ============================================================
+   SIDEBAR CONTAINER
+   ============================================================ */
+.sidebar_menu {
+  height: 100%;
+  background: #ffffff;
+  border-right: 1px solid var(--sb-border);
+  box-shadow: 2px 0 12px rgba(8, 51, 44, 0.04);
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--sb-bg-light) transparent;
+
+  &::-webkit-scrollbar { width: 5px; }
+  &::-webkit-scrollbar-thumb {
+    background: var(--sb-bg-light);
+    border-radius: 3px;
+
+    &:hover { background: var(--sb-green); }
+  }
+}
+
+.menu-list {
+  padding: 0 !important;
+  background: #ffffff;
+}
+
+/* ---------- Logo ---------- */
+.align-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 12px 4px;
+
+  img {
+    transition: transform var(--sb-dur-slow) var(--sb-ease-spring),
+                filter var(--sb-dur) var(--sb-ease);
+
+    &:hover {
+      transform: scale(1.05);
+      filter: drop-shadow(0 4px 12px rgba(5, 135, 73, 0.25));
+    }
+  }
+}
+
+/* ---------- Divider ---------- */
 .mat-divider {
-  border-top-width: 2px;
-  border-color: white;
-  margin-bottom: 10px;
+  border-top-width: 1px;
+  border-color: var(--sb-bg-light);
+  margin: 10px 14px 12px !important;
+  opacity: 0.7;
 }
 
-.mat-list-item {
-  color: #0e3508 !important;
-  font-size: 1rem;
-  height: 44px !important;
-  margin-bottom: 4px;
-  padding: 0 16px !important;
-
-  &:hover {
-    color: #f2f5f7 !important;
-    background-image: linear-gradient(to right, rgba(255, 0, 0, 0), #0e3508) !important;
-  }
-
-  ::ng-deep {
-    .mat-list-item-content {
-      border-radius: 5px;
-      margin: 0;
-      padding: 0px 0px 0px 5px !important;
-
-    }
-  }
-}
-
-.list-item-active {
-  color: #0e3508 !important;
-  background-image: linear-gradient(to right, rgba(255, 0, 0, 0), #0e3508) !important;
-
-  ::ng-deep {
-    .mat-list-item {
-
-      &:hover {
-        background-image: linear-gradient(to right, rgba(255, 0, 0, 0), #0e3508) !important;
-      }
-    }
-
-  }
-}
-
-
-.mat-subheader {
-  color: #818cf8;
-  font-size: 0.6rem;
-  font-weight: 100;
-  letter-spacing: 1px;
-}
-
-.menu-margin {
-  font-size: 24px !important;
-  margin: 2px 24px 0 !important;
-  font-weight: 600 !important;
-}
-
-.margin-menu-btn {
-  margin: 0px 0px 6px 6px;
-  text-align: center;
-}
-
-.margin-menu-btn-open {
-  margin: 0px 6px 6px 6px;
-  text-align: end;
-}
-
+/* ---------- Toggle button ---------- */
 .toggle {
   padding: 0 !important;
   background: transparent;
   border: none;
+
+  &:hover { transform: scale(1.08); }
+  &:active { transform: scale(0.95); }
 }
 
 .menu-mat {
-  font-size: 30px !important;
-  height: 30px !important;
-  width: 30px !important;
-  margin: 5px 0 5px 16px;
-  color: #0e3508;
+  font-size: 26px !important;
+  height: 26px !important;
+  width: 26px !important;
+  margin: 6px 0 6px 16px;
+  color: var(--sb-bg-dark);
+  transition: color var(--sb-dur) var(--sb-ease),
+              transform var(--sb-dur) var(--sb-ease-spring);
 }
 
-.menu-item {
-  height: 40px !important;
+.toggle:hover .menu-mat {
+  color: var(--sb-dark-green);
+  transform: rotate(90deg);
 }
+
+/* ---------- Menu items ---------- */
+.mat-list-item {
+  color: var(--sb-bg-dark) !important;
+  font-size: 0.94rem;
+  font-weight: 500;
+  height: 46px !important;
+  margin: 2px 8px 4px !important;
+  padding: 0 14px !important;
+  border-radius: var(--sb-r-md);
+  position: relative;
+  overflow: hidden;
+  transition: color var(--sb-dur) var(--sb-ease),
+              background var(--sb-dur) var(--sb-ease),
+              transform var(--sb-dur) var(--sb-ease),
+              box-shadow var(--sb-dur) var(--sb-ease);
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%) scaleY(0);
+    width: 3px;
+    height: 60%;
+    background: linear-gradient(180deg, var(--sb-green), var(--sb-dark-green));
+    border-radius: 0 3px 3px 0;
+    transition: transform var(--sb-dur) var(--sb-ease-spring);
+    transform-origin: center;
+  }
+
+  &:hover {
+    color: #ffffff !important;
+    background: linear-gradient(90deg, var(--sb-dark-green) 0%, var(--sb-bg-dark) 100%) !important;
+    transform: translateX(3px);
+    box-shadow: var(--sb-shadow-md);
+
+    mat-icon {
+      color: #ffffff !important;
+      transform: scale(1.08);
+    }
+
+    &::before {
+      transform: translateY(-50%) scaleY(1);
+    }
+  }
+
+  &:active {
+    transform: translateX(3px) scale(0.98);
+  }
+
+  ::ng-deep {
+    .mat-list-item-content {
+      border-radius: var(--sb-r-md);
+      margin: 0;
+      padding: 0 0 0 8px !important;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  mat-icon {
+    color: var(--sb-bg-dark);
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+    transition: color var(--sb-dur) var(--sb-ease),
+                transform var(--sb-dur) var(--sb-ease-spring);
+  }
+}
+
+/* ---------- Active state ---------- */
+.list-item-active {
+  color: #ffffff !important;
+  background: linear-gradient(90deg, var(--sb-dark-green) 0%, var(--sb-bg-dark) 100%) !important;
+  box-shadow: var(--sb-shadow-md);
+  position: relative;
+
+  mat-icon { color: #ffffff !important; }
+
+  &::before {
+    transform: translateY(-50%) scaleY(1) !important;
+    background: linear-gradient(180deg, var(--sb-green), var(--sb-bg-light)) !important;
+  }
+}
+
+/* ---------- Subheader ---------- */
+.mat-subheader {
+  color: var(--sb-green);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 10px 16px !important;
+}
+
+/* ---------- Utilities ---------- */
+.menu-margin {
+  font-size: 22px !important;
+  margin: 2px 24px 0 !important;
+  font-weight: 700 !important;
+  color: var(--sb-bg-dark);
+  letter-spacing: -0.01em;
+}
+
+.margin-menu-btn { margin: 0 0 6px 6px; text-align: center; }
+.margin-menu-btn-open { margin: 0 6px 6px 6px; text-align: end; }
+
+.menu-item { height: 46px !important; }
 
 .menu-item-name {
-  margin-left: 15px;
+  margin-left: 14px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  transition: color var(--sb-dur) var(--sb-ease);
 }
 
 .menu-item-img {
-  height: 40px !important;
-  padding: 0 12px !important;
+  height: 46px !important;
+  padding: 0 14px !important;
+
+  img {
+    transition: transform var(--sb-dur) var(--sb-ease-spring),
+                filter var(--sb-dur) var(--sb-ease);
+  }
+
+  &:hover img {
+    transform: scale(1.1);
+    filter: drop-shadow(0 4px 10px rgba(5, 135, 73, 0.35));
+  }
 }
 
 .menu-img {
-  width: 25px !important;
-  height: 25px !important;
+  width: 24px !important;
+  height: 24px !important;
+  object-fit: contain;
+  transition: transform var(--sb-dur) var(--sb-ease-spring),
+              filter var(--sb-dur) var(--sb-ease);
 }
 
 .menu-img-venue {
-  width: 30px !important;
-  height: 35px !important;
+  width: 28px !important;
+  height: 32px !important;
+  object-fit: contain;
+  transition: transform var(--sb-dur) var(--sb-ease-spring),
+              filter var(--sb-dur) var(--sb-ease);
+}
+
+/* ============================================================
+   MODAL — GLOBAL OVERRIDES (must escape encapsulation)
+   Angular Material / ng-bootstrap render modals OUTSIDE the
+   sidebar's DOM. Using ::ng-deep + :host + global selectors
+   ensures these styles actually apply.
+   ============================================================ */
+
+/* Body overlay backdrop */
+::ng-deep .modal-backdrop,
+::ng-deep .modal-backdrop.show {
+  background: rgba(8, 51, 44, 0.55) !important;
+  opacity: 1 !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Modal container — used by both Bootstrap and ng-bootstrap */
+::ng-deep .modal-dialog,
+::ng-deep .modal-dialog-centered {
+  max-width: 520px;
+  margin: 1.75rem auto;
+}
+
+::ng-deep .modal-content {
+  border: none !important;
+  border-radius: 16px !important;
+  box-shadow: 0 24px 60px rgba(8, 51, 44, 0.35) !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+}
+
+/* ---------- Header ---------- */
+::ng-deep .modal-header,
+.modal-header {
+  padding: 20px 24px !important;
+  border-bottom: 1px solid rgba(8, 51, 44, 0.10) !important;
+  border-top-left-radius: 16px !important;
+  border-top-right-radius: 16px !important;
+  background: linear-gradient(135deg, #08332c 0%, #058749 100%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+
+  .modal-title,
+  #modal-basic-title {
+    font-size: 17px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    letter-spacing: -0.01em !important;
+    margin: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #a5d6a7;
+      box-shadow: 0 0 0 4px rgba(165, 214, 167, 0.3);
+    }
+  }
+
+  /* Optional close button (btn-close / ×) */
+  .btn-close,
+  .close {
+    filter: invert(1) brightness(2);
+    opacity: 0.85;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+
+    &:hover {
+      opacity: 1;
+      transform: rotate(90deg);
+    }
+  }
+}
+
+/* ---------- Body ---------- */
+::ng-deep .modal-body,
+.modal-body {
+  padding: 22px 24px !important;
+  background: #ffffff !important;
+
+  &.p-1 { padding: 22px 24px !important; }
+}
+
+/* ---------- Footer ---------- */
+::ng-deep .modal-footer,
+.modal-footer {
+  padding: 16px 24px !important;
+  border-top: 1px solid rgba(8, 51, 44, 0.10) !important;
+  background: #f9fbf9 !important;
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+}
+
+/* ---------- Buttons ---------- */
+::ng-deep .modal-footer .close-btn,
+::ng-deep .modal-footer .filter-btn,
+.modal-footer .close-btn,
+.modal-footer .filter-btn {
+  border: none !important;
+  border-radius: 999px !important;
+  padding: 10px 24px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  letter-spacing: 0.02em !important;
+  box-shadow: 0 2px 6px rgba(8, 51, 44, 0.08) !important;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.22s ease,
+              background 0.22s ease !important;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(8, 51, 44, 0.18) !important;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+/* Cancel — light green outline */
+::ng-deep .modal-footer .close-btn,
+.modal-footer .close-btn {
+  background: #ffffff !important;
+  color: #08332c !important;
+  border: 2px solid #a5d6a7 !important;
+
+  &:hover {
+    border-color: #058749 !important;
+    background: rgba(165, 214, 167, 0.15) !important;
+  }
+}
+
+/* Confirm — green gradient */
+::ng-deep .modal-footer .filter-btn,
+.modal-footer .filter-btn {
+  background: linear-gradient(135deg, #4cb050 0%, #058749 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(5, 135, 73, 0.35) !important;
+
+  &:hover {
+    background: linear-gradient(135deg, #058749 0%, #08332c 100%) !important;
+    box-shadow: 0 10px 26px rgba(5, 135, 73, 0.5) !important;
+  }
+}
+
+/* ============================================================
+   FORM FIELDS (inside modal) — GLOBAL
+   ============================================================ */
+::ng-deep .modal-body .form-group,
+.modal-body .form-group,
+.form-group {
+  position: relative;
+  margin-bottom: 1.25rem;
+
+  .form-control,
+  input.form-control {
+    width: 100%;
+    padding: 12px 14px !important;
+    font-size: 14px !important;
+    font-weight: 500;
+    color: #08332c !important;
+    background: #f8fbf8 !important;
+    border: 1.5px solid rgba(8, 51, 44, 0.22) !important;
+    border-radius: 8px !important;
+    transition: border-color 0.22s ease,
+                box-shadow 0.22s ease,
+                background 0.22s ease;
+
+    &:hover:not(:focus) {
+      background: #ffffff !important;
+      border-color: rgba(5, 135, 73, 0.4) !important;
+    }
+
+    &:focus {
+      outline: none !important;
+      background: #ffffff !important;
+      border-color: #058749 !important;
+      box-shadow: 0 0 0 4px rgba(5, 135, 73, 0.16) !important;
+    }
+
+    &::placeholder { color: transparent !important; }
+  }
+
+  .form-control-placeholder {
+    position: absolute;
+    top: -9px;
+    left: 12px;
+    padding: 0 8px;
+    background: #ffffff;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #058749;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    pointer-events: none;
+    z-index: 2;
+    transition: color 0.22s ease;
+  }
+
+  &:focus-within .form-control-placeholder {
+    color: #08332c;
+  }
+}
+
+/* Force proper alignment for the inline `.mb4 .align-left` wrapper */
+::ng-deep .modal-body .mb4.align-left {
+  margin-bottom: 1.25rem !important;
+  text-align: left;
+}
+
+/* ============================================================
+   LEGACY HELPERS (kept 1:1 with original)
+   ============================================================ */
+.mb4 { margin-bottom: 1rem; }
+.align-left { text-align: left; }
+.p-1 { padding: 0.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+
+/* ============================================================
+   MISC
+   ============================================================ */
+::selection {
+  background: rgba(76, 176, 80, 0.28);
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid #4cb050;
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .mat-list-item {
+    height: 44px !important;
+    padding: 0 10px !important;
+    margin: 2px 6px 3px !important;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .menu-item-name {
+    margin-left: 12px;
+    font-size: 0.9rem;
+  }
+
+  .menu-mat {
+    font-size: 24px !important;
+    height: 24px !important;
+    width: 24px !important;
+    margin-left: 12px;
+  }
+
+  .menu-margin {
+    font-size: 20px !important;
+    margin: 2px 16px 0 !important;
+  }
+
+  ::ng-deep .modal-dialog {
+    margin: 1rem;
+    max-width: calc(100% - 2rem);
+  }
+
+  ::ng-deep .modal-footer,
+  .modal-footer {
+    flex-direction: column;
+
+    .close-btn,
+    .filter-btn {
+      width: 100%;
+      text-align: center;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .mat-list-item {
+    height: 42px !important;
+    font-size: 0.88rem;
+  }
+
+  .menu-item-name {
+    font-size: 0.85rem;
+  }
 }

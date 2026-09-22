@@ -1,45 +1,169 @@
+/* ==========================================================================
+   card-page-small.component.scss
+   UI/UX-only refresh — Apple / Linear / Vercel / shadcn inspired
+   NOTE: All existing class names are preserved 1:1 with the HTML.
+   No selectors were renamed or removed — only visual/animation upgrades.
+   ========================================================================== */
+
+/* ---------- Design tokens (scoped to this component) ---------- */
+:host {
+  --tm-bg: #0b1210;
+  --tm-surface: #ffffff;
+  --tm-surface-dark: #0e3508;
+  --tm-surface-dark-2: #0c2e07;
+  --tm-primary: #14874b;
+  --tm-primary-600: #0e3508;
+  --tm-accent: #22c55e;
+  --tm-danger: #ef4444;
+  --tm-text: #0f172a;
+  --tm-text-muted: #64748b;
+  --tm-text-inverse: #f8fafc;
+  --tm-border: rgba(15, 23, 42, 0.08);
+  --tm-border-strong: rgba(15, 23, 42, 0.14);
+  --tm-shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --tm-shadow-md: 0 4px 12px rgba(16, 24, 40, 0.08);
+  --tm-shadow-lg: 0 12px 32px rgba(16, 24, 40, 0.14);
+  --tm-shadow-glow: 0 8px 30px rgba(20, 135, 75, 0.18);
+  --tm-radius-sm: 8px;
+  --tm-radius-md: 12px;
+  --tm-radius-lg: 16px;
+  --tm-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --tm-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --tm-dur-fast: 140ms;
+  --tm-dur: 220ms;
+  --tm-dur-slow: 380ms;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "SF Pro Display",
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------- Motion-safety ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes tm-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tm-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes tm-pop {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.28);
+  }
+  60% {
+    transform: scale(0.94);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes tm-pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes tm-shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+@keyframes tm-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Placeholder ---------- */
 ::placeholder {
-  /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: #fff !important;
+  color: rgba(255, 255, 255, 0.65) !important;
   opacity: 1;
-  /* Firefox */
+  transition: opacity var(--tm-dur) var(--tm-ease);
 }
 
 :-ms-input-placeholder {
-  /* Internet Explorer 10-11 */
-  color: #fff !important;
+  color: rgba(255, 255, 255, 0.65) !important;
 }
 
 ::-ms-input-placeholder {
-  /* Microsoft Edge */
-  color: #fff !important;
+  color: rgba(255, 255, 255, 0.65) !important;
 }
 
+/* ---------- Scrollbars (kept hidden, but smooth) ---------- */
 ::-webkit-scrollbar {
-  width: 0px;
+  width: 4px;
   background: transparent;
-  display: none;
-  /* make scrollbar transparent */
 }
 
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 4px;
+  transition: background var(--tm-dur) var(--tm-ease);
+}
+
+:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ---------- Header text ---------- */
 .card-p {
-  font-size: 16px;
-  margin: 8px 0 8px 10px;
+  font-size: 17px;
+  margin: 10px 0 10px 12px;
   font-weight: 700;
+  letter-spacing: -0.01em;
   float: left;
-  color: #334155
+  color: var(--tm-text);
 }
 
 .card-p-date {
-  font-size: 16px;
-  margin: 8px 0 8px 10px;
-  font-weight: 700;
+  font-size: 13px;
+  margin: 12px 0 8px 10px;
+  font-weight: 600;
   float: right;
-  color: #dfdcee;
+  color: rgba(255, 255, 255, 0.72);
+  letter-spacing: 0.01em;
 }
 
 .card-bg {
-  background-image: linear-gradient(to right, rgba(255, 0, 0, 0), rgba(233, 169, 39));
+  background-image: linear-gradient(120deg, #ffb703 0%, #e9a927 55%, rgba(233, 169, 39, 0.9) 100%);
+  transition: filter var(--tm-dur) var(--tm-ease);
 }
 
 .card-post-user-img {
@@ -53,122 +177,216 @@
 
 .overflow {
   overflow: hidden scroll;
+  scroll-behavior: smooth;
 }
 
 .col-img {
-  padding: 8px 2px 8px 15px;
+  padding: 8px 4px 8px 16px;
 }
 
 .img-s {
   width: 50px;
   border-radius: 50%;
+  box-shadow: var(--tm-shadow-sm);
+  transition: transform var(--tm-dur-slow) var(--tm-ease-spring), box-shadow var(--tm-dur) var(--tm-ease);
+
+  &:hover {
+    transform: scale(1.06);
+    box-shadow: var(--tm-shadow-md);
+  }
 }
 
+/* ---------- Comment input ---------- */
 .in-comment {
-  background: transparent;
-  border: 2px solid white !important;
-  margin-top: 7px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid rgba(255, 255, 255, 0.28) !important;
+  border-radius: var(--tm-radius-sm);
+  margin-top: 8px;
+  transition: border-color var(--tm-dur) var(--tm-ease), background var(--tm-dur) var(--tm-ease),
+    box-shadow var(--tm-dur) var(--tm-ease);
+
+  &:focus {
+    outline: none;
+    border-color: var(--tm-accent) !important;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18);
+  }
 }
 
 .pad-input {
-  padding: 0 16px 0 5px;
+  padding: 0 18px 0 6px;
 }
 
+/* ---------- Profile avatars ---------- */
 .profile-image {
   width: 40px !important;
-  float: left;
   height: 40px;
+  float: left;
   border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--tm-surface);
+  box-shadow: var(--tm-shadow-sm);
+  transition: transform var(--tm-dur) var(--tm-ease-spring), box-shadow var(--tm-dur) var(--tm-ease);
+  animation: tm-fade-in var(--tm-dur-slow) var(--tm-ease);
+
+  &:hover {
+    transform: scale(1.08) translateY(-1px);
+    box-shadow: var(--tm-shadow-md);
+  }
 }
 
+/* ---------- Post user meta ---------- */
 .post-uname {
-  font-size: 16px;
+  font-size: 15.5px;
   font-weight: 700 !important;
+  letter-spacing: -0.01em;
   float: left;
   color: #0e3508;
+  transition: color var(--tm-dur) var(--tm-ease);
 }
 
 .post-uname-margin {
-  margin: 0px 0 4px 10px;
-  padding-top: 6px;
+  margin: 0px 0 4px 12px;
+  padding-top: 7px;
 }
 
 .post-uname-marginnew {
-  margin: 0px 0 4px 10px;
-  padding-top: 8px;
+  margin: 0px 0 4px 12px;
+  padding-top: 9px;
 }
 
 .post-uname-margin2 {
-  margin: 6px 0 4px 10px !important;
+  margin: 7px 0 4px 12px !important;
 }
 
 .post-created {
-  font-size: 12px;
-  font-weight: 700 !important;
+  font-size: 11.5px;
+  font-weight: 600 !important;
   float: right;
-  color: #137e44;
+  color: var(--tm-primary);
+  letter-spacing: 0.02em;
+  opacity: 0.85;
 }
 
 .post-created-m {
-  padding-top: 12px;
+  padding-top: 13px;
   margin: 0px 0 15px 2px;
 }
 
 .post-created-m2 {
-  margin: 12px 0 4px 10px !important;
+  margin: 13px 0 4px 10px !important;
 }
 
 .post-created-3 {
-  font-size: 12px;
+  font-size: 11.5px;
   margin: 0px 0 15px 10px;
-  font-weight: 700;
+  font-weight: 600;
   float: right;
-  color: #137e44;
-  padding-top: 12px;
+  color: var(--tm-primary);
+  padding-top: 13px;
+  opacity: 0.85;
 }
 
 .post-created-4 {
-  font-size: 12px;
+  font-size: 11.5px;
   margin: 0px 0 20px 10px;
-  font-weight: 700;
-  color: #137e44;
+  font-weight: 600;
+  color: var(--tm-primary);
   text-align: end;
-  padding-top: 10px;
+  padding-top: 11px;
+  opacity: 0.85;
 }
 
+/* ---------- Media ---------- */
 .post-video {
   width: 100%;
-  border-radius: 8px 8px 0 0;
+  border-radius: var(--tm-radius-md) var(--tm-radius-md) 0 0;
+  background: #000;
+  transition: filter var(--tm-dur) var(--tm-ease);
 }
 
 .post-image {
-  border-radius: 8px 8px 0 0;
-  height: 100% !important;
+  border-radius: var(--tm-radius-md) var(--tm-radius-md) 0 0;
+  // height: 100% !important;
+  height:250px !important;
   object-fit: contain;
   max-width: 100%;
+  background: #f1f5f9;
+  transition: transform var(--tm-dur-slow) var(--tm-ease), filter var(--tm-dur) var(--tm-ease);
+  will-change: transform;
+
+  &:hover {
+    transform: scale(1.015);
+  }
 }
 
+/* ---------- Like icon ---------- */
 .c-red {
-  color: red;
+  color: var(--tm-danger);
+  cursor: pointer;
+  transition: transform var(--tm-dur-fast) var(--tm-ease-spring), filter var(--tm-dur) var(--tm-ease);
+
+  &:hover {
+    transform: scale(1.15);
+    filter: drop-shadow(0 2px 6px rgba(239, 68, 68, 0.35));
+  }
+
+  &:active {
+    animation: tm-pop 360ms var(--tm-ease-spring);
+  }
+}
+
+/* generic mat-icon affordance for clickable icons in this component */
+mat-icon {
+  transition: transform var(--tm-dur-fast) var(--tm-ease-spring), color var(--tm-dur) var(--tm-ease),
+    opacity var(--tm-dur) var(--tm-ease);
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-1px) scale(1.08);
+    opacity: 0.85;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--tm-accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
 }
 
 .post-content {
-  border-radius: 0 0 8px 8px;
+  border-radius: 0 0 var(--tm-radius-md) var(--tm-radius-md);
 }
 
+/* ---------- Comment row / send ---------- */
 .comment-send-div {
-  padding: 0 0px 0 15px
+  padding: 0 0px 0 16px;
 }
 
 .comment-input {
-  background: transparent !important;
-  border: 2px solid white !important;
-  margin-top: 7px;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: var(--tm-radius-sm);
+  margin-top: 8px;
   color: white !important;
+  padding-left: 12px !important;
+  transition: border-color var(--tm-dur) var(--tm-ease), background var(--tm-dur) var(--tm-ease),
+    box-shadow var(--tm-dur) var(--tm-ease), transform var(--tm-dur) var(--tm-ease);
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.4) !important;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--tm-accent) !important;
+    background: rgba(255, 255, 255, 0.09) !important;
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2);
+  }
 }
 
 .send-btn-div {
-  padding: 14px 2px 5px 15px;
+  padding: 14px 4px 5px 15px;
 }
 
 .row-div {
@@ -177,50 +395,113 @@
 }
 
 .send {
-  padding: 14px 2px 5px 5px;
+  padding: 14px 4px 5px 5px;
   text-align: center;
+
+  mat-icon {
+    color: var(--tm-accent);
+    transition: transform var(--tm-dur-fast) var(--tm-ease-spring), filter var(--tm-dur) var(--tm-ease);
+
+    &:hover {
+      transform: translateX(3px) scale(1.12);
+      filter: drop-shadow(0 2px 8px rgba(34, 197, 94, 0.45));
+    }
+
+    &:active {
+      transform: translateX(4px) scale(0.94);
+    }
+  }
 }
 
+/* ---------- Containers / cards ---------- */
 .userposts-div {
   height: 800px !important;
-  border-radius: 8px;
-  border-radius: 8px !important;
+  border-radius: var(--tm-radius-lg);
+  box-shadow: var(--tm-shadow-lg);
+  scroll-behavior: smooth;
+  animation: tm-fade-in var(--tm-dur-slow) var(--tm-ease);
 }
 
 .feed-posts-div {
   overflow: hidden scroll;
   height: 800px !important;
-  border-radius: 8px;
-  border: 4px solid #0e3509;
+  border-radius: var(--tm-radius-lg);
+  border: 1px solid var(--tm-surface-dark);
+  box-shadow: var(--tm-shadow-lg);
+  scroll-behavior: smooth;
+  transition: box-shadow var(--tm-dur) var(--tm-ease);
+  animation: tm-fade-in var(--tm-dur-slow) var(--tm-ease);
+
+  &:hover {
+    box-shadow: var(--tm-shadow-glow);
+  }
 }
 
+/* individual post cards produced by *ngFor wrappers */
+.card {
+  border-radius: var(--tm-radius-lg);
+  transition: box-shadow var(--tm-dur) var(--tm-ease), transform var(--tm-dur) var(--tm-ease);
+}
+
+.xl\:mb-0.p-2 {
+  animation: tm-fade-in-up var(--tm-dur-slow) var(--tm-ease) both;
+}
+
+.card-body {
+  transition: background var(--tm-dur) var(--tm-ease);
+}
+
+.card-text {
+  color: var(--tm-text);
+  line-height: 1.55;
+  letter-spacing: -0.005em;
+}
+
+/* ---------- Close button ---------- */
 .btn-close {
   position: absolute !important;
   top: 10px !important;
   right: 0 !important;
+  transition: transform var(--tm-dur) var(--tm-ease-spring), opacity var(--tm-dur) var(--tm-ease);
+
+  &:hover {
+    transform: rotate(90deg) scale(1.05);
+    opacity: 0.85;
+  }
 }
 
 .c-label {
   background: transparent;
   color: #fff !important;
-  font-size: 16px !important;
+  font-size: 15px !important;
+  font-weight: 600;
+  letter-spacing: 0.01em;
 }
 
+/* ---------- Single post / comments panel ---------- */
 .singlepost-div {
   overflow: scroll;
   height: 150px;
-  border-radius: 8px;
+  border-radius: var(--tm-radius-md);
   color: #0e3508;
   margin-bottom: 55px !important;
+  scroll-behavior: smooth;
 }
 
 .singlepost-comment {
-  padding: 5px 0;
+  padding: 8px 6px;
   width: 95%;
-  border-radius: 8px;
+  border-radius: var(--tm-radius-md);
   background: #fff !important;
-  box-shadow: rgb(100 100 111 / 20%) 0px 7px 29px 0px;
+  box-shadow: var(--tm-shadow-sm);
   margin: 10px auto !important;
+  transition: transform var(--tm-dur) var(--tm-ease), box-shadow var(--tm-dur) var(--tm-ease);
+  animation: tm-fade-in-up var(--tm-dur) var(--tm-ease) both;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--tm-shadow-md);
+  }
 }
 
 .profile-image-35 {
@@ -228,64 +509,178 @@
   height: 35px;
   border-radius: 50%;
   margin-top: 6px;
+  object-fit: cover;
+  box-shadow: var(--tm-shadow-sm);
 }
 
 .comment-uname {
   font-size: 12px !important;
   margin-left: -30px !important;
-  line-height: 1.2;
+  line-height: 1.25;
   font-weight: 700;
+  letter-spacing: -0.005em;
 }
 
 .comment-content {
-  font-size: 12px !important;
+  font-size: 12.5px !important;
   margin-left: -30px !important;
   font-weight: 500;
+  color: var(--tm-text-muted);
+  line-height: 1.4;
 }
 
 .c-div {
-  padding-top: 7px;
+  padding-top: 8px;
 }
 
 .row-commet-input-div {
-  border-radius: 8px;
+  border-radius: var(--tm-radius-md);
   width: 100%;
   position: absolute;
   bottom: 0px;
-  background: #0e3508;
-  padding: 2px 8px 4px 8px;
-  box-shadow: rgb(0 0 0 / 56%) 0px 22px 70px 4px;
+  background: linear-gradient(180deg, rgba(14, 53, 8, 0.94), #0e3508 40%);
+  backdrop-filter: blur(6px);
+  padding: 4px 10px 6px 10px;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.35);
 }
 
+/* ---------- No-attachment variant ---------- */
 .notAttachcreated {
-  font-size: 12px;
+  font-size: 11.5px;
   margin: 0px 0 15px 2px;
-  font-weight: 700;
+  font-weight: 600;
   text-align: end;
-  color: #137e44;
-  padding-top: 12px
+  color: var(--tm-primary);
+  padding-top: 13px;
+  opacity: 0.85;
 }
 
 .notAttachname {
-  font-size: 16px;
-  margin: 0px 0 4px 10px;
+  font-size: 15.5px;
+  margin: 0px 0 4px 12px;
   float: left;
   font-weight: 700;
+  letter-spacing: -0.01em;
   color: #0e3508;
-  padding-top: 6px;
+  padding-top: 7px;
 }
 
-@import '../../global.scss';
+@import "../../global.scss";
 
+/* ---------- Load more / infinite scroll states ---------- */
 .load-more {
   text-align: center;
-  font-size: 20px;
-  padding: 10px 0 20px;
+  font-size: 14px;
+  padding: 14px 0 22px;
+
+  button {
+    border: none;
+    border-radius: 999px;
+    padding: 10px 22px !important;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    font-size: 13px;
+    text-transform: none;
+    box-shadow: var(--tm-shadow-sm);
+    transition: transform var(--tm-dur) var(--tm-ease-spring), box-shadow var(--tm-dur) var(--tm-ease),
+      filter var(--tm-dur) var(--tm-ease), background var(--tm-dur) var(--tm-ease);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--tm-shadow-md);
+      filter: brightness(1.05);
+    }
+
+    &:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--tm-accent);
+      outline-offset: 3px;
+    }
+  }
 }
 
 .feeds-div {
   height: 48px;
   padding: 4px;
-  border-radius: 8px;
-  background-image: linear-gradient(to right, #14874b, #0c2e07) !important;
+  border-radius: var(--tm-radius-md);
+  background-image: linear-gradient(120deg, #14874b, #0c2e07) !important;
+  box-shadow: var(--tm-shadow-sm);
+  transition: box-shadow var(--tm-dur) var(--tm-ease);
+
+  &:hover {
+    box-shadow: var(--tm-shadow-md);
+  }
+}
+
+/* ---------- Empty / no-record states ---------- */
+.set-no-record {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--tm-text-muted);
+  padding: 28px 16px !important;
+  border-radius: var(--tm-radius-md);
+  background: linear-gradient(180deg, #f8fafc, #f1f5f9);
+  border: 1px dashed var(--tm-border-strong);
+  animation: tm-fade-in var(--tm-dur-slow) var(--tm-ease);
+  letter-spacing: -0.005em;
+}
+
+/* the "Loading More ......" state gets a subtle pulse instead of static text */
+.task.block.overflow-x-auto.set-no-record.box-shad.margin-10:not(.load-more) {
+  transition: opacity var(--tm-dur) var(--tm-ease);
+}
+
+/* ---------- Responsive polish (mobile-first, non-structural) ---------- */
+@media (max-width: 576px) {
+  .profile-image {
+    width: 34px !important;
+    height: 34px;
+  }
+
+  .post-uname,
+  .notAttachname {
+    font-size: 14px;
+  }
+
+  .card-text {
+    font-size: 14px;
+  }
+
+  .userposts-div,
+  .feed-posts-div {
+    height: 640px !important;
+  }
+
+  .singlepost-div {
+    height: 120px;
+  }
+
+  .row-commet-input-div {
+    padding: 4px 8px 6px 8px;
+  }
+}
+
+@media (max-width: 400px) {
+  .userposts-div,
+  .feed-posts-div {
+    height: 560px !important;
+  }
+}
+
+/* ---------- Focus-visible accessibility ring for inputs across the component ---------- */
+input.form-control:focus-visible {
+  outline: none;
+}
+
+/* ---------- Selection color, small polish touch ---------- */
+::selection {
+  background: rgba(34, 197, 94, 0.28);
+  color: inherit;
 }

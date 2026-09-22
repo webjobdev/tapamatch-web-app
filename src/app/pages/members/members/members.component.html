@@ -22,8 +22,8 @@
           No Member Available!
         </div>
       </div>
-      <div *ngFor="let user of mUserListResponse.data; let i=index" class="col-xl-3 col-sm-6 mb-5 member-list-card">
-        <div class="bg-white rounded py-4 px-4 align-center box-shad member-data">
+      <div *ngFor="let user of mUserListResponse.data; let i=index" class="col-xl-3 col-sm-6 mb-4  member-list-card">
+        <div class="bg-white rounded py-4 px-4 align-center box-shad  member-data">
           <img *ngIf="user?.profile_image == '' || user?.profile_image == null"
             src="../../../../assets/images/Gender.png" alt="" width="100"
             class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
@@ -63,8 +63,8 @@
           No Member Available!
         </div>
       </div>
-      <div *ngFor="let user of searchList; let i=index" class="col-xl-3 col-sm-6 mb-5 member-list-card">
-        <div class="bg-white rounded py-4 px-4 align-center box-shad member-data">
+      <div *ngFor="let user of searchList; let i=index" class="col-xl-3 col-sm-6 mb-4  member-list-card ">
+        <div class="bg-white rounded py-4 px-4 align-center box-shad  member-data">
           <img *ngIf="user?.profile_image == '' || user?.profile_image == null"
             src="../../../../assets/images/Gender.png" alt="" width="100"
             class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
@@ -104,8 +104,8 @@
           No Friend Available!
         </div>
       </div>
-      <div *ngFor="let user of searchList; let i=index" class="col-xl-3 col-sm-6 mb-5 member-list-card">
-        <div class="bg-white rounded py-4 px-4 align-center box-shad member-data">
+      <div *ngFor="let user of searchList; let i=index" class="col-xl-3 col-sm-6 mb-4 member-list-card">
+        <div class="bg-white rounded py-4 px-4 align-center box-shad   member-data">
           <img *ngIf="user?.user?.profile_image == '' || user?.user?.profile_image == null"
             src="../../../../assets/images/Gender.png" alt="" width="100"
             class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">
@@ -136,8 +136,8 @@
           No Friend Available!
         </div>
       </div>
-      <div *ngFor="let user of mFriendListResponse.data; let i=index" class="col-xl-3 col-sm-6 mb-5 member-data">
-        <div class="bg-white rounded py-4 px-4 align-center box-shad member-list-card">
+      <div *ngFor="let user of mFriendListResponse.data; let i=index" class="col-xl-3 col-sm-6 mb-4 member-list-card ">
+        <div class="bg-white rounded py-4 px-4 align-center box-shad member-data">
           <img *ngIf="user?.user?.profile_image == '' || user?.user?.profile_image == null"
             src="../../../../assets/images/Gender.png" alt="" width="100"
             class="img-fluid rounded-circle mb-3 img-thumbnail shadow-sm">

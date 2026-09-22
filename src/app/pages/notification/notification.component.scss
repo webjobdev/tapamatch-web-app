@@ -1,32 +1,567 @@
+// Keep original global page classes (.page, .page__box, .page__content, etc.)
+// so nothing that depends on them elsewhere breaks.
 @import "../home/home.component.scss";
 
+// ===== DESIGN TOKENS (from brand palette) =====
+$color-blue: #18227b;
+$color-green: #4cb050;
+$color-btn-green: #058749;        // buttons / profile action color
+$color-bg-dark-green: #08332c;    // card dark background accent
+$color-card-light-green: #a5d6a7; // light card / selected background
+$color-danger: #e53935;
+
+// ===== MOTION SAFETY =====
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+// ===== PAGE SHELL — modern hero banner + attached content =====
+.page {
+  padding: 0 1rem;
+  background: #f4f7f4;
+  margin-top: -8px;
+  color: $color-bg-dark-green;
+
+  &__box {
+    position: relative;
+    min-height: 130px !important;
+    border-radius: 16px 16px 0 0;
+    background-image: linear-gradient(120deg, $color-btn-green 0%, $color-bg-dark-green 55%, #041d18 100%);
+    margin: 0 -1rem;
+    padding: 1.75rem 2.25rem !important;
+    font-size: 26px;
+    font-weight: 700;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    box-shadow: 0 12px 32px rgba(8, 51, 44, 0.22);
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -10%;
+      width: 60%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(165, 214, 167, 0.28) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 22px 22px;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .row {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      margin: 0;
+      align-items: center;
+    }
+  }
+
+  &__content {
+    border-radius: 0 0 16px 16px;
+    margin-top: 0 !important;
+    background: #ffffff;
+    color: $color-bg-dark-green;
+    padding: 1.5rem !important;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 20px 50px rgba(8, 51, 44, 0.10);
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.min-height-wallet { min-height: 130px; }
+.min-height-100 { min-height: 130px; }
+.min-h-calc-90 { min-height: calc(100vh - 220px); }
+.width-size { width: 100%; }
+.h-60 { display: flex; align-items: center; min-height: 60px; }
+.bg-trans { background: transparent !important; }
+
+// ===== PAGE TITLE (glass pill with pulsing dot) =====
+.line-h {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  margin: 0;
+  padding: 8px 20px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+
+  &::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $color-green;
+    box-shadow: 0 0 0 4px rgba(76, 176, 80, 0.28);
+    animation: notif-pulse 2s infinite;
+  }
+}
+
+@keyframes notif-pulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(76, 176, 80, 0.28); }
+  50%      { box-shadow: 0 0 0 10px rgba(76, 176, 80, 0); }
+}
+
+// ===== TASK CONTAINER =====
+.tasks-container {
+  width: 100%;
+  padding: 0;
+}
+
+// ===== TASK CARD (each notification) =====
+.task {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid rgba(8, 51, 44, 0.10);
+  border-left: 4px solid $color-btn-green;
+  border-radius: 14px;
+  padding: 18px 20px 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 16px rgba(8, 51, 44, 0.08);
+  overflow: hidden;
+  transition:
+    transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+  animation: notif-fade-in-up 0.35s ease both;
+
+  // soft radial glow that reveals on hover
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 0% 50%, rgba(165, 214, 167, 0.22), transparent 55%);
+    opacity: 0;
+    transition: opacity 0.22s ease;
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 36px rgba(8, 51, 44, 0.16);
+    border-left-color: $color-green;
+
+    &::after {
+      opacity: 1;
+    }
+  }
+}
+
+@keyframes notif-fade-in-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// Stagger animation for stacked notifications
+.task:nth-child(1) { animation-delay: 0.03s; }
+.task:nth-child(2) { animation-delay: 0.06s; }
+.task:nth-child(3) { animation-delay: 0.09s; }
+.task:nth-child(4) { animation-delay: 0.12s; }
+.task:nth-child(5) { animation-delay: 0.15s; }
+
+// ===== TASK TITLE (header strip) =====
+.task-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: linear-gradient(120deg, $color-btn-green, $color-bg-dark-green);
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 12px rgba(5, 135, 73, 0.28);
+
+  &::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $color-card-light-green;
+    box-shadow: 0 0 0 3px rgba(165, 214, 167, 0.35);
+  }
+}
+
+// ===== ROWS (label + value) =====
+.set-row {
+  margin: 0 -4px 6px;
+  align-items: center;
+
+  > [class*="col-"] {
+    padding: 0 4px;
+  }
+
+  .font-600 {
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(8, 51, 44, 0.55);
+  }
+
+  .align-right {
+    text-align: right;
+  }
+
+  .time {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    color: $color-bg-dark-green;
+    background: rgba(165, 214, 167, 0.35);
+    padding: 4px 12px;
+    border-radius: 999px;
+    letter-spacing: -0.005em;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .timeopen.time {
+    background: rgba(76, 176, 80, 0.15);
+    color: $color-btn-green;
+  }
+}
+
+// ===== FRIEND / MATCH REQUEST TEXT =====
 .frnd-request {
-  font-size: 16px;
-  color: red;
+  font-size: 14px;
+  color: $color-bg-dark-green;
   font-weight: 600;
+  padding: 10px 14px;
+  margin-top: 6px;
+  background: linear-gradient(180deg, rgba(165, 214, 167, 0.22), rgba(165, 214, 167, 0.10));
+  border-radius: 10px;
+  border-left: 3px solid $color-btn-green;
+  text-align: left;
 }
 
 .frnd-request-pending {
-  font-size: 16px;
-  color: red;
+  font-size: 14px;
+  color: $color-bg-dark-green;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 10px 0 4px;
+  flex-wrap: wrap;
+}
+
+// ===== ACTION BUTTONS =====
+.reject-btn,
+.accept-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 9px 22px !important;
+  border: none !important;
+  border-radius: 999px !important;
+  cursor: pointer;
+  color: #ffffff !important;
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.22s ease,
+    filter 0.22s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+
+  &:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.06);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.97);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-green;
+    outline-offset: 3px;
+  }
 }
 
 .reject-btn {
-  color: #fff !important;
-  font-size: 20px;
-  background: red !important;
+  background: linear-gradient(135deg, #ef5350 0%, $color-danger 100%) !important;
+  box-shadow: 0 4px 14px rgba(229, 57, 53, 0.35) !important;
+
+  &:hover {
+    box-shadow: 0 8px 22px rgba(229, 57, 53, 0.5) !important;
+  }
 }
 
 .accept-btn {
-  color: #fff !important;
-  font-size: 20px;
-  background: #0b2d06 !important;
+  background: linear-gradient(135deg, $color-green 0%, $color-btn-green 100%) !important;
+  box-shadow: 0 4px 14px rgba(5, 135, 73, 0.35) !important;
+
+  &:hover {
+    box-shadow: 0 8px 22px rgba(5, 135, 73, 0.5) !important;
+  }
 }
 
+// ===== UTILITY =====
 .m-10 {
-  margin: 10px;
+  margin: 10px 0;
 }
 
 .team-font {
-  font-size: 16px !important;
+  font-size: 14px !important;
+}
+
+.font-600 {
+  font-weight: 700 !important;
+}
+
+.align-center { text-align: center; }
+.align-right  { text-align: right; }
+.align-left   { text-align: left; }
+.p-2 { padding: 0.5rem; }
+
+// ===== MODAL (Venue picker) =====
+.modal-header {
+  padding: 18px 22px;
+  border-bottom: 1px solid rgba(8, 51, 44, 0.10);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  background: linear-gradient(135deg, $color-bg-dark-green 0%, $color-btn-green 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .modal-title {
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0;
+
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: $color-card-light-green;
+      box-shadow: 0 0 0 4px rgba(165, 214, 167, 0.3);
+    }
+  }
+
+  button {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    border-radius: 12px !important;
+    padding: 3px 30px;
+    border: none !important;
+    text-transform: none !important;
+
+    mat-icon {
+      font-size: 22px;
+      height: 22px;
+      width: 22px;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.3) !important;
+    }
+  }
+}
+
+.modal-body {
+  padding: 16px;
+
+  &.friendlyshow {
+    max-height: 66vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: $color-card-light-green transparent;
+
+    &::-webkit-scrollbar { width: 6px; }
+    &::-webkit-scrollbar-thumb {
+      background: $color-card-light-green;
+      border-radius: 3px;
+
+      &:hover { background: $color-green; }
+    }
+  }
+
+  .form-control.mr-sm-2 {
+    width: 100%;
+    padding: 12px 16px 12px 42px;
+    border: 1.5px solid rgba(8, 51, 44, 0.18);
+    border-radius: 24px;
+    font-size: 14px;
+    background:
+      #f6faf6
+      url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23058749' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3ccircle cx='11' cy='11' r='8'/%3e%3cpath d='m21 21-4.3-4.3'/%3e%3c/svg%3e")
+      14px center / 18px 18px no-repeat;
+    transition: all 0.2s ease;
+    margin-bottom: 8px;
+
+    &:focus {
+      outline: none;
+      background-color: #ffffff;
+      border-color: $color-btn-green;
+      box-shadow: 0 0 0 4px rgba(5, 135, 73, 0.14);
+    }
+  }
+}
+
+// ===== VENUE CARD (inside modal) =====
+.venueData {
+  cursor: pointer;
+  background: #ffffff;
+  border: 1.5px solid rgba(8, 51, 44, 0.10);
+  border-radius: 12px !important;
+  padding: 14px 18px !important;
+  transition: all 0.22s ease;
+  position: relative;
+
+  &:hover {
+    box-shadow: 0 8px 22px rgba(8, 51, 44, 0.14);
+    transform: translateY(-2px);
+    border-color: rgba(5, 135, 73, 0.35);
+  }
+
+  .font-600 {
+    font-weight: 700;
+    color: $color-bg-dark-green;
+    font-size: 15px;
+  }
+
+  .align-right {
+    text-align: right;
+    font-weight: 700;
+    color: $color-btn-green;
+    font-size: 15px;
+    display: inline-block;
+    background: rgba(165, 214, 167, 0.35);
+    padding: 3px 12px;
+    border-radius: 999px;
+    margin-top: 6px;
+  }
+}
+
+.venueId {
+  position: absolute !important;
+  top: 12px !important;
+  right: 14px !important;
+
+  &.icon-done-btn {
+    background: $color-btn-green !important;
+    color: #ffffff !important;
+    border-radius: 12px !important;
+    padding: 3px 18px !important;
+    border: none !important;
+
+    &:hover {
+      background: $color-bg-dark-green !important;
+    }
+  }
+}
+
+.venueSave {
+  color: #ffffff !important;
+  font-size: 24px !important;
+  height: 24px !important;
+  width: 24px !important;
+  font-weight: 700 !important;
+}
+
+// ===== RESPONSIVE =====
+@media (max-width: 992px) {
+  .page__box {
+    min-height: 120px !important;
+    padding: 1.5rem 1.5rem !important;
+    font-size: 22px;
+  }
+  .line-h { font-size: 18px; padding: 6px 16px; }
+}
+
+@media (max-width: 768px) {
+  .page__box {
+    padding: 1.25rem !important;
+    font-size: 20px;
+    border-radius: 12px 12px 0 0;
+  }
+  .page__content {
+    padding: 1rem !important;
+    border-radius: 0 0 12px 12px;
+  }
+  .line-h { font-size: 16px; padding: 6px 14px; }
+  .task { padding: 14px 16px 12px; }
+  .task-title { font-size: 10.5px; padding: 5px 12px; }
+  .frnd-request, .frnd-request-pending { font-size: 13px; }
+  .reject-btn, .accept-btn { padding: 8px 18px !important; font-size: 12px !important; }
+}
+
+@media (max-width: 480px) {
+  .page { padding: 0 0.5rem; }
+  .page__box { padding: 1rem !important; font-size: 18px; }
+  .page__content { padding: 0.85rem !important; }
+  .line-h { font-size: 15px; gap: 8px; }
+  .line-h::before { width: 6px; height: 6px; }
+
+  .task {
+    padding: 12px 14px 10px;
+    border-left-width: 3px;
+  }
+  .task-title { font-size: 10px; letter-spacing: 0.1em; }
+
+  .set-row .time { font-size: 12px; padding: 3px 10px; }
+  .set-row .font-600 { font-size: 11px; }
+
+  .frnd-request { font-size: 12.5px; padding: 8px 12px; }
+  .frnd-request-pending { justify-content: stretch; }
+  .frnd-request-pending button { flex: 1; }
+
+  .reject-btn, .accept-btn {
+    padding: 8px 14px !important;
+    font-size: 11.5px !important;
+  }
+}
+
+// ===== ACCESSIBILITY =====
+:focus-visible {
+  outline: 2px solid $color-green;
+  outline-offset: 2px;
+}
+
+::selection {
+  background: rgba(76, 176, 80, 0.28);
+  color: inherit;
 }
