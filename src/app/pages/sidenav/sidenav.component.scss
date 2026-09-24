@@ -280,13 +280,10 @@
 }
 
 /* ============================================================
-   MODAL — GLOBAL OVERRIDES (must escape encapsulation)
-   Angular Material / ng-bootstrap render modals OUTSIDE the
-   sidebar's DOM. Using ::ng-deep + :host + global selectors
-   ensures these styles actually apply.
+   MODAL — GLOBAL OVERRIDES (escape encapsulation)
    ============================================================ */
 
-/* Body overlay backdrop */
+/* Backdrop */
 ::ng-deep .modal-backdrop,
 ::ng-deep .modal-backdrop.show {
   background: rgba(8, 51, 44, 0.55) !important;
@@ -295,16 +292,25 @@
   -webkit-backdrop-filter: blur(6px);
 }
 
-/* Modal container — used by both Bootstrap and ng-bootstrap */
+/* Centered, wider dialog for ALL modals */
 ::ng-deep .modal-dialog,
 ::ng-deep .modal-dialog-centered {
-  max-width: 520px;
-  margin: 1.75rem auto;
+  max-width: 1024px !important;
+  max-height: 800px !important;
+  width: calc(100% - 3rem) !important;
+  margin: 2rem auto !important;
+}
+
+/* Extra-large variant for Terms / Privacy iframes */
+::ng-deep .modal-dialog.modal-lg,
+::ng-deep .modal-dialog.modal-xl,
+::ng-deep .modal-dialog.modal-dialog-scrollable {
+  max-width: 900px !important;
 }
 
 ::ng-deep .modal-content {
   border: none !important;
-  border-radius: 16px !important;
+  border-radius: 18px !important;
   box-shadow: 0 24px 60px rgba(8, 51, 44, 0.35) !important;
   overflow: hidden !important;
   background: #ffffff !important;
@@ -315,8 +321,8 @@
 .modal-header {
   padding: 20px 24px !important;
   border-bottom: 1px solid rgba(8, 51, 44, 0.10) !important;
-  border-top-left-radius: 16px !important;
-  border-top-right-radius: 16px !important;
+  border-top-left-radius: 18px !important;
+  border-top-right-radius: 18px !important;
   background: linear-gradient(135deg, #08332c 0%, #058749 100%) !important;
   display: flex !important;
   align-items: center !important;
@@ -344,7 +350,6 @@
     }
   }
 
-  /* Optional close button (btn-close / ×) */
   .btn-close,
   .close {
     filter: invert(1) brightness(2);
@@ -361,10 +366,26 @@
 /* ---------- Body ---------- */
 ::ng-deep .modal-body,
 .modal-body {
-  padding: 22px 24px !important;
+  padding: 24px 28px !important;
   background: #ffffff !important;
+  max-height: calc(100vh - 220px) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
 
-  &.p-1 { padding: 22px 24px !important; }
+  &.p-1 { padding: 24px 28px !important; }
+
+  /* Iframes (Terms / Privacy Policy) — full width, tall, styled */
+  iframe {
+    display: block !important;
+    width: 100% !important;
+    min-height: 65vh !important;
+    height: 65vh !important;
+    border: 1px solid rgba(8, 51, 44, 0.10) !important;
+    border-radius: 12px !important;
+    background: #ffffff !important;
+    box-shadow: 0 4px 16px rgba(8, 51, 44, 0.06) !important;
+    overflow: hidden !important;
+  }
 }
 
 /* ---------- Footer ---------- */
@@ -520,6 +541,20 @@
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+@media (max-width: 992px) {
+  ::ng-deep .modal-dialog,
+  ::ng-deep .modal-dialog-centered {
+    max-width: calc(100% - 2rem) !important;
+    width: calc(100% - 2rem) !important;
+    margin: 1.25rem auto !important;
+  }
+
+  ::ng-deep .modal-body iframe {
+    min-height: 55vh !important;
+    height: 55vh !important;
+  }
+}
+
 @media (max-width: 768px) {
   .mat-list-item {
     height: 44px !important;
@@ -550,9 +585,24 @@
     margin: 2px 16px 0 !important;
   }
 
-  ::ng-deep .modal-dialog {
-    margin: 1rem;
-    max-width: calc(100% - 2rem);
+  ::ng-deep .modal-dialog,
+  ::ng-deep .modal-dialog-centered {
+    margin: 1rem !important;
+    max-width: calc(100% - 2rem) !important;
+    width: calc(100% - 2rem) !important;
+  }
+
+  ::ng-deep .modal-body,
+  .modal-body {
+    padding: 18px 20px !important;
+
+    &.p-1 { padding: 18px 20px !important; }
+
+    iframe {
+      min-height: 50vh !important;
+      height: 50vh !important;
+      border-radius: 10px !important;
+    }
   }
 
   ::ng-deep .modal-footer,
@@ -575,5 +625,10 @@
 
   .menu-item-name {
     font-size: 0.85rem;
+  }
+
+  ::ng-deep .modal-body iframe {
+    min-height: 45vh !important;
+    height: 45vh !important;
   }
 }
