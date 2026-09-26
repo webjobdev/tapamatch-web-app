@@ -2,93 +2,149 @@
   <div class="d-flex page__box pt-2 pl-3 pr-3 pb-3 mt-2 min-height-wallet min-height-100">
     <div class="row width-size">
       <div class="col-md-6 h-60">
-        <label class="bg-trans line-h">Update Score</label>
+        <label class="bg-trans line-h">
+          <mat-icon class="title-icon">scoreboard</mat-icon>
+          Update Score
+        </label>
       </div>
     </div>
-
   </div>
+
   <div class="page__content p-2 position-relative min-h-calc-90">
     <div class="flex flex-wrap mt-2">
       <div class="container text-center text-lg-start set-margin-zero">
         <div class="row gx-lg-5 align-items-center">
           <div class="col-lg-8 mb-5 mb-lg-0 position-relative m-0-auto">
-            <div class="card bg-glass card-box-shadow">
+            <div class="card bg-glass card-box-shadow challenge-card">
               <div class="card-body">
                 <form [formGroup]="updateScoreFormgroup">
 
-                  <div class="form-group align-left mb-3">
-                    <select class="form-select" name="type" id="floatingSelectGrid"
-                      aria-label="Floating label select example" formControlName="type" (change)="selectType()">
-                      <option value="">Select</option>
-                      <option value="Challenge">Challenge</option>
-                      <option value="Friendly">Friendly</option>
-                    </select>
-                    <label class="form-control-placeholder" for="floatingSelectGrid">Select Type</label>
+                  <!-- Type -->
+                  <div class="form-group align-left mb-3 field-row">
+                    <div class="field-icon field-icon--sport">
+                      <mat-icon>category</mat-icon>
+                    </div>
+                    <div class="field-input-wrap">
+                      <select class="form-select" name="type" id="floatingSelectGrid"
+                        aria-label="Floating label select example" formControlName="type" (change)="selectType()">
+                        <option value="">Select</option>
+                        <option value="Challenge">Challenge</option>
+                        <option value="Friendly">Friendly</option>
+                      </select>
+                      <label class="form-control-placeholder" for="floatingSelectGrid">Select Type</label>
+                    </div>
                   </div>
-                  <div *ngIf="type == 'Challenge'" class="form-group align-left mb-3">
-                    <select class="form-select" name="challenge" id="floatingSelectGrid"
-                      aria-label="Floating label select example" formControlName="challenge"
-                      (change)="selectMatch('Challenge')">
-                      <option value="">Select</option>
-                      <option *ngFor="let challenge of mHomeUpcomingChallengeResponse.data" value="{{challenge.id}}">
-                        {{challenge.c_title}}
-                      </option>
-                    </select>
-                    <label class="form-control-placeholder" for="floatingSelectGrid">Select Challenge</label>
+
+                  <!-- Challenge -->
+                  <div *ngIf="type == 'Challenge'" class="form-group align-left mb-3 field-row">
+                    <div class="field-icon field-icon--title">
+                      <mat-icon>emoji_events</mat-icon>
+                    </div>
+                    <div class="field-input-wrap">
+                      <select class="form-select" name="challenge" id="floatingSelectGrid"
+                        aria-label="Floating label select example" formControlName="challenge"
+                        (change)="selectMatch('Challenge')">
+                        <option value="">Select</option>
+                        <option *ngFor="let challenge of mHomeUpcomingChallengeResponse.data" value="{{challenge.id}}">
+                          {{challenge.c_title}}
+                        </option>
+                      </select>
+                      <label class="form-control-placeholder" for="floatingSelectGrid">Select Challenge</label>
+                    </div>
                   </div>
-                  <div *ngIf="type == 'Friendly'" class="form-group align-left mb-3">
-                    <select class="form-select" name="friendly" id="floatingSelectGrid"
-                      aria-label="Floating label select example" formControlName="friendly"
-                      (change)="selectMatch('Friendly')">
-                      <option value="">Select</option>
-                      <option *ngFor="let friendly of mHomeUpcomingFriendlyResponse.data" value="{{friendly.id}}">
-                        {{friendly.frd_title}}
-                      </option>
-                    </select>
-                    <label class="form-control-placeholder" for="floatingSelectGrid">Select Friendly</label>
+
+                  <!-- Friendly -->
+                  <div *ngIf="type == 'Friendly'" class="form-group align-left mb-3 field-row">
+                    <div class="field-icon field-icon--title">
+                      <mat-icon>handshake</mat-icon>
+                    </div>
+                    <div class="field-input-wrap">
+                      <select class="form-select" name="friendly" id="floatingSelectGrid"
+                        aria-label="Floating label select example" formControlName="friendly"
+                        (change)="selectMatch('Friendly')">
+                        <option value="">Select</option>
+                        <option *ngFor="let friendly of mHomeUpcomingFriendlyResponse.data" value="{{friendly.id}}">
+                          {{friendly.frd_title}}
+                        </option>
+                      </select>
+                      <label class="form-control-placeholder" for="floatingSelectGrid">Select Friendly</label>
+                    </div>
                   </div>
+
+                  <!-- User A / Team A + Score A -->
                   <div class="row g-2">
                     <div class="col-md">
-                      <div class="form-group  align-left mb-3">
-                        <input type="text" id="userA" class="form-control" name="userA" formControlName="userA" required
-                          readonly>
-                        <label *ngIf="type == 'Friendly'" class="form-control-placeholder" for="userA">User A</label>
-                        <label *ngIf="type == 'Challenge'" class="form-control-placeholder" for="userA">Team A</label>
+                      <div class="form-group align-left mb-3 field-row">
+                        <div class="field-icon field-icon--team">
+                          <mat-icon>group</mat-icon>
+                        </div>
+                        <div class="field-input-wrap">
+                          <input type="text" id="userA" class="form-control" name="userA" formControlName="userA"
+                            required readonly>
+                          <label *ngIf="type == 'Friendly'" class="form-control-placeholder" for="userA">User A</label>
+                          <label *ngIf="type == 'Challenge'" class="form-control-placeholder" for="userA">Team A</label>
+                        </div>
                       </div>
                     </div>
                     <div class="col-md">
-                      <div class="form-group  align-left mb-3">
-                        <input type="number" id="userAScore" class="form-control" name="userAScore"
-                          formControlName="userAScore" required (input)="changeScore($event,'1')">
-                        <label class="form-control-placeholder" for="userAScore">Enter Score</label>
+                      <div class="form-group align-left mb-3 field-row">
+                        <div class="field-icon field-icon--title">
+                          <mat-icon>looks_one</mat-icon>
+                        </div>
+                        <div class="field-input-wrap">
+                          <input type="number" id="userAScore" class="form-control" name="userAScore"
+                            formControlName="userAScore" required (input)="changeScore($event,'1')">
+                          <label class="form-control-placeholder" for="userAScore">Enter Score</label>
+                        </div>
                       </div>
                     </div>
                   </div>
+
+                  <!-- User B / Team B + Score B -->
                   <div class="row g-2">
                     <div class="col-md">
-                      <div class="form-group  align-left mb-3">
-                        <input type="text" id="userB" class="form-control" name="userB" formControlName="userB" required
-                          readonly>
-                        <label *ngIf="type == 'Friendly'" class="form-control-placeholder" for="userB">User B</label>
-                        <label *ngIf="type == 'Challenge'" class="form-control-placeholder" for="userB">Team B</label>
+                      <div class="form-group align-left mb-3 field-row">
+                        <div class="field-icon field-icon--team">
+                          <mat-icon>group</mat-icon>
+                        </div>
+                        <div class="field-input-wrap">
+                          <input type="text" id="userB" class="form-control" name="userB" formControlName="userB"
+                            required readonly>
+                          <label *ngIf="type == 'Friendly'" class="form-control-placeholder" for="userB">User B</label>
+                          <label *ngIf="type == 'Challenge'" class="form-control-placeholder" for="userB">Team B</label>
+                        </div>
                       </div>
                     </div>
                     <div class="col-md">
-                      <div class="form-group  align-left mb-3">
-                        <input type="number" id="userBScore" class="form-control" name="userBScore"
-                          formControlName="userBScore" required (input)="changeScore($event,'2')">
-                        <label class="form-control-placeholder" for="userBScore">Enter Score</label>
+                      <div class="form-group align-left mb-3 field-row">
+                        <div class="field-icon field-icon--title">
+                          <mat-icon>looks_two</mat-icon>
+                        </div>
+                        <div class="field-input-wrap">
+                          <input type="number" id="userBScore" class="form-control" name="userBScore"
+                            formControlName="userBScore" required (input)="changeScore($event,'2')">
+                          <label class="form-control-placeholder" for="userBScore">Enter Score</label>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div class="form-group  align-left mb-3">
-                    <input type="text" id="won" class="form-control" name="won" formControlName="won" required readonly>
-                    <label class="form-control-placeholder" for="won">Winner</label>
+
+                  <!-- Winner -->
+                  <div class="form-group align-left mb-3 field-row">
+                    <div class="field-icon field-icon--refree">
+                      <mat-icon>emoji_events</mat-icon>
+                    </div>
+                    <div class="field-input-wrap">
+                      <input type="text" id="won" class="form-control" name="won" formControlName="won" required readonly>
+                      <label class="form-control-placeholder" for="won">Winner</label>
+                    </div>
                   </div>
-                  <div>
-                    <button type="submit" class="btn btn-success btn-block btn-fonts box-shad" style="background: #0b2d06;
-                    color: #fff;
-                    font-size: 22px;" (click)="scoreUpdate()">
+
+                  <!-- Submit -->
+                  <div class="submit-row">
+                    <button type="submit" class="btn btn-success btn-block btn-fonts box-shad update-btn"
+                      (click)="scoreUpdate()">
+                      <mat-icon class="btn-icon">save</mat-icon>
                       Update Score
                     </button>
                   </div>

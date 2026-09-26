@@ -1,1 +1,286 @@
+// Keep original global page classes so nothing else breaks
 @import "../home/home.component.scss";
+
+// ===== DESIGN TOKENS (from brand palette) =====
+$color-blue: #18227b;
+$color-green: #4cb050;
+$color-btn-green: #058749;
+$color-bg-dark-green: #08332c;
+$color-card-light-green: #a5d6a7;
+
+// ===== PAGE HEADER =====
+.page__box {
+  background: linear-gradient(135deg, $color-bg-dark-green 0%, $color-btn-green 100%) !important;
+
+  .title-icon {
+    vertical-align: middle;
+    margin-right: 8px;
+    color: #fff;
+    font-size: 22px;
+    height: 22px;
+    width: 22px;
+  }
+}
+
+// ===== CARD =====
+.challenge-card {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(8, 51, 44, 0.15);
+  border: none;
+
+  .card-body {
+    padding: 28px 24px;
+  }
+}
+
+// ===== FIELD ROWS =====
+.field-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  &--textarea {
+    align-items: flex-start;
+  }
+}
+
+.field-icon {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $color-card-light-green;
+  color: $color-bg-dark-green;
+  margin-top: 4px;
+
+  mat-icon {
+    font-size: 22px;
+    height: 22px;
+    width: 22px;
+  }
+
+  &--sport { background: rgba($color-green, 0.18); color: $color-green; }
+  &--venue { background: rgba($color-blue, 0.12); color: $color-blue; }
+  &--title { background: rgba($color-btn-green, 0.15); color: $color-btn-green; }
+  &--date  { background: rgba($color-blue, 0.12); color: $color-blue; }
+  &--desc  { background: rgba($color-green, 0.18); color: $color-green; }
+  &--team  { background: rgba($color-btn-green, 0.15); color: $color-btn-green; }
+  &--refree{ background: rgba($color-blue, 0.12); color: $color-blue; }
+}
+
+.field-input-wrap {
+  flex: 1;
+  position: relative;
+}
+
+// ===== INPUT / SELECT =====
+.form-control,
+.form-select {
+  border-radius: 10px !important;
+  border: 1.5px solid #e1eae1 !important;
+  padding: 1px 14px !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background-color: #fbfdfb !important;
+  font-size: 14.5px;
+
+  &:hover:not(:focus):not([readonly]) {
+    border-color: rgba($color-btn-green, 0.4) !important;
+  }
+
+  &:focus {
+    border-color: $color-btn-green !important;
+    box-shadow: 0 0 0 3px rgba($color-btn-green, 0.15) !important;
+    outline: none;
+  }
+
+  /* Read-only fields (User A / Team A / User B / Team B / Winner) */
+  &[readonly] {
+    background: linear-gradient(180deg, #eef5ee, #e3ede4) !important;
+    color: $color-bg-dark-green !important;
+    font-weight: 700;
+    cursor: default;
+
+    &:hover {
+      border-color: #e1eae1 !important;
+    }
+  }
+}
+
+/* Number inputs — hide spinners, bold, centered */
+input[type="number"].form-control {
+  font-weight: 700;
+  font-size: 16px;
+  text-align: center;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Select green arrow */
+.form-select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23058749' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 14px center;
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+  padding-right: 40px !important;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Floating label */
+.form-control-placeholder {
+  position: absolute;
+  top: -9px;
+  left: 14px;
+  padding: 0 8px;
+  background: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  color: $color-btn-green;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 2;
+  transition: color 0.2s ease;
+}
+
+.form-group:focus-within .form-control-placeholder {
+  color: $color-bg-dark-green;
+}
+
+/* Winner highlight */
+#won.form-control {
+  background: linear-gradient(135deg, rgba($color-green, 0.18), rgba($color-btn-green, 0.12)) !important;
+  border-color: $color-btn-green !important;
+  color: $color-bg-dark-green !important;
+  font-weight: 800;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+// ===== SUBMIT BUTTON =====
+.submit-row {
+  margin-top: 12px;
+}
+
+.update-btn {
+  background: linear-gradient(135deg, $color-green 0%, $color-btn-green 100%) !important;
+  border: none !important;
+  border-radius: 30px !important;
+  padding: 14px 28px !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 15px rgba($color-btn-green, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.22) 50%, transparent 100%);
+    transition: left 0.6s ease;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba($color-btn-green, 0.5);
+    filter: brightness(1.05);
+
+    &::before { left: 100%; }
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-green;
+    outline-offset: 3px;
+  }
+
+  .btn-icon {
+    vertical-align: middle;
+    margin-right: 8px;
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+  }
+}
+
+// ===== MISC =====
+::selection {
+  background: rgba($color-green, 0.28);
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid $color-green;
+  outline-offset: 2px;
+}
+
+// ===== RESPONSIVE =====
+@media (max-width: 768px) {
+  .page__box {
+    padding: 1.25rem !important;
+    font-size: 20px;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .page__content {
+    padding: 1rem !important;
+    border-radius: 0 0 12px 12px;
+  }
+
+  .card .card-body { padding: 20px 16px; }
+
+  .field-icon {
+    flex: 0 0 38px;
+    width: 38px;
+    height: 38px;
+
+    mat-icon { font-size: 20px; height: 20px; width: 20px; }
+  }
+
+  .form-control,
+  .form-select {
+    font-size: 14px;
+    padding: 9px 12px !important;
+  }
+
+  .update-btn {
+    font-size: 14px !important;
+    padding: 12px 20px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .page { padding: 0 0.5rem; }
+
+  .page__box {
+    padding: 1rem !important;
+    font-size: 18px;
+  }
+
+  .page__content { padding: 1rem 0.75rem !important; }
+
+  .form-control-placeholder {
+    font-size: 10.5px;
+    left: 12px;
+  }
+}
