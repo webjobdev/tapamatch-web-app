@@ -48,16 +48,19 @@
 
         <p *ngIf="post?.comment_count > 0" class="card-text" (click)="open(content, post)">View all
           {{post?.comment_count}} comments.....</p>
-        <div class="row">
-          <div class="col-10 comment-send-div">
-            <input class="form-control form-control-sm comment-input" type="text" id="content" [(ngModel)]="comment"
-              (input)="changeComment($event.target.value)" placeholder="Comment..."
-              aria-label=".form-control-sm example">
+          <div class="row">
+            <div class="col-10 comment-send-div">
+              <input class="form-control form-control-sm comment-input" type="text"
+                [id]="'content-' + post.id"
+                [ngModel]="commentMap[post.id] || ''"
+                (ngModelChange)="changeComment(post.id, $event)"
+                placeholder="Comment..."
+                aria-label=".form-control-sm example">
+            </div>
+            <div class="col-2 send-btn-div">
+              <mat-icon (click)="sendComment(post.id)">send</mat-icon>
+            </div>
           </div>
-          <div class="col-2 send-btn-div">
-            <mat-icon (click)="sendComment(post.id)">send</mat-icon>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -116,8 +119,11 @@
           {{post?.comment_count}} comments.....</p>
         <div class="row row-div">
           <div class="col-11 p-0">
-            <input class="form-control form-control-sm comment-input" type="text" id="content" [(NgModel)]="comment"
-              (input)="changeComment($event.target.value)" placeholder="Comment..."
+            <input class="form-control form-control-sm comment-input" type="text"
+              [id]="'content-' + post.id"
+              [ngModel]="commentMap[post.id] || ''"
+              (ngModelChange)="changeComment(post.id, $event)"
+              placeholder="Comment..."
               aria-label=".form-control-sm example">
           </div>
           <div class="col-1 send">
@@ -180,16 +186,19 @@
         </div>
         <p *ngIf="post?.comment_count > 0" class="card-text" (click)="open(content, post)">View all
           {{post?.comment_count}} comments.....</p>
-        <div class="row row-div">
-          <div class="col-11 p-0">
-            <input class="form-control form-control-sm comment-input" type="text" id="content" [(NgModel)]="comment"
-              (input)="changeComment($event.target.value)" placeholder="Comment..." aria-label=" .form-control-sm
-              example">
+          <div class="row row-div">
+            <div class="col-11 p-0">
+              <input class="form-control form-control-sm comment-input" type="text"
+                [id]="'content-' + post.id"
+                [ngModel]="commentMap[post.id] || ''"
+                (ngModelChange)="changeComment(post.id, $event)"
+                placeholder="Comment..."
+                aria-label=".form-control-sm example">
+            </div>
+            <div class="col-1 send">
+              <mat-icon (click)="sendComment(post.id)">send</mat-icon>
+            </div>
           </div>
-          <div class="col-1 send">
-            <mat-icon (click)="sendComment(post.id)">send</mat-icon>
-          </div>
-        </div>
       </div>
     </div>
     <div class="load-more" *ngIf="showButton && !showNoItem">
@@ -299,8 +308,11 @@
             </div>
             <div class="row row-commet-input-div">
               <div class="col-11 p-0">
-                <input class="form-control form-control-sm comment-input" type="text" id="content" [(NgModel)]="comment"
-                  (input)="changeComment($event.target.value)" placeholder="Comment..."
+                <input class="form-control form-control-sm comment-input" type="text"
+                  [id]="'content-' + singlePost.id"
+                  [ngModel]="commentMap[singlePost.id] || ''"
+                  (ngModelChange)="changeComment(singlePost.id, $event)"
+                  placeholder="Comment..."
                   aria-label=".form-control-sm example">
               </div>
               <div class="col-1 send">

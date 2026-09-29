@@ -26,7 +26,9 @@ export class CardPageSmallComponent implements OnInit {
   public startedPlay: boolean = false;
   public show: boolean = false;
   user_profile: any;
-  comment: any;
+
+  commentMap: { [postId: number]: string } = {};
+
   closeResult: string = '';
   singlePost: any;
   likeStatus: any;
@@ -37,6 +39,7 @@ export class CardPageSmallComponent implements OnInit {
   showButton: boolean = true;
   showNoItem: boolean = false;
   url: any;
+
   constructor(private router: Router, private wsHome: WsHomeService, private toast: ToastrService, private wsProfile: WsProfileService, private modalService: NgbModal) {
     this.user_profile = window.localStorage.getItem("profile");
     this.router.events.subscribe((evt) => {
@@ -51,13 +54,13 @@ export class CardPageSmallComponent implements OnInit {
     this.showButton = true;
   }
 
-
   ngAfterViewInit() {
     console.log(this.url)
     if (this.url == '/feeds') {
       this.createObserver(true);
     }
   }
+
   /**
    * split date time into date
    * @param created_at 
@@ -66,6 +69,7 @@ export class CardPageSmallComponent implements OnInit {
   getDate(created_at: any) {
     return created_at.split(" ")[0]
   }
+
   /**
    * videoplayer to play a video in post
    * @param videoplayer 
@@ -73,8 +77,9 @@ export class CardPageSmallComponent implements OnInit {
   pauseVideo(videoplayer: any) {
     videoplayer?.nativeElement?.pauseVideo();
   }
+
   /**
-   * Api to call like and unlikw post
+   * Api to call like and unlike post
    * @param postId 
    */
   likeUnlikePost(postId: any, type: any) {
@@ -90,35 +95,34 @@ export class CardPageSmallComponent implements OnInit {
       this.toast.error(error?.error?.message);
     })
   }
-  /**
-   * change event of coment 
-   * @param event 
-   */
-  changeComment(event: any) {
-    this.mHomeCreateCommentRequest.content = event;
-  }
-  /**
-   * Api to give a comment on post
-   * @param postId 
-   */
-  sendComment(postId: any) {
-    this.mHomeCreateCommentRequest.post_id = postId
-    if (this.mHomeCreateCommentRequest.content == "" || this.mHomeCreateCommentRequest.content == undefined) {
-      this.toast.error("Please enter comment!");
-    } else {
-      this.wsHome.createComent(this.mHomeCreateCommentRequest).toPromise().then(createCommentRes => {
-        if (createCommentRes && createCommentRes.id) {
-          this.comment = '';
-          this.getPostsCall();
 
-        } else {
-          this.toast.error("Something went Wrong!");
-        }
-      }, error => {
-        this.toast.error(error?.error?.message);
-      })
-    }
+  changeComment(postId: number, event: any) {
+    this.commentMap[postId] = event;
   }
+
+  sendComment(postId: any) {
+    const commentContent = this.commentMap[postId];
+
+    if (!commentContent || commentContent.trim() === '') {
+      this.toast.error("Please enter comment!");
+      return;
+    }
+
+    this.mHomeCreateCommentRequest.post_id = postId;
+    this.mHomeCreateCommentRequest.content = commentContent;
+
+    this.wsHome.createComent(this.mHomeCreateCommentRequest).toPromise().then(createCommentRes => {
+      if (createCommentRes && createCommentRes.id) {
+        this.commentMap[postId] = '';
+        this.getPostsCall();
+      } else {
+        this.toast.error("Something went Wrong!");
+      }
+    }, error => {
+      this.toast.error(error?.error?.message);
+    })
+  }
+
   /**
    * api call to get user post
    */
@@ -127,7 +131,7 @@ export class CardPageSmallComponent implements OnInit {
       this.wsProfile.getUserPosts("1").toPromise().then(resPosts => {
         if (resPosts && resPosts.data) {
           this.userposts = resPosts.data;
-          this.mHomeCreateCommentRequest.content = '';
+          this.commentMap = {};
           this.modalService.dismissAll();
           this.singlePost = '';
           this.likeStatus = '';
@@ -149,7 +153,7 @@ export class CardPageSmallComponent implements OnInit {
           } else if (this.posts) {
             this.posts = resPosts.data;
           }
-          this.mHomeCreateCommentRequest.content = '';
+          this.commentMap = {}; 
           this.modalService.dismissAll();
           this.singlePost = '';
           this.likeStatus = '';
@@ -161,6 +165,7 @@ export class CardPageSmallComponent implements OnInit {
       })
     }
   }
+
   /**
    * open modal to view single post
    * @param content 
@@ -178,6 +183,7 @@ export class CardPageSmallComponent implements OnInit {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
+
   /**
    * dismiss the modal
    * @param reason 
@@ -238,7 +244,7 @@ export class CardPageSmallComponent implements OnInit {
   }
 
   createObserver(fromLoadMore?: any) {
-    const threshold = 0.2; // how much % of the element is in view
+    const threshold = 0.2;
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0]['isIntersecting'] === true) {
@@ -264,11 +270,11 @@ export class CardPageSmallComponent implements OnInit {
       }, 1000);
     }
   }
+
   onUp() {
     console.log("onUp")
     console.log(this.pageNo)
     this.pageNo++;
-    // if (this.pageNo > 0 <= this.last_page) {
     this.wsHome.getPosts(this.pageNo).toPromise().then(resPosts => {
       if (resPosts && resPosts.data) {
         this.loaderShow = false;
@@ -284,10 +290,5 @@ export class CardPageSmallComponent implements OnInit {
       console.log("getPosts error", error)
       this.toast.error(error?.error?.message);
     })
-    // }
   }
-
-
-
-
 }
