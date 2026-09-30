@@ -100,10 +100,14 @@
                           <mat-icon>image</mat-icon>
                         </div>
                         <div class="field-input-wrap">
-                          <label for="image" class="align-center width-size upload-label">
-                            <input type="file" name="image" id="image" class="displaynone" (change)="preview($event)" />
-                            <img src="{{imgView}}" class="img-preview" />
-                          </label>
+                        <label for="image" class="align-center width-size upload-label">
+                          <input type="file" name="image" id="image" class="displaynone" (change)="preview($event)" />
+                          <img
+                            [src]="imgView || '../../../assets/images/camera1.png'"
+                            (error)="imgView = '../../../assets/images/camera1.png'"
+                            class="img-preview"
+                            alt="Team Image" />
+                        </label>
                         </div>
                       </div>
                     </div>

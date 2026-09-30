@@ -7,6 +7,7 @@ import { throwError } from 'rxjs';
 })
 export class GlobalService {
   static BASE_URL = "https://tapamatch.com/api/"
+  // static BASE_URL = "http://127.0.0.1:8000/api/"
   static STAGING_BASE_URL = "https://staging.tapamatch.com/api/"
   static LOGIN = "v1/login"
   static USERTYPE = "getusertype"

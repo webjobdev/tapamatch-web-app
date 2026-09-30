@@ -42,78 +42,118 @@ export class CreateTeamComponent implements OnInit {
   update: boolean = false;
   state: any
   teamId: any;
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, private wsList: WsListService, private wsMember: WsMembersService, private wsHome: WsHomeService, private modalService: NgbModal, private formBuilder: FormBuilder, private toast: ToastrService, private wsProfile: WsProfileService) {
-    this.createTeamFormgroup = this.formBuilder.group({
-      sport: [''],
-      description: [''],
-      friend: [''],
-      title: [''],
-      image: [''],
-      gender: ['']
-    });
-    this.imgView = '../../../assets/images/camera1.png'
-    this.router.events.subscribe((evt) => {
-      if (evt instanceof NavigationEnd) {
-        if (evt.url.includes("update-team")) {
-          this.update = true;
-          this.activatedRoute.queryParams.subscribe(async (data) => {
-            if (this.router.getCurrentNavigation()?.extras?.state) {
-              this.state = this.router.getCurrentNavigation()?.extras.state;
-              console.log("state", this.state)
-              this.imgView = this.state.state.team.grp_image;
-              this.teamId = this.state.state.team.id;
-              var imgExt = this.getUrlExtension(this.imgView);
+constructor(private activatedRoute: ActivatedRoute, private router: Router, private wsList: WsListService, private wsMember: WsMembersService, private wsHome: WsHomeService, private modalService: NgbModal, private formBuilder: FormBuilder, private toast: ToastrService, private wsProfile: WsProfileService) {
+  this.createTeamFormgroup = this.formBuilder.group({
+    sport: [''],
+    description: [''],
+    friend: [''],
+    title: [''],
+    image: [''],
+    gender: ['']
+  });
+  this.imgView = '../../../assets/images/camera1.png'
+  this.router.events.subscribe((evt) => {
+    if (evt instanceof NavigationEnd) {
+      if (evt.url.includes("update-team")) {
+        this.update = true;
+        this.activatedRoute.queryParams.subscribe(async (data) => {
+          if (this.router.getCurrentNavigation()?.extras?.state) {
+            this.state = this.router.getCurrentNavigation()?.extras.state;
+            console.log("state", this.state);
 
-              const response = await fetch(this.imgView);
-              const blob = await response.blob();
-              const file = new File([blob], "profileImage." + imgExt, {
-                type: blob.type,
-              });
-              console.log("new file", file)
-              this.mCreateTeamRequest.grp_image = file;
-              this.createTeamFormgroup.controls['sport'].setValue(this.state.state.team.grp_sport_id)
-              this.createTeamFormgroup.controls['title'].setValue(this.state.state.team.grp_name)
-              this.createTeamFormgroup.controls['description'].setValue(this.state.state.team.grp_about)
-              this.friendSelect = this.state.state.team.users;
-              this.mCreateTeamRequest.grp_invite = this.friendSelect.map((x: any) => x.id).join(",")
-              this.friendId = "," + this.mCreateTeamRequest.grp_invite + ","
-              this.friend_name = this.friendSelect.map((x: any) => x.name).join(",")
-              console.log(this.friend_name)
-              this.createTeamFormgroup.controls['friend'].setValue(this.friend_name)
-              this.createTeamFormgroup.controls['gender'].setValue(this.state.state.team.grp_gender)
+            this.teamId = this.state.state.team.id;
+
+            const imgUrl = this.state.state.team.grp_image;
+
+            if (imgUrl && typeof imgUrl === 'string' && imgUrl.startsWith('http')) {
+              this.imgView = imgUrl;
+
+              try {
+                const response = await fetch(imgUrl);
+                if (!response.ok) {
+                  throw new Error('Failed to fetch image');
+                }
+                const blob = await response.blob();
+                const imgExt = this.getUrlExtension(imgUrl) || 'png';
+                const file = new File([blob], "profileImage." + imgExt, {
+                  type: blob.type || 'image/png',
+                });
+                console.log("new file", file);
+                this.mCreateTeamRequest.grp_image = file;
+              } catch (err) {
+                console.error('Image fetch failed:', err);
+                this.imgView = '../../../assets/images/camera1.png';
+                this.mCreateTeamRequest.grp_image = null;
+              }
+            } else {
+              this.imgView = '../../../assets/images/camera1.png';
+              this.mCreateTeamRequest.grp_image = null;
             }
-          });
-        } else {
-          this.update = false;
-          this.createTeamFormgroup.controls['sport'].setValue("")
-          this.createTeamFormgroup.controls['title'].setValue("")
-          this.createTeamFormgroup.controls['description'].setValue("")
-          this.createTeamFormgroup.controls['friend'].setValue("")
-          this.createTeamFormgroup.controls['gender'].setValue("")
-          this.mCreateTeamRequest.grp_about = '';
-          this.mCreateTeamRequest.grp_gender = '';
-          this.mCreateTeamRequest.grp_invite = '';
-          this.friendId = '';
-        }
+
+            this.createTeamFormgroup.controls['sport'].setValue(this.state.state.team.grp_sport_id);
+            this.createTeamFormgroup.controls['title'].setValue(this.state.state.team.grp_name);
+            this.createTeamFormgroup.controls['description'].setValue(this.state.state.team.grp_about);
+            this.createTeamFormgroup.controls['gender'].setValue(this.state.state.team.grp_gender);
+
+            this.friendSelect = (this.state.state.team.users || [])
+              .filter((x: any) => x && (x.fname || x.name));
+
+            this.mCreateTeamRequest.grp_invite = this.friendSelect
+              .map((x: any) => x.id)
+              .join(",");
+
+            this.friendId = this.mCreateTeamRequest.grp_invite
+              ? "," + this.mCreateTeamRequest.grp_invite + ","
+              : "";
+
+            this.friend_name = this.friendSelect
+              .map((x: any) => {
+                const fn = x?.fname ?? x?.name ?? '';
+                const ln = x?.lname ?? '';
+                return (fn + ' ' + ln).trim();
+              })
+              .filter((n: string) => n !== '')
+              .join(",");
+
+            console.log("friend_name:", this.friend_name);
+            this.createTeamFormgroup.controls['friend'].setValue(this.friend_name);
+          }
+        });
+      } else {
+        this.update = false;
+        this.createTeamFormgroup.controls['sport'].setValue("");
+        this.createTeamFormgroup.controls['title'].setValue("");
+        this.createTeamFormgroup.controls['description'].setValue("");
+        this.createTeamFormgroup.controls['friend'].setValue("");
+        this.createTeamFormgroup.controls['gender'].setValue("");
+        this.mCreateTeamRequest.grp_about = '';
+        this.mCreateTeamRequest.grp_gender = '';
+        this.mCreateTeamRequest.grp_invite = '';
+        this.friendId = '';
+        this.imgView = '../../../assets/images/camera1.png';
       }
-    });
+    }
+  });
+}
 
-
-  }
-  /**
-   * getUrlExtension used to convert base64 to url
-   * @param url 
-   * @returns 
-   */
-  getUrlExtension(url: any) {
-    if (url) {
-      return url
-        .split(/[#?]/)[0]
-        .split(".")
-        .pop()
-        .trim();
+/**
+ * getUrlExtension used to convert base64 to url
+ * @param url 
+ * @returns 
+ */
+getUrlExtension(url: any) {
+  if (url && typeof url === 'string') {
+    try {
+      const parts = url.split(/[#?]/)[0].split(".");
+      const ext = parts.pop();
+      return ext ? ext.trim() : 'png';
+    } catch (e) {
+      console.error('getUrlExtension error', e);
+      return 'png';
     }
   }
+  return 'png';
+}
 
   ngOnInit(): void {
     this.wsMember.getAvailFriends().toPromise().then(resUsers => {
@@ -178,28 +218,35 @@ export class CreateTeamComponent implements OnInit {
     }
   }
 
-  /**
-   * selectFriend used to select friend
-   * @param friend 
-   */
-  selectFriend(friend: any) {
-    console.log(friend);
-    if (this.friendId.includes("," + friend.id + ",")) {
-      for (var i = 0; i < this.friendSelect.length; i++) {
-        if (this.friendSelect[i].id == friend.id) {
-          this.friendSelect.splice(i, 1);
-        }
+/**
+ * selectFriend used to select friend
+ * @param friend 
+ */
+selectFriend(friend: any) {
+  console.log(friend);
+  if (this.friendId.includes("," + friend.id + ",")) {
+    for (var i = 0; i < this.friendSelect.length; i++) {
+      if (this.friendSelect[i].id == friend.id) {
+        this.friendSelect.splice(i, 1);
       }
-    } else {
-      this.friendSelect.push(friend);
     }
-    console.log("friendId", this.friendId)
-    this.mCreateTeamRequest.grp_invite = this.friendSelect.map((x: any) => x.id).join(",")
-    this.friendId = "," + this.mCreateTeamRequest.grp_invite + ","
-    this.friend_name = this.friendSelect.map((x: any) => x.fname + " " + x.lname).join(",")
-    console.log(this.friend_name)
-    this.createTeamFormgroup.controls['friend'].setValue(this.friend_name)
+  } else {
+    this.friendSelect.push(friend);
   }
+  console.log("friendId", this.friendId)
+  this.mCreateTeamRequest.grp_invite = this.friendSelect.map((x: any) => x.id).join(",")
+  this.friendId = "," + this.mCreateTeamRequest.grp_invite + ","
+  this.friend_name = this.friendSelect
+    .map((x: any) => {
+      const fn = x?.fname ?? x?.name ?? '';
+      const ln = x?.lname ?? '';
+      return (fn + ' ' + ln).trim();
+    })
+    .filter((n: string) => n !== '')
+    .join(",");
+  console.log(this.friend_name)
+  this.createTeamFormgroup.controls['friend'].setValue(this.friend_name)
+}
   /**
    * searchFriend used to search friend by name
    * @param event 
